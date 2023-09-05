@@ -1,0 +1,19 @@
+## docker-compose -f docker-compose.yml up
+version: '3'
+services:
+  minio:
+    image: minio/minio
+    command: server --console-address ":38821" /data
+    container_name: minio_s3
+    ports:
+      - 9000:9000
+      - 38821:38821
+    volumes:
+      - s3_minio_data:/data
+    environment:
+      MINIO_ACCESS_KEY: minio_access
+      MINIO_SECRET_KEY: minio_secret
+      MINIO_ROOT_USER : MINIO_ID
+      MINIO_ROOT_PASSWORD: MINIO_PASSWORD
+volumes:
+  s3_minio_data:
