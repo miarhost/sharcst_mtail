@@ -176,9 +176,6 @@ GEM
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     jsonapi-renderer (0.2.2)
     jwt (2.7.1)
@@ -217,6 +214,7 @@ GEM
     mini_portile2 (2.8.4)
     minitest (5.19.0)
     msgpack (1.7.2)
+    multi_json (1.15.0)
     net-imap (0.3.7)
       date
       net-protocol
@@ -236,6 +234,14 @@ GEM
       racc (~> 1.4)
     numerizer (0.1.1)
     numo-narray (0.9.2.1)
+    opensearch-api (2.2.0)
+      multi_json
+    opensearch-ruby (2.1.0)
+      opensearch-api (~> 2.1)
+      opensearch-transport (~> 2.0)
+    opensearch-transport (2.1.0)
+      faraday (>= 1.0, < 3)
+      multi_json
     orm_adapter (0.5.0)
     pg (1.2.3)
     puma (4.3.12)
@@ -404,11 +410,11 @@ DEPENDENCIES
   faker
   faraday
   image_processing (~> 1.2)
-  jbuilder (~> 2.7)
   jwt
   kaminari
   listen (~> 3.2)
   mimemagic!
+  opensearch-ruby
   pg
   puma (~> 4.1)
   pundit
