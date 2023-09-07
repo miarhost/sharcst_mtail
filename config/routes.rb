@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   namespace :api do
     namespace :v1 do
+      post '/users/login', to: 'users#login'
       resources :uploads do
         member do
           post 'upload_file', to: 'uploads#upload_file'

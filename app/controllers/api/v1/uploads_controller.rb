@@ -3,7 +3,6 @@ module Api
     class UploadsController < ApplicationController
       require 'rest-client'
       include Rails.application.routes.url_helpers
-      before_action -> { doorkeeper_authorize! :write }, only: [:upload_on_twitter]
       before_action :set_upload, only: %i[update show upload_file remove_file load_prediction_for_infos webhook_infos]
 
       def webhook_infos
@@ -18,6 +17,7 @@ module Api
       end
 
       def upload_file
+        authorize_request!
         if params[:file].blank?
           render json: { status: :not_acceptable, message: 'Please add a file' }, status: 406
         else
