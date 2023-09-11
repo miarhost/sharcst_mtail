@@ -10,8 +10,6 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bunny'
 gem 'cloudinary'
-gem 'devise'
-gem 'devise-jwt'
 gem 'disco'
 gem 'dotenv-rails'
 gem 'faraday'

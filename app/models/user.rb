@@ -1,7 +1,4 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
 
   has_many :access_grants,
            class_name: 'DoorKeeper::AccessGrant',
@@ -12,8 +9,10 @@ class User < ApplicationRecord
            class_name: 'DoorKeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :delete_all
+
   has_many :upload_infos, dependent: :destroy
   validates_presence_of :email
   has_many :uploads, dependent: :destroy
   has_one :webhook, dependent: :destroy
+  has_secure_password
 end

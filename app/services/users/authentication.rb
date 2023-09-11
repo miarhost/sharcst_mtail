@@ -14,8 +14,7 @@ module Users
     end
 
     def attach_token
-
-      Jwt::JwtAuth.new(user).generate_token if user&.valid_password?(@password)
+      Jwt::JwtAuth.new(user).generate_token if user&.authenticate(@password)
     end
   end
 end

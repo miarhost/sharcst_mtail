@@ -19,8 +19,6 @@ class  Authorization < ApplicationService
     def decoded_token
       token = @headers['HTTP_AUTHORIZATION'].split(' ').last
       Jwt::JwtToken.decode(token)[0].deep_symbolize_keys[:user][:id]
-    rescue StandardError => e
-      raise JWT::DecodeError
     end
   end
 end

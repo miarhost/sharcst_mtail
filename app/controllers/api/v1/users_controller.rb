@@ -3,7 +3,7 @@ module Api
     class UsersController < ApplicationController
       def login
         result = Users::Authentication.call(login_params[:email], login_params[:password])
-        result.nil? ? not_authorized_message : (render json: { 'authorization': output })
+        result.nil? ? not_authorized_message : (render json: { 'authorization': result })
       end
 
       private
