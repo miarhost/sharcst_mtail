@@ -1,4 +1,4 @@
-Redis.current = Redis.new(url: ENV['REDIS_URL'],
-                          port: ENV['REDIS_PORT'],
-                          db: ENV['REDIS_DB'],
-                          namespace: 'sharcst_mtail')
+ConnectionPool::Wrapper.new {
+Redis.new(host: ENV["REDIS_URL"],
+          namespace: 'sharcst_mtail')
+}
