@@ -8,14 +8,10 @@ services:
     ports:
       - 9000:9000
       - 38821:38821
+    env_file:
+    - .env
     volumes:
       - s3_minio_data:/data
-    environment:
-      MINIO_ACCESS_KEY: minio_access
-      MINIO_SECRET_KEY: minio_secret
-      MINIO_ROOT_USER : MINIO_ID
-      MINIO_ROOT_PASSWORD: MINIO_PASSWORD
-
 
   opensearch:
     image: opensearchproject/opensearch:latest

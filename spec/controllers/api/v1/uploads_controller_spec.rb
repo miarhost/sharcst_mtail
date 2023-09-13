@@ -1,14 +1,21 @@
 require 'rails_helper'
+require 'sidekiq/testing'
 
-describe UploadsController, type: :controller do
+describe Api::V1::UploadsController, type: :controller do
   let!(:upload) { FactoryBot.create(:upload) }
 
   describe '#upload_file' do
+
+    before { Sidekiq::Testing.inline! }
+
+    after { Sidekiq::Testing.fake! }
+
     context 'file upload is successful' do
+
       it 'uploads the file attachment and updates upload attachment successfully' do
-        post :upload_file, params: { id: upload.id, file: fixture_file_upload('file_example.png') }
+        post :upload_file, params: { id: upload.id, file: fixture_file_upload('example_file.png') }
         expect(response.status).to eq(200)
-        expect(response.body).to eq({ filename: 'file_example.png', upload_id: upload.id }.to_json)
+        expect(response.body).to eq({ filename: 'example_file.png', upload_id: upload.id }.to_json)
       end
     end
 
