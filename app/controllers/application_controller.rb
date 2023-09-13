@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
-  include ActionController::MimeResponds
+  rescue_from ActiveRecord::RecordNotFound, with: :not_authorized_message
 
   def doorkeeper_unauthorized_render_options(error = nil)
     { json: { error => 'Not Authorized by OAuth' } }

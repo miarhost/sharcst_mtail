@@ -10,8 +10,6 @@ class  Authorization < ApplicationService
 
   def current_user
     @current_user = User.find(decoded_token) if decoded_token
-
-    raise ActiveRecord::RecordNotFound unless @current_user
   end
 
     private

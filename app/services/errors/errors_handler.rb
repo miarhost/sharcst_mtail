@@ -6,6 +6,7 @@ module Errors
         rescue_from ActiveRecord::RecordNotFound, with: :not_found_error
         rescue_from JWT::VerificationError, with: :not_authorized_error
         rescue_from JWT::DecodeError, with: :not_authorized_error
+        rescue_from JWT::InvalidPayload, with: :not_authorized_message
       end
     end
 
@@ -18,11 +19,15 @@ module Errors
     end
 
     def not_authorized_error(error)
-      render json: { status: :not_authorized, message: error.message }, status: 406
+      render json: { status: :unauthorized, message: error.message }, status: 401
     end
 
     def not_authorized_message
-      render json: { status: :not_authorized, message: 'User is not authorized' }, status: 406
+      render json: { status: :unauthorized, message: 'User is not authorized' }, status: 401
+    end
+
+    def forbidden_error(error)
+      render json: { status: :uforbidden, message: error.message }, status: 403
     end
   end
 end

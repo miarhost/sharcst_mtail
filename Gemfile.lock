@@ -392,6 +392,7 @@ DEPENDENCIES
   redis (~> 4.0)
   redis-namespace
   redis-rails
+  redis-store
   rest-client
   rspec-json_expectations
   rspec-rails (~> 3.0)
