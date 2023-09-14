@@ -19,6 +19,12 @@ Rails.application.routes.draw do
           patch 'update_streaming_infos', to: 'uploads_infos#update_streaming_infos'
         end
       end
+
+      resources :webhooks do
+        member do
+          post 'slack_notification_for_report', to: 'webhooks#slack_notification_for_report'
+        end
+      end
     end
   end
 end

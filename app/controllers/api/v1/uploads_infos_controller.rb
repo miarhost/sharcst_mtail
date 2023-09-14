@@ -1,7 +1,8 @@
 module Api
   module V1
     class UploadsInfosController < ApplicationController
-      before_action :set_info, only: %i[update show generate_report remove_report update_streaming_infos]
+      before_action :set_info, except: :index
+      before_action :authorize_request, except: %i[index show]
 
       def index
         filter = filter_params[:search].present? ? filter_params[:search] : ''

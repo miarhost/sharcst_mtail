@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
-  rescue_from ActiveRecord::RecordNotFound, with: :not_authorized_message
 
   def doorkeeper_unauthorized_render_options(error = nil)
     { json: { error => 'Not Authorized by OAuth' } }
@@ -11,6 +10,8 @@ class ApplicationController < ActionController::API
   end
 
   def authorize_request
-    Users::Authorization.call(request.headers) if request.headers['HTTP_AUTHORIZATION']
+    @current_user = Users::Authorization.call(request.headers) if request.headers['HTTP_AUTHORIZATION']
+  rescue ActiveRecord::RecordNotFound => e
+    not_authorized_message
   end
 end

@@ -3,8 +3,8 @@ module Api
     class UploadsController < ApplicationController
       require 'rest-client'
       include Rails.application.routes.url_helpers
-      before_action :authorize_request, only: %i[upload_file]
-      before_action :set_upload, only: %i[update show upload_file remove_file load_prediction_for_infos webhook_infos]
+      before_action :authorize_request, except: %i[show load_predictions_for_infos]
+      before_action :set_upload
 
       def webhook_infos
         url = @upload.webhook.url
