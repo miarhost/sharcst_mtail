@@ -1,12 +1,20 @@
 module Errors
   module ErrorsHandler
+    class JwtDecodeError < StandardError; end
+    class JwtVerificationError < StandardError; end
+    class JwtExpiredSignatureError < StandardError; end
+    class Errors::ErrorsHandler::JwtInvalidPayload; end
     def self.included(klass)
       klass.class_eval do
         rescue_from ActiveRecord::RecordInvalid, with: :validation_error
         rescue_from ActiveRecord::RecordNotFound, with: :not_found_error
-        rescue_from JWT::VerificationError, with: :not_authorized_error
-        rescue_from JWT::DecodeError, with: :not_authorized_error
+        rescue_from Errors::ErrorsHandler::JwtVerificationError, with: :not_authorized_error
+        rescue_from Errors::ErrorsHandler::JwtExpiredSignatureError, with: :not_authorized_error
+        rescue_from Errors::ErrorsHandler::JwtDecodeError, with: :not_authorized_error
+        rescue_from Errors::ErrorsHandler::JwtInvalidPayload, with: :not_authorized_error
+        rescue_from JWT::ExpiredSignature, with: :not_authorized_error
         rescue_from JWT::InvalidPayload, with: :not_authorized_message
+        rescue_from JWT::DecodeError, with: :not_authorized_error
       end
     end
 

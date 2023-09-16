@@ -8,7 +8,9 @@ module Jwt
     def self.decode(token)
       JWT.decode(token, ENV['JWT_HMAC'], true, { algorithm: ENV['JWT_ALG'] })
     rescue JWT::ExpiredSignature => e
-      { "error": e.message }
+      raise Errors::ErrorsHandler::JwtVerificationError, e.message
+    rescue JWT::DecodeError => e
+      raise Errors::ErrorsHandler::JwtDecodeError, e.message
     end
   end
 end

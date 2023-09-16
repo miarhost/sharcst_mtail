@@ -1,3 +1,4 @@
+
 class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
 
@@ -9,9 +10,16 @@ class ApplicationController < ActionController::API
     Kaminari.paginate_array(collection).page(page).per(num)
   end
 
+  def bearer
+    request.headers['HTTP_AUTHORIZATION']
+  end
+
   def authorize_request
-    @current_user = Users::Authorization.call(request.headers) if request.headers['HTTP_AUTHORIZATION']
-  rescue ActiveRecord::RecordNotFound => e
-    not_authorized_message
+    raise if bearer.blank?
+    @current_user = Users::Authorization.call(request.headers)
+  rescue RuntimeError => e
+    raise Errors::ErrorsHandler::JwtDecodeError, "No token provided."
+  rescue JWT::DecodeError => e
+    raise Errors::ErrorsHandler::JwtDecodeError, e
   end
 end
