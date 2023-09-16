@@ -4,12 +4,13 @@ module Api
       require 'rest-client'
       include Rails.application.routes.url_helpers
       before_action :authorize_request, except: %i[show load_predictions_for_infos]
-      before_action :set_upload
+      before_action :set_upload, except: :create
 
-      def webhook_infos
-        url = @upload.webhook.url
-        response = RestClient.get(url)
-        render json: response
+
+      def create
+        @upload = Upload.new(upload_params.merge(user_id: @current_user.id))
+        @upload.save!
+        render json: @upload, serializer: serializer
       end
 
       def update

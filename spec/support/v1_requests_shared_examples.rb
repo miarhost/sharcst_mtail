@@ -29,7 +29,7 @@
       expect(response.body).to include_json(
         {
           "status": "unauthorized",
-          "message": "User is not authorized"
+          "message": "No token provided."
         }
       )
     end

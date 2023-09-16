@@ -6,6 +6,7 @@ describe 'Uploads', type: :request do
   describe 'Token authorization' do
     context 'unautnorized' do
       include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads/1/upload_file', params: { id: 1, file: 'example_file.png' }
+      include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads/', params: { "upload": {"name": "Test folder"} }
     end
   end
 
@@ -36,4 +37,20 @@ describe 'Uploads', type: :request do
       expect(response.body).to eq({ filename: 'example_file.png', upload_id: upload.id }.to_json)
     end
   end
+
+  describe 'POST /api/v1/uploads' do
+    include_context 'v1:authorized_request'
+    it 'creates an upload' do
+      post '/api/v1/uploads', params: { "upload": {"name": "Test folder"} }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include_json(
+        {
+          "user_id": 1,
+          "name": "New folder for user 1",
+          "upload_attachment": null
+        }
+      )
+    end
+  end
+
 end
