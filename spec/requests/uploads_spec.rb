@@ -11,6 +11,8 @@ describe 'Uploads', type: :request do
   end
 
   let!(:upload) { create(:upload) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
   describe 'GET /api/v1/uploads/:id/load_prediction_for_infos' do
     let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload.id) }
 
@@ -32,22 +34,24 @@ describe 'Uploads', type: :request do
   describe 'POST /api/v1/uploads/:id/upload_file' do
     include_context 'v1:authorized_request'
     it 'successfully uploads a file' do
-      post "/api/v1/uploads/#{upload.id}/upload_file", params: { id: upload.id, file: fixture_file_upload('example_file.png') }
+      post "/api/v1/uploads/#{upload.id}/upload_file", params: { id: upload.id, file: fixture_file_upload('example_file.png') },
+          headers: { Authorization: "Bearer #{authenticate}" }
+
       expect(response.status).to eq(200)
       expect(response.body).to eq({ filename: 'example_file.png', upload_id: upload.id }.to_json)
     end
   end
 
   describe 'POST /api/v1/uploads' do
-    include_context 'v1:authorized_request'
     it 'creates an upload' do
-      post '/api/v1/uploads', params: { "upload": {"name": "Test folder"} }
+      post '/api/v1/uploads', params: { "upload": {"name": "Test folder"} },
+          headers: { Authorization: "Bearer #{authenticate}" }
       expect(response).to have_http_status(:success)
       expect(response.body).to include_json(
         {
-          "user_id": 1,
-          "name": "New folder for user 1",
-          "upload_attachment": null
+          "user_id": user.id,
+          "name": "Test folder",
+          "upload_attachment": nil
         }
       )
     end
