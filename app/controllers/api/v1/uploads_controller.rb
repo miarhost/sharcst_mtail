@@ -39,6 +39,10 @@ module Api
         render json: { status: :no_content, message: 'Attachment is removed' }, status: 204
       end
 
+      def destroy
+        @upload.destroy!
+      end
+
       def show
         render json: @upload, serializer: serializer
       end
