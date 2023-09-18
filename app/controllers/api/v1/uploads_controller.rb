@@ -1,8 +1,6 @@
 module Api
   module V1
     class UploadsController < ApplicationController
-      require 'rest-client'
-      include Rails.application.routes.url_helpers
       before_action :authorize_request, except: %i[show load_predictions_for_infos]
       before_action :set_upload, except: :create
 
@@ -10,7 +8,7 @@ module Api
       def create
         @upload = Upload.new(upload_params.merge(user_id: @current_user.id))
         @upload.save!
-        render json: @upload, serializer: serializer
+        render json: @upload, serializer: serializer, status: 201
       end
 
       def update
@@ -35,8 +33,8 @@ module Api
       end
 
       def remove_file
-        @upload.upload_attachment.purge
-        render json: { status: :no_content, message: 'Attachment is removed' }, status: 204
+        @upload.upload_attachment&.purge
+        @upload.upload_attachment&.destroy!
       end
 
       def destroy
