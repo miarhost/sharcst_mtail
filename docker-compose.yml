@@ -1,6 +1,15 @@
 
 version: '3'
 services:
+  redis:
+    image: redis:6.2.13
+    ports:
+    - 6379:6379
+    volumes:
+    - redis_data:/data
+    env_file:
+    - .env
+
   minio:
     image: minio/minio
     command: server --console-address ":38821" /data
@@ -57,6 +66,7 @@ services:
 volumes:
   opensearch:
   s3_minio_data:
+  redis_data:
 
 networks:
   opensearch-net:

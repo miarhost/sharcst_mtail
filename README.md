@@ -2,6 +2,6 @@
 
 * Ruby version 2.7.1
 
-* for local minio setup and open-search / open-search dashboard run:
+* for running _redis_, local s3 bucket -> _minio_, _open-search_ / open-search dashboard execute:
 
 docker-compose -f docker-compose.yml up
