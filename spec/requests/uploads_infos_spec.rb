@@ -2,10 +2,20 @@ require 'rails_helper'
 require 'sidekiq/testing'
 
 describe 'UploadsInfos', type: :request do
-  let(:user) { create(:user) }
-  let(:upload) { create(:upload) }
+
+  describe 'Token authorization' do
+    context 'unautnorized' do
+      include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads_infos/1/generate_report', params: { id: 1 }
+      include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads_infos/1/update_streaming_infos', params: { id: 1 }
+      include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads_infos/1', params: { uploads_info: { description: 'Updated description' } }
+    end
+  end
+
+  let!(:user) { create(:user) }
+  let!(:upload) { create(:upload) }
   let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload.id, user_id: user.id) }
   let!(:uploads_info) { create(:uploads_info, upload_id: upload.id, user_id: user.id) }
+  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
 
   describe 'GET /api/v1/uploads_infos' do
     it 'shows filtered records ordered list with additional reporting attributes' do
@@ -38,10 +48,13 @@ describe 'UploadsInfos', type: :request do
   end
 
   describe 'POST /api/v1/uploads_infos/:id/generate_report' do
-    let!(:uploads_info) { create(:uploads_info, upload_id: upload.id, user_id: user.id) }
+    include_context 'v1:authorized_request'
+
     context 'generation of csv report and instant upload is successful' do
       it 'returns created attachment record' do
-        post "/api/v1/uploads_infos/#{uploads_info.id}/generate_report", params: { id: uploads_info.id }
+        post "/api/v1/uploads_infos/#{uploads_info.id}/generate_report", params: { id: uploads_info.id },
+        headers: { Authorization: "Bearer #{authenticate}" }
+
         expect(response).to have_http_status(200)
         expect(response.body).to include_json(
           {
@@ -54,7 +67,9 @@ describe 'UploadsInfos', type: :request do
 
     context 'generation of csv report and instant upload has errors' do
       it 'returns json with error message' do
-        post '/uploads_infos/0/generate_report', params: { id: 0 }
+        post '/api/v1/uploads_infos/0/generate_report', params: { id: 0 },
+        headers: { Authorization: "Bearer #{authenticate}" }
+
         expect(response).to have_http_status(404)
         expect(response.body).to include_json(
           {
@@ -67,6 +82,7 @@ describe 'UploadsInfos', type: :request do
   end
 
   describe 'PATCH /api/v1/uploads_infos/:id/update_streaming_infos' do
+    include_context 'v1:authorized_request'
     let!(:webhook) { create(:webhook, upload_id: upload.id, user_id: user.id) }
 
     before { Sidekiq::Testing.inline! }
@@ -75,7 +91,9 @@ describe 'UploadsInfos', type: :request do
 
     context 'update of streaming_infos field is successful' do
       it 'returns uploads info record with updated streaming_infos field' do
-        patch "/api/v1/uploads_infos/#{uploads_info.id}/update_streaming_infos", params: { id: uploads_info.id }
+        patch "/api/v1/uploads_infos/#{uploads_info.id}/update_streaming_infos", params: { id: uploads_info.id },
+        headers: { Authorization: "Bearer #{authenticate}" }
+
         uploads_info.reload
         expect(response).to have_http_status(200)
         expect(response.body).to include_json(
@@ -102,6 +120,59 @@ describe 'UploadsInfos', type: :request do
             }
           }
         )
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/uploads_infos/:id' do
+    include_context 'v1:authorized_request'
+
+    context 'successfully updates a record' do
+      it 'returns serialized record' do
+        patch "/api/v1/uploads_infos/#{uploads_info.id}",
+        params: { uploads_info: { description: 'Updated description', number_of_seeds: 2100 } },
+        headers: { Authorization: "Bearer #{authenticate}" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include_json(
+          {
+            "user_id": uploads_info.user_id,
+            "upload_id": uploads_info.upload_id,
+            "protocol": uploads_info.protocol,
+            "name": uploads_info.name,
+            "streaming_infos": nil,
+            "media_type": uploads_info.media_type,
+            "number_of_seeds": 2100,
+            "provider": uploads_info.provider,
+            "duration": uploads_info.duration.to_s,
+            "description": 'Updated description',
+            "static_info_block": {
+              "streaming_statistics": {
+                "duration": uploads_info.duration.to_s,
+                "marking": uploads_info.name,
+                "other": "Updated description",
+                "send_to": user.email
+              }
+            }
+          }
+        )
+      end
+    end
+
+    context 'fails to update a record due to validations' do
+      it 'returns serialized error message' do
+        patch "/api/v1/uploads_infos/#{uploads_info.id}",
+        params: { uploads_info: { name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Vestibulum commodo porttitor dolor, En porta est bibendum in.' } },
+          headers: { Authorization: "Bearer #{authenticate}" }
+
+          expect(response).to have_http_status(422)
+          expect(response.body).to include_json(
+            {
+            'status': 'unprocessable_entity',
+            'message': "Name is too long (maximum is 100 characters)"
+            }
+          )
       end
     end
   end
