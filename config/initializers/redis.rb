@@ -1,4 +1,3 @@
 ConnectionPool::Wrapper.new {
-Redis.new(host: ENV["REDIS_URL"],
-          namespace: 'sharcst_mtail')
+Redis.new(host: ENV["REDIS_URL"])
 }

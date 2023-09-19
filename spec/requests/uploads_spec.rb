@@ -9,6 +9,7 @@ describe 'Uploads', type: :request do
       include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads/', params: { 'upload': {'name': 'Test folder' } }
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads/1', params: { 'upload': {'name': 'Updated folder name' } }
       include_examples 'v1:unauthorized_request', :delete, '/api/v1/uploads/1/remove_file', params: { id: 1 }
+      include_examples 'v1:unauthorized_request', :get, '/api/v1/uploads/1/load_prediction_for_infos', params: { id: 1 }
     end
   end
 
@@ -17,6 +18,7 @@ describe 'Uploads', type: :request do
   let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
 
   describe 'GET /api/v1/uploads/:id/load_prediction_for_infos' do
+    include_context 'v1:authorized_request'
     let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload.id) }
 
     before { Sidekiq::Testing.inline! }
@@ -24,7 +26,8 @@ describe 'Uploads', type: :request do
     after { Sidekiq::Testing.fake! }
 
     it 'performs job up to complete and returns result' do
-      get "/api/v1/uploads/#{upload.id}/load_prediction_for_infos", params: { id: upload.id }
+      get "/api/v1/uploads/#{upload.id}/load_prediction_for_infos", params: { id: upload.id },
+      headers: { Authorization: "Bearer #{authenticate}" }
 
       sleep 6
       result = DiscoServices::UploadsRecommender.call(upload.id)
