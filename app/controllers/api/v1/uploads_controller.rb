@@ -1,7 +1,7 @@
 module Api
   module V1
     class UploadsController < ApplicationController
-      before_action :authorize_request, except: %i[show load_predictions_for_infos]
+      before_action :authorize_request, except: :show
       before_action :set_upload, except: :create
 
 

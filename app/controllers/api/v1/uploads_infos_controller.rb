@@ -1,8 +1,8 @@
 module Api
   module V1
     class UploadsInfosController < ApplicationController
-      before_action :set_info, except: :index
       before_action :authorize_request, except: %i[index show]
+      before_action :set_info, except: %i[index remove_report]
 
       def index
         filter = filter_params[:search].present? ? filter_params[:search] : ''
@@ -25,8 +25,9 @@ module Api
       end
 
       def remove_report
-        uploads_info_attachment = UploadsInfoAttacment.find_by!(id: params[:id])
+        uploads_info_attachment = UploadsInfoAttacment.find_by!(id: params[:attachment_id])
         uploads_info_attachment.purge
+        uploads_info_attachment.destroy!
       end
 
       def update_streaming_infos

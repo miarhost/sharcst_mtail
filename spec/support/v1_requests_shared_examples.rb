@@ -16,7 +16,7 @@
 
   shared_context 'v1:authorized_request' do
     let(:user) { FactoryBot.create(:user) }
-    it 'calls auttorization check and return user if user is valid' do
+    it 'calls authorization check and return user if user is valid' do
       allow(Users::Authorization).to receive(:call).and_return(user)
     end
   end

@@ -15,8 +15,10 @@ Rails.application.routes.draw do
       resources :uploads_infos do
         member do
           post 'generate_report', to: 'uploads_infos#generate_report'
-          delete 'remove_report', to: 'uploads_infos#remove_report'
           patch 'update_streaming_infos', to: 'uploads_infos#update_streaming_infos'
+        end
+        collection do
+          delete 'remove_report', to: 'uploads_infos#remove_report'
         end
       end
 

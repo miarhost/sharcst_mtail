@@ -8,6 +8,7 @@ describe 'UploadsInfos', type: :request do
       include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads_infos/1/generate_report', params: { id: 1 }
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads_infos/1/update_streaming_infos', params: { id: 1 }
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads_infos/1', params: { uploads_info: { description: 'Updated description' } }
+      include_examples 'v1:unauthorized_request', :delete, '/api/v1/uploads_infos/remove_report', params: { attachment_id: 1 }
     end
   end
 
@@ -174,6 +175,19 @@ describe 'UploadsInfos', type: :request do
             }
           )
       end
+    end
+  end
+
+  describe 'DELETE /api/v1/uploads_infos/remove_report' do
+    let!(:report) { create :uploads_info_attacment, uploads_info_id: uploads_info.id }
+    include_context 'v1:authorized_request'
+
+    it 'removes report from the bucket and deletes its record' do
+      delete "/api/v1/uploads_infos/remove_report", params: { attachment_id: report.id },
+      headers: { Authorization: "Bearer #{authenticate}" }
+
+      expect(response).to have_http_status(204)
+      expect { report.reload }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
 end
