@@ -39,5 +39,5 @@ sudo mkdir sites-enabled
 
 sudo nano /etc/nginx/nginx.conf at htto block: include /etc/nginx/sites-enabled/*; # to allow access from symlink to enabled
 
-
+sudo yum install git
 Ready to deploy.

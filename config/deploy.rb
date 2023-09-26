@@ -5,9 +5,10 @@ set :application, 'sharcst_mtail'
 set :repo_url, 'git@github.com:miarhost/sharcst_mtail.git'
 set :use_sudo, true
 set :branch, 'main'
+set :user, 'ec2-user'
 
 # config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_files, %w{config/database.yml config/master.key}# Default branch is :master
+set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml}# Default branch is :master
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -22,9 +23,17 @@ set :decompose_web_service, :web
 
 set :decompose_rake_tasks, ['db:migrate', 'one_time_tasks:additional_infos_creation']
 
-on roles(:web) do
-  execute "docker-compose -f docker-compose.yml up"
+set :compose_file, "/var/www/sharcst/sharcst_mtail/shared/docker-compose.yml"
+
+namespace :deploy do
+  task :run_composer do
+    on roles(:web) do
+      execute("docker-compose -f /var/www/sharcst/sharcst_mtail/shared/docker-compose.yml up")
+    end
+  end
 end
+
+set :upload_roles, %i[web worker db]
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -38,7 +47,7 @@ end
 
 # Default value for :linked_files is []
 # Default value for linked_dirs is []
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'tmp/webpacker', 'public/system', 'vendor', 'storage'
+append :linked_dirs, 'tmp/pids', 'tmp/sockets', 'public'
 
 # Default value for default_env is {}
 
@@ -48,13 +57,11 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'tmp/webpack
 # Default value for keep_releases is 5
 set :keep_releases, 15
 
+before 'deploy:check', 'linked_files:upload'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-
+after 'deploy:check', 'deploy:run_composer'
 # sidekiq
-set :sidekiq_roles, %i[worker]
-set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }
-set :sidekiq_default_hooks, true
-
-# config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_files, %w{config/database.yml config/master.key}# Default branch is :master
+#set :sidekiq_roles, %i[worker]
+#set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }
+#set :sidekiq_default_hooks, true

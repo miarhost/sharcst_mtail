@@ -1,5 +1,6 @@
 require 'capistrano/setup'
 require 'capistrano/deploy'
+require 'capistrano/linked_files'
 require 'capistrano/scm/git'
 require 'capistrano/nginx'
 require 'capistrano/sidekiq'
