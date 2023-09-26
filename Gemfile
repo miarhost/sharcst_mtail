@@ -42,6 +42,7 @@ end
 group :development do
   gem 'capistrano', '~> 3.17', require: false
   gem 'capistrano-rails'
+  gem 'capistrano-sidekiq'
   gem 'capistrano-decompose', require: false
   gem 'capistrano-puma'
   gem 'capistrano-nginx'

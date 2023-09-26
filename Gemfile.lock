@@ -114,6 +114,10 @@ GEM
     capistrano-rails (1.6.3)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
+    capistrano-sidekiq (2.3.1)
+      capistrano (>= 3.9.0)
+      capistrano-bundler
+      sidekiq (>= 6.0)
     case_transform (0.2)
       activesupport
     chronic_duration (0.10.6)
@@ -374,6 +378,7 @@ DEPENDENCIES
   capistrano-nginx
   capistrano-puma
   capistrano-rails
+  capistrano-sidekiq
   cloudinary
   disco
   doorkeeper (~> 5.5)
