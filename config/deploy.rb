@@ -2,23 +2,29 @@
 lock '~> 3.17.3'
 
 set :application, 'sharcst_mtail'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :repo_url, 'git@github.com:miarhost/sharcst_mtail.git'
+set :use_sudo, true
+set :branch, 'main'
 
+# config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+set :linked_files, %w{config/database.yml config/master.key}# Default branch is :master
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/#{fetch(:user)}/application/#{sharcst_mtail}"
+set :deploy_to, "/var/www/sharcst/#{fetch(:application)}"
 
 set :all_roles, %i[web worker db]
 
-# rvm
-set :rvm_type, :user
-set :rvm_ruby_version, '2.7.1'
+set :decompose_restart, [:web]
 
-before 'deploy:assets:precompile', 'deploy:yarn_install'
-before 'deploy:starting', 'assets:precompile'
-after 'deploy:assets:precompile', 'assets:upload'
+set :decompose_web_service, :web
+
+set :decompose_rake_tasks, ['db:migrate', 'one_time_tasks:additional_infos_creation']
+
+on roles(:web) do
+  execute "docker-compose -f docker-compose.yml up"
+end
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -31,13 +37,10 @@ after 'deploy:assets:precompile', 'assets:upload'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, 'config/database.yml', 'config/master.key'
-
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'tmp/webpacker', 'public/system', 'vendor', 'storage'
 
 # Default value for default_env is {}
-set :default_env, { path: '/opt/ruby/bin:$PATH' }
 
 # Default value for local_user is ENV['USER']
 # set :local_user, -> { `git config user.name`.chomp }
@@ -53,10 +56,5 @@ set :sidekiq_roles, %i[worker]
 set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }
 set :sidekiq_default_hooks, true
 
-namespace :deploy do
-  task :yarn_install do
-    run_locally do
-      execute('yarn inslall --silent --no-optional')
-    end
-  end
-end
+# config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+set :linked_files, %w{config/database.yml config/master.key}# Default branch is :master

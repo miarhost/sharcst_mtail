@@ -1,7 +1,11 @@
 set :stage, :production
 
-server '127.0.0.1', roles: ['web'], user: fetch(:user)
+set :rails_env, :production
 
-server '127.0.0.18', roles: ['worker'], user: fetch(:user)
+server ENV['HOST'], user: 'ec2-user', roles: %w{web worker db}
 
-server '127.0.0.36', roles: ['db'], user: fetch(:user)
+set :ssh_options, {
+  forward_agent: true,
+  auth_methods: %w[publickey],
+  keys: [ENV['SSH_PATH']]
+  }
