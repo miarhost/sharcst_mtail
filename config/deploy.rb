@@ -8,7 +8,7 @@ set :branch, 'main'
 set :user, 'ec2-user'
 
 # config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml}# Default branch is :master
+set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml Dockerfile Gemfile Gemfile.lock}
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -17,18 +17,15 @@ set :deploy_to, "/var/www/sharcst/#{fetch(:application)}"
 
 set :all_roles, %i[web worker db]
 
-set :decompose_restart, [:web]
 
-set :decompose_web_service, :web
-
-set :decompose_rake_tasks, ['db:migrate', 'one_time_tasks:additional_infos_creation']
-
-set :compose_file, "/var/www/sharcst/sharcst_mtail/shared/docker-compose.yml"
 
 namespace :deploy do
   task :run_composer do
     on roles(:web) do
-      execute("docker-compose -f /var/www/sharcst/sharcst_mtail/shared/docker-compose.yml up")
+      within release_path do
+        execute("cd #{release_path} && docker-compose -f /var/www/sharcst/sharcst_mtail/shared/docker-compose.yml down")
+        execute("cd #{release_path} && docker-compose -f /var/www/sharcst/sharcst_mtail/shared/docker-compose.yml up -d")
+      end
     end
   end
 end
@@ -55,12 +52,12 @@ append :linked_dirs, 'tmp/pids', 'tmp/sockets', 'public'
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-set :keep_releases, 15
+set :keep_releases, 10
 
 before 'deploy:check', 'linked_files:upload'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-after 'deploy:check', 'deploy:run_composer'
+after 'deploy:updated', 'deploy:run_composer'
 # sidekiq
 #set :sidekiq_roles, %i[worker]
 #set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }

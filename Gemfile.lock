@@ -105,8 +105,6 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.1.0)
       capistrano (~> 3.1)
-    capistrano-decompose (0.2.0)
-      capistrano (~> 3.5)
     capistrano-linked-files (1.2.0)
       capistrano (~> 3.1)
     capistrano-nginx (1.0.0)
@@ -376,7 +374,6 @@ DEPENDENCIES
   bunny
   byebug
   capistrano (~> 3.17)
-  capistrano-decompose
   capistrano-linked-files
   capistrano-nginx
   capistrano-puma
