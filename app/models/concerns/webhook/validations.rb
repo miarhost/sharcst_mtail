@@ -4,6 +4,7 @@ module Webhook::Validations
   DENIED_HOSTS = %w[localhost 127.0.0.1].freeze
   included do
     validates :url, presence: true, format: { with: URL_REGEX }
+    validates_presence_of :secret
 
     validate :url_plug
 

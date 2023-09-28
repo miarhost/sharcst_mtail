@@ -10,12 +10,12 @@ module Api
       end
 
       def create
-        @webhook = Webhook.create(webhook_params.merge(user_id: @current_user&.id))
-        render json: { 'status': :created, 'webhook': @webhook }
+        @webhook = Webhook.create!(webhook_params.merge(user_id: @current_user&.id))
+        render json: { 'status': :created, 'webhook': @webhook }, status: 201
       end
 
       def update
-        @webhook.update(webhook_params)
+        @webhook.update!(webhook_params)
         render json: @webhook
       end
 
