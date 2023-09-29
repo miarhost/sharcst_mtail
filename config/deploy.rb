@@ -13,11 +13,8 @@ set :linked_files, %w{config/database.yml config/master.key .env docker-compose.
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/var/www/sharcst/#{fetch(:application)}"
 
 set :all_roles, %i[web worker db]
-
-
 
 namespace :deploy do
   task :run_composer do

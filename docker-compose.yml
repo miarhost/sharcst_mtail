@@ -81,6 +81,24 @@ services:
     networks:
       - opensearch-net
 
+  worker:
+    container_name: sharcst_sidekiq
+    build: .
+    command: 'bundle exec sidekiq'
+    depends_on:
+    - db
+    - redis
+    - mailcatcher
+    volumes:
+    - '.:/sharcst_mtail'
+
+
+  mailcatcher:
+    container_name: mailcatcher
+    image: schickling/mailcatcher
+    ports:
+    - 1080:1080
+
 
 volumes:
   postgres-data:
