@@ -71,6 +71,8 @@ describe 'Webhooks', type: :request do
 
   describe 'PATCH /api/v1/webhooks/:id' do
     include_context 'v1:authorized_request'
+    context 'successfully updates a record' do
+      it 'returns updated record' do
         patch "/api/v1/webhooks/#{webhook.id}",
         params: { webhook: { secret: 'updated secret'} },
         headers: { Authorization: "#{authenticate}" }
@@ -114,6 +116,26 @@ describe 'Webhooks', type: :request do
           }
         )
       end
+    end
+  end
+
+  describe 'POST /api/v1/webhooks/:id/slack_notification_for_report' do
+    let!(:webhook) { create(:webhook, url: ENV['SLACK_URL']) }
+    let!(:upload_attachment) { create(:upload_attachment) }
+    before do
+    end
+    it 'triggers notifier service and returns succesful result' do
+      post "/api/v1/webhooks/#{webhook.id}/slack_notification_for_report",
+      params: { id: webhook.id, resource_id: upload_attachment.id },
+      headers: { Authorization: "Bearer #{authenticate}" }
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include_json(
+        {
+          "status": "done",
+          "message": "ok"
+        }
+      )
     end
   end
 end

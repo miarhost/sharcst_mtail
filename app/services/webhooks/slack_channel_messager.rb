@@ -15,7 +15,7 @@ class Webhooks::SlackChannelMessager < ApplicationService
   end
   private
   def attachment_link
-    @resource.blob.service_url.sub(/\?.*/, '')
+    @resource.blob.service_url.sub(/\?.*/, '') if @resource.file.attached?
   end
 
   def attachment_date
