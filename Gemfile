@@ -16,6 +16,7 @@ gem 'faraday'
 gem 'image_processing', '~> 1.2'
 gem 'jwt'
 gem 'kaminari'
+gem 'opensearch-ruby'
 gem 'pg'
 gem 'puma', '~> 4.1'
 gem 'pundit'
@@ -28,7 +29,7 @@ gem 'redis-store'
 gem 'rest-client'
 gem 'sidekiq'
 gem 'sidekiq-status'
-gem 'opensearch-ruby'
+gem 'twilio-ruby'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

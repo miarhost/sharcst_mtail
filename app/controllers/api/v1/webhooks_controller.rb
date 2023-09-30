@@ -2,9 +2,10 @@ module Api
   module V1
     class WebhooksController < ApplicationController
       before_action :authorize_request
-      before_action :set_webhook, except: :create
+      before_action :set_webhook, only: %i[update destroy]
 
       def slack_notification_for_report
+        @webhook = Webhook.where(description: 'slack').first
         result = Webhooks::SlackChannelMessager.call(@webhook.url, permitted_notifier_params[:resource_id])
         render json: { "status": "done", "message": result }
       end

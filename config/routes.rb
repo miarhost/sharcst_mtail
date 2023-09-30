@@ -27,6 +27,12 @@ Rails.application.routes.draw do
           post 'slack_notification_for_report', to: 'webhooks#slack_notification_for_report'
         end
       end
+
+      resources :newsletters do
+        member do
+          post 'sms_users_newsletter', to: 'webhooks#sms_users_newsletter'
+        end
+      end
     end
   end
 end
