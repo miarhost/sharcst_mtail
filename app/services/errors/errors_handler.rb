@@ -4,6 +4,11 @@ module Errors
     class JwtVerificationError < StandardError; end
     class JwtExpiredSignatureError < StandardError; end
     class Errors::ErrorsHandler::JwtInvalidPayload; end
+    class Twilio::REST::TwilioError < StandardError; end
+    class Twilio::REST::RestError < Twilio::REST::TwilioError; end
+    class Errors::ErrorsHandler::TwilioApiError; end
+    class Errors::ErrorsHandler::TwilioRestError; end
+
     def self.included(klass)
       klass.class_eval do
         rescue_from ActiveRecord::RecordInvalid, with: :validation_error
@@ -15,6 +20,10 @@ module Errors
         rescue_from JWT::ExpiredSignature, with: :not_authorized_error
         rescue_from JWT::InvalidPayload, with: :not_authorized_message
         rescue_from JWT::DecodeError, with: :not_authorized_error
+        rescue_from Errors::ErrorsHandler::TwilioApiError, with: :external_api_error
+        rescue_from Twilio::REST::TwilioError, with: :external_api_error
+        rescue_from Errors::ErrorsHandler::TwilioRestError, with: :external_api_error
+        rescue_from Twilio::REST::RestError, with: :external_api_error
       end
     end
 
@@ -35,7 +44,11 @@ module Errors
     end
 
     def forbidden_error(error)
-      render json: { status: :uforbidden, message: error.message }, status: 403
+      render json: { status: :forbidden, message: error.message }, status: 403
+    end
+
+    def external_api_error
+      render json: { status: :bad_request, message: error.message }, status: 400
     end
   end
 end

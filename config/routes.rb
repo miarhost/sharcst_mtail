@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
       resources :newsletters do
         member do
-          post 'sms_users_newsletter', to: 'webhooks#sms_users_newsletter'
+          post 'sms_users_newsletter', to: 'newsletters#sms_users_newsletter'
         end
       end
     end
