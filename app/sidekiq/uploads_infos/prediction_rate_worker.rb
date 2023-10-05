@@ -6,9 +6,7 @@ module UploadsInfos
 
     sidekiq_options queue: :default
 
-    def perform(id)
-      records = UploadsInfo.where(upload_id: id)
-      ids = records.map { |r| { user_id: r.user_id, item_id: id } }.uniq
+    def perform(ids)
       recommender = Disco::Recommender.new(factors: 20)
       recommender.fit(ids)
       resulting_score = recommender.predict(ids)

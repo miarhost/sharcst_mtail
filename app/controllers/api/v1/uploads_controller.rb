@@ -4,7 +4,6 @@ module Api
       before_action :authorize_request, except: :show
       before_action :set_upload, except: :create
 
-
       def create
         @upload = Upload.new(upload_params.merge(user_id: @current_user.id))
         @upload.save!

@@ -6,9 +6,12 @@ module Api
 
       def index
         filter = filter_params[:search].present? ? filter_params[:search] : ''
-        uploads_infos = paginate_collection(SelectUploadsInfos.new.call(filter), params[:page], 5)
+        uploads_infos = SelectUploadsInfos.new.call(filter)
+        uploads_infos_paginated = paginate_collection(uploads_infos, params[:page], 5)
+        predictions = UploadsInfos::PredictionRateWorker.perform_in(1.seconds, uploads_infos.ids)
+        PredictionsDeliverQueue.new(uploads_infos, predictions).publish
 
-        render json: uploads_infos, each_serializer: UploadsInfosSerializer, root: false
+        render json: uploads_infos_paginated, each_serializer: UploadsInfosSerializer, root: false
       end
 
       def show

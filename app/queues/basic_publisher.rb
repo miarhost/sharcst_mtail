@@ -16,15 +16,16 @@ class BasicPublisher
 
     def config
       {
-      user:  ENV['RABBITMQ_DEFAULT_USER'],
-      pass:  ENV['RABBITMQ_DEFAULT_PASS'],
-      host:  ENV['RABBITMQ_HOST'],
-      port:  ENV['RABBITMQ_PORT'],
-      vhost: ENV['RABBITMQ_DEFAULT_VHOST']
-    }
-  end
+        user:  ENV['RABBITMQ_DEFAULT_USER'],
+        pass:  ENV['RABBITMQ_DEFAULT_PASS'],
+        host:  ENV['RABBITMQ_HOST'],
+        port:  ENV['RABBITMQ_PORT'],
+        vhost: ENV['RABBITMQ_DEFAULT_VHOST']
+      }
+    end
 
-  def queue(name)
-    channel.queue(name, durable: true)
+    def queue(name)
+      channel.queue(name, durable: true)
+    end
   end
 end

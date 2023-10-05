@@ -1,7 +1,7 @@
 class PredictionsDeliverQueue
   def initialize(records, predictions)
     @records = records
-    @predictions = predictions
+    @predictions = predictions.split(', ')
   end
 
 
@@ -9,11 +9,11 @@ class PredictionsDeliverQueue
     'predictions for a period'
   end
 
-  def publish(records, predictions)
+  def publish
     BasicPublisher.queue(queue_name).publish(data_hash.to_json)
   end
 
   def data_hash
-    @data_hash = Hash[records.zip(predictions)]
+    @data_hash = Hash[@records.zip(@predictions)]
   end
 end
