@@ -1,9 +1,8 @@
 class PredictionsDeliverQueue
   def initialize(records, predictions)
     @records = records
-    @predictions = predictions.split(', ')
+    @predictions = predictions
   end
-
 
   def queue_name
     'predictions for a period'
@@ -14,6 +13,6 @@ class PredictionsDeliverQueue
   end
 
   def data_hash
-    @data_hash = Hash[@records.zip(@predictions)]
+    Hash[@records.pluck(:name).zip(@predictions)]
   end
 end

@@ -45,7 +45,7 @@ module Api
       end
 
       def load_prediction_for_infos
-        result = DiscoServices::UploadsRecommender.call(@upload.id)
+        result = DiscoServices::UploadsRecommender.call(@upload.uploads_infos.ids)
         render json: { 'predicted rating': result }
       end
 

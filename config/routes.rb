@@ -19,6 +19,7 @@ Rails.application.routes.draw do
         end
         collection do
           delete 'remove_report', to: 'uploads_infos#remove_report'
+          post 'deliver_predictions', to: 'uploads_infos#deliver_predictions'
         end
       end
 

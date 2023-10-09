@@ -1,17 +1,19 @@
 module Api
   module V1
     class UploadsInfosController < ApplicationController
-      before_action :authorize_request, except: %i[index show]
-      before_action :set_info, except: %i[index remove_report]
+      before_action :authorize_request, except: %i[index show deliver_predictions]
+      before_action :set_info, except: %i[index remove_report deliver_predictions]
 
       def index
-        filter = filter_params[:search].present? ? filter_params[:search] : ''
-        uploads_infos = SelectUploadsInfos.new.call(filter)
         uploads_infos_paginated = paginate_collection(uploads_infos, params[:page], 5)
-        predictions = UploadsInfos::PredictionRateWorker.perform_in(1.seconds, uploads_infos.ids)
-        PredictionsDeliverQueue.new(uploads_infos, predictions).publish
-
         render json: uploads_infos_paginated, each_serializer: UploadsInfosSerializer, root: false
+      end
+
+      def deliver_predictions
+        predictions = DiscoServices::UploadsRecommender.call(uploads_infos.ids)
+        predictions_array = predictions&.delete('[]').split(', ').map(&:to_f)
+        render json: (Hash[uploads_infos.pluck(:name).zip([predictions_array])])
+        PredictionsDeliverQueue.new(uploads_infos, predictions_array).publish
       end
 
       def show
@@ -50,6 +52,14 @@ module Api
 
       def filter_params
         params[:filter] ? params.require[:search].permit(:number_of_seeds, :name, :protocol, :user_id) : {}
+      end
+
+      def filter
+        filter_params[:search].present? ? filter_params[:search] : ''
+      end
+
+      def uploads_infos
+        SelectUploadsInfos.new.call(filter)
       end
     end
   end
