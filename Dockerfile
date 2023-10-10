@@ -7,4 +7,4 @@ RUN gem install bundler && bundle install
 ADD . /app
 
 CMD ["rails", "server"]
-EXPOSE 3000
+EXPOSE 3001

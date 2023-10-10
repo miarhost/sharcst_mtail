@@ -13,7 +13,7 @@ services:
   web:
     build: ./
     ports:
-    - 3000:3000
+    - 3001:3001
     depends_on:
     - db
     - redis
@@ -84,14 +84,13 @@ services:
   worker:
     container_name: sharcst_sidekiq
     build: .
-    command: 'bundle exec sidekiq'
+    command: 'sidekiq'
     depends_on:
     - db
     - redis
     - mailcatcher
-    volumes:
-    - '.:/sharcst_mtail'
-
+    env_file:
+    - .env
 
   mailcatcher:
     container_name: mailcatcher
@@ -99,12 +98,23 @@ services:
     ports:
     - 1080:1080
 
+  rabbitmq:
+    image: rabbitmq:3.9.29-alpine
+    env_file:
+    - .env
+    ports:
+    - 5671:5671
+    - 15692:15692
+    volumes:
+    - rabbitmq:/var/lib/rabbitmq
+
 
 volumes:
   postgres-data:
   opensearch:
   s3_minio_data:
   redis_data:
+  rabbitmq:
 
 networks:
   opensearch-net:
