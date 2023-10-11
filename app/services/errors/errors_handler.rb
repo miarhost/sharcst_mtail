@@ -24,6 +24,7 @@ module Errors
         rescue_from Twilio::REST::TwilioError, with: :external_api_error
         rescue_from Errors::ErrorsHandler::TwilioRestError, with: :external_api_error
         rescue_from Twilio::REST::RestError, with: :external_api_error
+        rescue_from Pundit::NotAuthorizedError, with: :policy_restriction_for_user
       end
     end
 
@@ -49,6 +50,10 @@ module Errors
 
     def external_api_error
       render json: { status: :bad_request, message: error.message }, status: 400
+    end
+
+    def policy_restriction_for_user
+      render json: { status: :forbidden, message: 'You are not authorized to perform this action'}, status: 403
     end
   end
 end

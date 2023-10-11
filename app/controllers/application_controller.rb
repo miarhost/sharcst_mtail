@@ -1,6 +1,7 @@
 
 class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
+  include Pundit::Authorization
 
   def doorkeeper_unauthorized_render_options(error = nil)
     { json: { error => 'Not Authorized by OAuth' } }
@@ -21,5 +22,9 @@ class ApplicationController < ActionController::API
     raise Errors::ErrorsHandler::JwtDecodeError, "No token provided."
   rescue JWT::DecodeError => e
     raise Errors::ErrorsHandler::JwtDecodeError, e
+  end
+
+  def pundit_user
+    authorize_request
   end
 end

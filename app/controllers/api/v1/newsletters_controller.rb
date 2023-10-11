@@ -5,6 +5,7 @@ module Api
       before_action :authorize_request
 
       def sms_users_newsletter
+        authorize @newsletter
         twilio_response = TwilioServices::SmsSender.call(@newsletter)
 
         render json: twilio_response

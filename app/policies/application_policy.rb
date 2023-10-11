@@ -26,12 +26,14 @@ class ApplicationPolicy
     false
   end
 
-  def edit?
-    update?
-  end
-
   def destroy?
     false
+  end
+
+  Roles::LIST.each do |role|
+    define_method "user_is_#{role}?" do
+      user.roles.include?(role)
+    end
   end
 
   class Scope
