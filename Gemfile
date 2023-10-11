@@ -38,6 +38,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'shoulda-matchers'
   gem 'rspec-json_expectations'
+  gem 'webmock'
 end
 
 group :development do

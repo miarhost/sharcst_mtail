@@ -70,6 +70,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.2)
       sshkit (>= 1.6.1, != 1.7.0)
     amq-protocol (2.3.2)
@@ -127,6 +129,8 @@ GEM
       rest-client (>= 2.0.0)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     date (3.3.3)
     diff-lcs (1.5.0)
@@ -156,6 +160,7 @@ GEM
     ffi (1.15.5)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    hashdiff (1.0.1)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -231,6 +236,7 @@ GEM
       faraday (>= 1.0, < 3)
       multi_json
     pg (1.2.3)
+    public_suffix (5.0.3)
     puma (4.3.12)
       nio4r (~> 2.0)
     pundit (2.3.1)
@@ -300,6 +306,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rexml (3.2.6)
     rspec-core (3.9.3)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.4)
@@ -361,6 +368,10 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
+    webmock (3.19.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -415,6 +426,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   twilio-ruby
   tzinfo-data
+  webmock
 
 RUBY VERSION
    ruby 2.7.1p83

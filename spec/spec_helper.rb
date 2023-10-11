@@ -14,6 +14,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'rspec/json_expectations'
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -44,6 +46,22 @@ RSpec.configure do |config|
   # inherited by the metadata hash of host groups and examples, rather than
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.before(:each) do
+    stub_request(:post, ENV['SLACK_URL']).
+    with(
+      body: {"text": "You have new report for bucket logging for #{Time.now.utc}.
+               Please download it on "}.to_json,
+      headers: {
+        'Accept'=>'application/json',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Length'=>'117',
+        'Content-Type'=>'application/json',
+        'Host'=>'hooks.slack.com',
+        'User-Agent'=>'rest-client/2.1.0 (linux-gnu x86_64) ruby/2.7.1p83'
+      }).
+      to_return(status: 200, body: 'ok', headers: {})
+  end
 
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.

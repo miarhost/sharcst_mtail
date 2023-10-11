@@ -10,6 +10,8 @@ describe 'Webhooks', type: :request do
 
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/webhooks/1',
       params: { webhook: { secret: 'updated secret'} }
+
+      include_examples 'v1:unauthorized_request', :delete, '/api/v1/webhooks/1', params: { id: 1 }
     end
   end
 
@@ -120,7 +122,8 @@ describe 'Webhooks', type: :request do
   end
 
   describe 'POST /api/v1/webhooks/:id/slack_notification_for_report' do
-    let!(:webhook) { create(:webhook, url: ENV['SLACK_URL']) }
+    include_context 'v1:authorized_request'
+    let!(:webhook) { create(:webhook, url: ENV['SLACK_URL'], description: 'slack') }
     let!(:upload_attachment) { create(:upload_attachment) }
     before do
     end
@@ -136,6 +139,17 @@ describe 'Webhooks', type: :request do
           "message": "ok"
         }
       )
+    end
+  end
+
+  describe 'DELETE /api/v1/webhooks/:id' do
+    include_context 'v1:authorized_request'
+    it 'destroys the record' do
+      delete "/api/v1/webhooks/#{webhook.id}",
+      headers: { Authorization: "Bearer #{authenticate}" }
+
+      expect(response.status).to eq(204)
+      expect { webhook.reload }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
 end

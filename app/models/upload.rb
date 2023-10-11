@@ -8,6 +8,6 @@ class Upload < ApplicationRecord
   private
 
   def publish_to_dashboard
-    Publisher.publish('uploads', attributes)
+    BasicPublisher.publish('uploads', attributes)
   end
 end
