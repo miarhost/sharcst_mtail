@@ -1,0 +1,5 @@
+FactoryBot.define do
+  factory :subscription do
+    title { Faker::Books::Dune }
+  end
+end

@@ -61,6 +61,13 @@ RSpec.configure do |config|
         'User-Agent'=>'rest-client/2.1.0 (linux-gnu x86_64) ruby/2.7.1p83'
       }).
       to_return(status: 200, body: 'ok', headers: {})
+
+    stub_request(:post, "https://api.twilio.com/#{DateTime.now.strftime("%y-%m-%d")}/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/#{ENV['TWILIO_SERVICE_NUMBER']}.json").
+    with(:headers => {'Accept'=>'application/json',
+      'Accept-Charset'=>'utf-8',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'User-Agent'=>'twilio-rest-client/4.7.1 (ruby/x86_64-darwin15 2.2.4-p230)'}).
+      to_return(:status => 200, :body => "[{'body': 'Sent from your Twilio trial account - New Event', 'status': 'queued'}]", :headers => {})
   end
 
   # The settings below are suggested to provide a good initial experience

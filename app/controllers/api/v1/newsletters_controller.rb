@@ -1,8 +1,8 @@
 module Api
   module V1
     class NewslettersController < ApplicationController
-      before_action :set_newsletter
       before_action :authorize_request
+      before_action :set_newsletter
 
       def sms_users_newsletter
         authorize @newsletter
