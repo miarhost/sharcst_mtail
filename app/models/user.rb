@@ -15,4 +15,12 @@ class User < ApplicationRecord
   has_many :uploads, dependent: :destroy
   has_one :webhook, dependent: :destroy
   has_secure_password
+
+  def admin_list_cached
+    Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do
+      uploads.includes(:upload_attachment, :webhooks)
+                  .references(:upload_attachment, :webhooks)
+                  .order(name: :asc)
+    end
+  end
 end

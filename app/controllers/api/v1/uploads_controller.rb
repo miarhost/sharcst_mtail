@@ -1,8 +1,23 @@
 module Api
   module V1
     class UploadsController < ApplicationController
-      before_action :authorize_request, except: :show
-      before_action :set_upload, except: :create
+      before_action :authorize_request, except: %i[show index]
+      before_action :set_upload, except: %i[create index dashboard]
+
+      def index
+        public_uploads = Rails.cache.fetch([Upload.first.cache_key, __method__], expires_in: 20.minutes) do
+          Upload.includes(:upload_attachment)
+                      .references(:upload_attachment)
+                      .order(name: :asc)
+        end
+        render json: public_uploads, each_serializer: PublicUploadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
+      end
+
+      def dashboard
+
+        render json: current_user.admin_uploads, each_serializer: AdminUploadsSerializer,
+                     include: [[:upload_attachment, UploadAttachmentSerializer], [:webhooks, WebhookSerializer]]
+      end
 
       def create
         @upload = Upload.new(upload_params.merge(user_id: @current_user.id))

@@ -53,6 +53,14 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :sidekiq
   # config.active_job.queue_name_prefix = "uploads_api_production"
 
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_PROD_CACHE_URL'],
+    connect_timeout: 0.2,
+    read_timeout: 1.0,
+    write_timeout: 0.5,
+    reconnect_attempts: 3
+  }
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.

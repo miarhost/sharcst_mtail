@@ -28,4 +28,4 @@ class BasicPublisher
       channel.queue(name, durable: true)
     end
   end
-end
+end.connection.close

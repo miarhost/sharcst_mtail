@@ -5,7 +5,7 @@ class PredictionsDeliverQueue
   end
 
   def queue_name
-    'predictions for a period'
+    'predictions'
   end
 
   def publish
