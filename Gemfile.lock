@@ -122,6 +122,7 @@ GEM
       sidekiq (>= 6.0)
     case_transform (0.2)
       activesupport
+    chronic (0.10.2)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     cloudinary (1.27.0)
@@ -375,6 +376,8 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    whenever (1.0.0)
+      chronic (>= 0.6.3)
     zeitwerk (2.6.11)
 
 PLATFORMS
@@ -427,6 +430,7 @@ DEPENDENCIES
   twilio-ruby
   tzinfo-data
   webmock
+  whenever
 
 RUBY VERSION
    ruby 2.7.1p83

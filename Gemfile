@@ -30,6 +30,7 @@ gem 'rest-client'
 gem 'sidekiq'
 gem 'sidekiq-status'
 gem 'twilio-ruby'
+gem 'whenever', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
