@@ -2,30 +2,21 @@ require 'bunny'
 class BasicPublisher
   class << self
     def publish(exchange, message = {})
-      entity = channel.fanout("crawler.#{exchange}")
-      entity.publish(message.to_json)
+      producer = channel.fanout("#{exchange}")
+      producer.publish(message.to_json)
+      connection.close
     end
 
     def channel
-      @channel ||= connection.create_channel
+      connection.create_channel
     end
 
     def connection
-      @connection = Bunny.new.tap(&:start)
-    end
-
-    def config
-      {
-        user:  ENV['RABBITMQ_DEFAULT_USER'],
-        pass:  ENV['RABBITMQ_DEFAULT_PASS'],
-        host:  ENV['RABBITMQ_HOST'],
-        port:  ENV['RABBITMQ_PORT'],
-        vhost: ENV['RABBITMQ_DEFAULT_VHOST']
-      }
+      Bunny.new.tap(&:start)
     end
 
     def queue(name)
-      channel.queue(name, durable: true)
+      channel.queue(name)
     end
   end
-end.connection.close
+end

@@ -9,7 +9,7 @@ class PredictionsDeliverQueue
   end
 
   def publish
-    BasicPublisher.queue(queue_name).publish(data_hash.to_json)
+    BasicPublisher.queue(queue_name).publish('snickers', data_hash)
   end
 
   def data_hash

@@ -29,3 +29,5 @@
 .env
 
 /config/credentials.yml.enc
+
+settings.json
