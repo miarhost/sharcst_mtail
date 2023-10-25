@@ -1,4 +1,4 @@
-class PredictionsDeliverQueue
+class MappedPredictionsDeliverQueue
   def initialize(records, predictions)
     @records = records
     @predictions = predictions

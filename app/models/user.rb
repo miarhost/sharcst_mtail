@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :uploads, dependent: :destroy
   has_one :webhook, dependent: :destroy
   has_secure_password
+  has_recommended :subscriptions
 
   def admin_list_cached
     Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do

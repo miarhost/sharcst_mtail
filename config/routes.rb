@@ -40,6 +40,12 @@ Rails.application.routes.draw do
           post 'sms_users_newsletter', to: 'newsletters#sms_users_newsletter'
         end
       end
+
+      resources :disco_recommendations do
+        collection do
+          post 'queue_recommendations_for_user', to: 'disco_recommendations#queue_recommendations_for_user'
+        end
+      end
     end
   end
 end

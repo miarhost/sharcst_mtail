@@ -13,7 +13,7 @@ module Api
         predictions = DiscoServices::UploadsRecommender.call(uploads_infos.ids)
        predictions_array = predictions.delete('[]').split(', ').map(&:to_f) if predictions
        render json: (Hash[uploads_infos.pluck(:name).zip([predictions_array])])
-       PredictionsDeliverQueue.new(uploads_infos, predictions_array).publish
+       MappedPredictionsDeliverQueue.new(uploads_infos, predictions_array).publish
       end
 
       def show
