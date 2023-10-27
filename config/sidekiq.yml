@@ -8,4 +8,4 @@ production:
 
 :queues:
   - default
-  - low
+  - updater
