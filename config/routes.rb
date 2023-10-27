@@ -41,11 +41,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :disco_recommendations do
+      resources :disco_recommendations, only: [] do
         collection do
           post 'queue_recommendations_for_user', to: 'disco_recommendations#queue_recommendations_for_user'
         end
       end
+
+      resources :subscriptions
     end
   end
 end
