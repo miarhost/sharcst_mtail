@@ -1,5 +1,5 @@
 class NewsletterMailer < ApplicationMailer
-  layout 'newsletter_mailer'
+  layout 'current_news'
 
   def current_news
     @user = params[:user]
