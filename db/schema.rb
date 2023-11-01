@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_11_172616) do
+ActiveRecord::Schema.define(version: 2023_11_01_112754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,8 @@ ActiveRecord::Schema.define(version: 2023_10_11_172616) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "title"
+    t.jsonb "uploads_ratings"
+    t.jsonb "newsletters_ratings"
   end
 
   create_table "upload_attachments", force: :cascade do |t|
