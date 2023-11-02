@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_01_112754) do
+ActiveRecord::Schema.define(version: 2023_11_02_143413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_112754) do
     t.string "title"
     t.jsonb "uploads_ratings"
     t.jsonb "newsletters_ratings"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   create_table "upload_attachments", force: :cascade do |t|
@@ -126,6 +128,8 @@ ActiveRecord::Schema.define(version: 2023_11_01_112754) do
     t.bigint "user_id", null: false
     t.string "name"
     t.datetime "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
