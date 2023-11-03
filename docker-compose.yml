@@ -1,6 +1,17 @@
 
 version: '3'
 services:
+
+  nginx:
+    image: nginx:1.14.2-alpine
+    ports:
+      - 8080:80
+      - 443:443
+    volumes:
+      - ./nginx.conf.d:/etc/nginx/nginx.conf.d
+    networks:
+      - nginx_network
+
   db:
     image: postgres:latest
     ports:
@@ -10,7 +21,7 @@ services:
     env_file:
     - .env
 
-  web:
+  sharcst_web:
     build: ./
     ports:
     - 3001:3001
@@ -19,6 +30,10 @@ services:
     - redis
     env_file:
     - .env
+    container_name: sharcst_web
+
+    networks:
+      - nginx_network
 
   redis:
     image: redis:6.2.13
@@ -96,15 +111,15 @@ services:
     container_name: mailcatcher
     image: schickling/mailcatcher
     ports:
-    - 1080:1080
+      - 1080:1080
 
   rabbitmq:
     image: rabbitmq:3.9.29-alpine
     env_file:
     - .env
     ports:
-    - 5671:5671
-    - 15692:15692
+      - 5671:5671
+      - 15692:15692
     volumes:
     - rabbitmq:/var/lib/rabbitmq
 
@@ -118,3 +133,5 @@ volumes:
 
 networks:
   opensearch-net:
+  nginx_network:
+    external: true
