@@ -51,6 +51,16 @@ module Api
         @upload.upload_attachment&.destroy!
       end
 
+      def download_file
+        if @upload.upload_attachment
+        download = @upload.upload_attachment.download
+        @upload.downloads_count += 1
+        render json: { "file": Base64.encode64(download.to_s) }
+        else
+          raise ActiveRecord::RecordNotFound
+        end
+      end
+
       def destroy
         @upload.destroy!
       end

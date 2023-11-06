@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_02_143413) do
+ActiveRecord::Schema.define(version: 2023_11_06_184556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 2023_11_02_143413) do
     t.datetime "date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "downloads_count", default: 0
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 

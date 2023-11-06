@@ -15,6 +15,7 @@ Rails.application.routes.draw do
           delete 'remove_file', to: 'uploads#remove_file'
           get 'load_prediction_for_infos', to: 'uploads#load_prediction_for_infos'
           get 'webhook_infos', to: 'uploads#webhook_infos'
+          get 'download_file', to: 'uploads#download_file'
         end
       end
 
