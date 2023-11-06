@@ -22,7 +22,7 @@ http {
     server {
        listen 80;
        server_name ec2-16-16-25-76.eu-north-1.compute.amazonaws.com;
-       resolver 127.0.0.3001;
+       resolver 127.0.0.11;
        location / {
           proxy_pass http://sharcst_web:80/;
        }

@@ -60,6 +60,8 @@ append :linked_dirs, 'tmp/pids', 'tmp/sockets', 'public'
 # Default value for keep_releases is 5
 set :keep_releases, 10
 
+set :connection_timeout, 5
+
 before 'deploy:check', 'linked_files:upload'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
