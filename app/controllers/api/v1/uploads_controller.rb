@@ -52,8 +52,8 @@ module Api
       end
 
       def download_file
-        if @upload.upload_attachment
-        download = @upload.upload_attachment.download
+        if @upload.upload_attachment && @upload.upload_attachment.attached?
+        download = @upload.upload_attachment.blob.download
         @upload.downloads_count += 1
         render json: { "file": Base64.encode64(download.to_s) }
         else

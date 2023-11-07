@@ -10,12 +10,14 @@ describe 'Uploads', type: :request do
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/uploads/1', params: { 'upload': {'name': 'Updated folder name' } }
       include_examples 'v1:unauthorized_request', :delete, '/api/v1/uploads/1/remove_file', params: { id: 1 }
       include_examples 'v1:unauthorized_request', :get, '/api/v1/uploads/1/load_prediction_for_infos', params: { id: 1 }
+      include_examples 'v1:unauthorized_request', :get, '/api/v1/uploads/1/download_file', params: { id: 1 }
     end
   end
 
   let!(:upload) { create(:upload) }
   let!(:user) { FactoryBot.create(:user) }
   let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
+
 
   describe 'GET /api/v1/uploads/:id/load_prediction_for_infos' do
     include_context 'v1:authorized_request'
@@ -29,8 +31,7 @@ describe 'Uploads', type: :request do
       get "/api/v1/uploads/#{upload.id}/load_prediction_for_infos", params: { id: upload.id },
       headers: { Authorization: "Bearer #{authenticate}" }
 
-      sleep 6
-      result = DiscoServices::UploadsRecommender.call(upload.id)
+      result = DiscoServices::UploadsRecommender.call(uploads_infos.pluck(:id))
 
       expect(response).to have_http_status(200)
       expect(response.body).to include_json({ 'predicted rating': result.to_s })
@@ -169,6 +170,35 @@ describe 'Uploads', type: :request do
       headers: { Authorization: "Bearer #{authenticate}" }
       expect(response.status).to eq(204)
       expect { upload_attachment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'GET /api/v1/uploads/:id/download_file' do
+    let!(:upload_attachment) { create(:upload_attachment, upload_id: upload.id) }
+    include_context 'v1:authorized_request'
+
+    context 'successful download' do
+      before { upload_attachment.attach(io: File.open(fixture_file_upload('example_file.png')), filename: 'example_file.png') }
+      it 'successfully downloads file from storage in binary format' do
+        get "/api/v1/uploads/#{upload.id}/download_file",
+        headers: { Authorization: "Bearer #{authenticate}" }
+
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['file']).to be_an_instance_of(String)
+      end
+    end
+
+    context 'failed download' do
+      it 'returns error message for an absent file' do
+        get "/api/v1/uploads/#{upload.id}/download_file",
+        headers: { Authorization: "Bearer #{authenticate}" }
+
+        expect(response.status).to eq(404)
+        expect(response.body).to include_json(
+          "status": "not_found",
+          "message": "Record not found"
+        )
+      end
     end
   end
 end
