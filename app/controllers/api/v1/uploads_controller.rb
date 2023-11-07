@@ -1,14 +1,15 @@
 module Api
   module V1
     class UploadsController < ApplicationController
-      before_action :authorize_request, except: %i[show index]
-      before_action :set_upload, except: %i[create index dashboard]
+      before_action :authorize_request, except: %i[show index public_downloads_list]
+      before_action :set_upload, except: %i[create index dashboard public_downloads_list]
 
       def index
         public_uploads = Rails.cache.fetch([Upload.first.cache_key, __method__], expires_in: 20.minutes) do
-          Upload.includes(:upload_attachment)
-                      .references(:upload_attachment)
-                      .order(name: :asc)
+          Upload.public_status
+                .includes(:upload_attachment)
+                .references(:upload_attachment)
+                .order(name: :asc)
         end
         render json: public_uploads, each_serializer: PublicUploadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
       end
@@ -54,7 +55,7 @@ module Api
       def download_file
         if @upload.upload_attachment && @upload.upload_attachment.attached?
         download = @upload.upload_attachment.blob.download
-        @upload.downloads_count += 1
+        @upload.update!(downloads_count: @upload.downloads_count + 1)
         render json: { "file": Base64.encode64(download.to_s) }
         else
           raise ActiveRecord::RecordNotFound
@@ -72,6 +73,14 @@ module Api
       def load_prediction_for_infos
         result = DiscoServices::UploadsRecommender.call(@upload.uploads_infos.ids)
         render json: { 'predicted rating': result }
+      end
+
+      def public_downloads_list
+        downloads = Upload.public_status
+                          .downloaded
+                          .eager_load(:upload_attachment)
+                          .order(downloads_count: :desc)
+        render json: downloads, each_serializer: PublicDownloadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
       end
 
       private

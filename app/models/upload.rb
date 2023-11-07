@@ -5,6 +5,10 @@ class Upload < ApplicationRecord
   belongs_to :user
   validates_presence_of :name
   after_create { publish_to_dashboard }
+
+  scope :public_status, -> { where(status: 'public')}
+  scope :downloaded, -> { where('downloads_count > 0')}
+
   private
 
   def publish_to_dashboard

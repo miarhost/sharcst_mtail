@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2023_11_06_184556) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "downloads_count", default: 0
+    t.string "status", default: "public"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
