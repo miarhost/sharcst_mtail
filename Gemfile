@@ -37,9 +37,12 @@ group :development, :test do
   gem 'faker'
   gem 'factory_bot_rails'
   gem 'rspec-rails', '~> 3.0'
+  gem 'webmock'
+end
+
+group :test do
   gem 'shoulda-matchers'
   gem 'rspec-json_expectations'
-  gem 'webmock'
 end
 
 group :development do

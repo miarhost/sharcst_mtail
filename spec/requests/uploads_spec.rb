@@ -201,4 +201,55 @@ describe 'Uploads', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/uploads/public_downloads_list' do
+    let!(:public_upload_downloaded) { create(:upload, status: 'public', downloads_count: 1) }
+    let!(:private_upload_downloaded) { create(:upload, status: 'private', downloads_count: 120) }
+    let!(:public_upload_not_downloaded) { create(:upload, name: 'Not Downloaded', status: 'public', downloads_count: 0) }
+    let!(:public_upload_downloaded_with_removed_attachment) { create(:upload, status: 'public', downloads_count: 33) }
+    let!(:upload_attachment) { create(:upload_attachment, upload_id: public_upload_downloaded.id) }
+    context 'list inclusions' do
+      before { upload_attachment.attach(io: File.open(fixture_file_upload('example_file.png')), filename: 'example_file.png') }
+      it 'shows all uploads had been downloaded by users with file links in order by downloads count' do
+        get '/api/v1/uploads/public_downloads_list'
+
+        expect(response).to have_http_status(200)
+        expect(response.body).to include_json(
+          [
+            {
+              name: public_upload_downloaded_with_removed_attachment.name,
+              status: "public",
+              downloads_count: 33,
+              upload_attachment: nil
+            },
+            {
+              name: public_upload_downloaded.name,
+              status: "public",
+              downloads_count: 1,
+              upload_attachment: {
+                filename: 'example_file.png'
+              }
+            },
+
+          ]
+        )
+        expect(JSON.parse(response.body)[1]['upload_attachment']['download_link']).to match(/example_file.png/)
+      end
+    end
+
+    context 'list exclusions' do
+      it "doesn't show private uploads with any downloads number or never downloaded" do
+        get '/api/v1/uploads/public_downloads_list'
+
+        expect(response).to have_http_status(200)
+        expect(response.body).not_to include_json(
+          [
+            name: 'Not Downloaded',
+            status: 'private',
+            downloads_count: 0
+          ]
+        )
+      end
+    end
+  end
 end
