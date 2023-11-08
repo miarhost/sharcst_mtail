@@ -1,18 +1,24 @@
 class MappedPredictionsDeliverQueue
-  def initialize(records, predictions)
+  include BasicPublisher
+  def initialize(records, values)
     @records = records
-    @predictions = predictions
+    @values = values
   end
 
   def queue_name
     'predictions'
   end
 
-  def publish
-    BasicPublisher.queue(queue_name).publish('snickers', data_hash)
+  def exchange_name
+    'sneakers'
   end
 
   def data_hash
-    Hash[@records.pluck(:name).zip(@predictions)]
+    Hash[@records.pluck(:name).zip(@values)]
+  end
+
+
+  def execute
+    publish('sneakers', data_hash)
   end
 end

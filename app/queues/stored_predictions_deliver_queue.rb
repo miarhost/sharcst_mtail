@@ -1,5 +1,5 @@
 class StoredPredictionsDeliverQueue
-
+  include BasicPublisher
   def initialize(data)
     @data = data
   end
@@ -8,7 +8,7 @@ class StoredPredictionsDeliverQueue
     'subscriptions_for_user'
   end
 
-  def publish
-    BasicPublisher.queue(queue_name).publish(@data)
+  def execute
+    publish('snickers', @data)
   end
 end

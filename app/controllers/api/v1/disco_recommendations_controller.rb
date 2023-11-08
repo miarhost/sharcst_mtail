@@ -5,7 +5,7 @@ module Api
 
       def queue_recommendations_for_user
         data = DiscoServices::UserRecommender.call(@current_user)
-        StoredPredictionsDeliverQueue.new(data.to_json).publish
+        StoredPredictionsDeliverQueue.new(data.to_json).execute
         store_ratings = Uploads::UploadsRatingsStoreWorker.
                           perform_async({'user' => @current_user.id, 'ratings' => data[:result]}.to_json)
         sleep 1
