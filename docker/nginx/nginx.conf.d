@@ -1,3 +1,4 @@
+worker_processes  auto;
 events {
   worker_connections 1024;
 }
@@ -21,21 +22,15 @@ http {
 
     server {
        listen 8080;
-       server_name ec2-16-16-25-76.eu-north-1.compute.amazonaws.com;
+       server_name _;
+       resolver http://ec2-16-16-25-76.eu-north-1.compute.amazonaws.com;
        location / {
           proxy_pass http://sharcst_web:80/;
+          proxy_set_header    X-Forwarded-For $remote_addr;
+          proxy_read_timeout 300;
+          proxy_connect_timeout 300;
+          proxy_send_timeout 300;
        }
-
-        include /etc/nginx/sites-enabled/*;
-        include /etc/nginx/default.d/*.conf;
-
-        error_page 404 /404.html;
-        location = /404.html {
-        }
-
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-        }
 
     }
 }
