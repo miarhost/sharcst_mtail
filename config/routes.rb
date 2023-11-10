@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   use_doorkeeper
   namespace :api do
     namespace :v1 do
+
+      root 'uploads#public_downloads_list'
       post '/users/login', to: 'users#login'
       resources :uploads do
         member do

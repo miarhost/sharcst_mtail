@@ -22,11 +22,9 @@ http {
     server {
        listen 8080;
        server_name ec2-16-16-25-76.eu-north-1.compute.amazonaws.com;
-       resolver 127.0.0.11;
        location / {
           proxy_pass http://sharcst_web:80/;
        }
-               root         /usr/share/nginx/html;
 
         include /etc/nginx/sites-enabled/*;
         include /etc/nginx/default.d/*.conf;
