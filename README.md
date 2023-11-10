@@ -2,9 +2,9 @@
 
 * Ruby version 2.7.1
 
-* for running app including  _redis_, local s3 bucket -> _minio_, _open-search_ / open-search dashboard execute:
+* on dev environment run dev compose config:
 
-docker-compose -f docker-compose.yml up
+docker-compose -f docker-compose.dev.yml up
 
 ===================
 ## Another production server installing schedule

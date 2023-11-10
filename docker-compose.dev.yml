@@ -21,20 +21,6 @@ services:
     env_file:
     - .env
 
-  sharcst_web:
-    build: ./
-    ports:
-    - 3001:3001
-    depends_on:
-    - db
-    - redis
-    env_file:
-    - .env
-    container_name: sharcst_web
-
-    networks:
-      - nginx_network
-
   redis:
     image: redis:6.2.13
     ports:
@@ -96,16 +82,6 @@ services:
     networks:
       - opensearch-net
 
-  worker:
-    container_name: sharcst_sidekiq
-    build: .
-    command: 'sidekiq'
-    depends_on:
-    - db
-    - redis
-    - mailcatcher
-    env_file:
-    - .env
 
   mailcatcher:
     container_name: mailcatcher
