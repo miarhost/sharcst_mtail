@@ -8,7 +8,7 @@ set :branch, 'main'
 set :user, 'ec2-user'
 
 # config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml Dockerfile Gemfile Gemfile.lock nginx.conf.d}
+set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml Dockerfile Gemfile Gemfile.lock docker/nginx/nginx.conf.d}
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
