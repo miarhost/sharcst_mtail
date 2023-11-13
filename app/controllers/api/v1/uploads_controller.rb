@@ -3,6 +3,7 @@ module Api
     class UploadsController < ApplicationController
       before_action :authorize_request, except: %i[show index public_downloads_list]
       before_action :set_upload, except: %i[create index dashboard public_downloads_list]
+      after_action :track_action, only: %i[download_file]
 
       def index
         public_uploads = Rails.cache.fetch([Upload.first.cache_key, __method__], expires_in: 20.minutes) do
@@ -81,6 +82,12 @@ module Api
                           .eager_load(:upload_attachment)
                           .order(downloads_count: :desc)
         render json: downloads, each_serializer: PublicDownloadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
+      end
+
+      protected
+
+      def track_action
+        ahoy.track "Record #{@upload.id} Downloaded", request.path_parameters
       end
 
       private

@@ -5,6 +5,7 @@ ruby '2.7.1'
 
 gem 'active_model_serializers'
 gem 'activestorage-validator'
+gem "ahoy_matey"
 gem "aws-sdk-s3", require: false
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
