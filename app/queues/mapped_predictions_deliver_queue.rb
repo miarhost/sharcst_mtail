@@ -19,6 +19,8 @@ class MappedPredictionsDeliverQueue
 
 
   def execute
-    publish('sneakers', data_hash)
+    direct_exchange.publish(data_hash.to_json)
+  rescue Interrupt => e
+    Rails.logger.error(e.message)
   end
 end

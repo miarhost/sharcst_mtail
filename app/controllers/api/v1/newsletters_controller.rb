@@ -18,6 +18,13 @@ module Api
         render json: @newsletter, status: 201
       end
 
+      def update
+        authorize @newsletter
+        @newsletter.update!(newsletter_params)
+        NewsletterMailer.with(user: @current_user, newsletter: @newsletter).current_news.deliver_now
+        render json: @newsletter, status: 200
+      end
+
       private
 
       def set_newsletter
