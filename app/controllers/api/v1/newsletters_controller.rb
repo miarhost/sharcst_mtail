@@ -2,7 +2,7 @@ module Api
   module V1
     class NewslettersController < ApplicationController
       before_action :authorize_request
-      before_action :set_newsletter, except: :create
+      before_action :set_newsletter, except: %i[create monthly_uploads_newsletter]
 
       def sms_users_newsletter
         authorize @newsletter
@@ -23,6 +23,18 @@ module Api
         @newsletter.update!(newsletter_params)
         NewsletterMailer.with(user: @current_user, newsletter: @newsletter).current_news.deliver_now
         render json: @newsletter, status: 200
+      end
+
+      def monthly_uploads_newsletter
+        @newsletter = Newsletters::MonthlyUploadsAdminsNewsletter.call
+        delivery = Email::DeliverNewsletter.call(User.admins, @newsletter)
+        render json: [@newsletter, { 'delivery_status': delivery }], status: 201
+      end
+
+      def email_users_newsletter
+        authorize @newsletter
+        response = Email::DeliverNewsletter.call(User.admins, @newsletter)
+        render json: { 'delivery_status': response }
       end
 
       private

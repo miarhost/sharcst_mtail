@@ -6,5 +6,8 @@ class NewsletterMailer < ApplicationMailer
     @newsletter = params[:newsletter]
 
     mail(to: @user.email, subject: @newsletter.header)
+    Rails.logger.info("Delivered to #{@user.email}")
+  rescue StandardError => e
+    Rails.logger.error("Delivery failed: #{error.message}")
   end
 end

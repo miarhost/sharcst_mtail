@@ -17,6 +17,8 @@ class User < ApplicationRecord
   has_secure_password
   has_recommended :uploads
 
+  scope :admins, -> { select{ |u| u.roles.include?('admin')} }
+
   def admin_list_cached
     Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do
       uploads.includes(:upload_attachment, :webhooks)
