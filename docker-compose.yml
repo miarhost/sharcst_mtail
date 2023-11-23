@@ -3,12 +3,14 @@ version: '3'
 services:
 
   nginx:
-    image: nginx:1.14.2-alpine
+    build: ./
     ports:
-      - 8080:80
-      - 443:443
+      - 80:80
+    restart: unless-stopped
+    depends_on:
+      - sharcst_web
     volumes:
-      - ./docker/nginx:/etc/nginx/conf.d
+      - ./docker/html:/usr/share/nginx/html
     networks:
       - nginx_network
 
@@ -24,10 +26,10 @@ services:
   sharcst_web:
     build: ./
     ports:
-    - 3001:3001
+    - 14441:14441
+    - 14440:80
     depends_on:
     - db
-    - redis
     env_file:
     - .env
     container_name: sharcst_web
@@ -101,7 +103,6 @@ services:
     build: .
     command: 'sidekiq'
     depends_on:
-    - db
     - redis
     - mailcatcher
     env_file:
@@ -134,4 +135,6 @@ volumes:
 networks:
   opensearch-net:
   nginx_network:
-    external: true
+    driver: bridge
+    ipam:
+      driver: default
