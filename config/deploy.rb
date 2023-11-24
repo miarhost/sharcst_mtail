@@ -8,7 +8,7 @@ set :branch, 'main'
 set :user, 'ec2-user'
 
 # config valid for current version and patch releases of Capistranolock "~> 3.16.0"set :application, "demo_app"set :repo_url, 'https://github.com/shreya-bacancy/demo_app.git'set :deploy_to, '/home/ubuntu/demo_app'set :use_sudo, trueset :branch, 'master'set :linked_files, %w{config/master.key config/database.yml}set :rails_env, 'production'set :keep_releases, 2set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml Dockerfile Gemfile Gemfile.lock docker/nginx/nginx.conf.d}
+set :linked_files, %w{config/database.yml config/master.key .env docker-compose.yml Dockerfile Gemfile Gemfile.lock docker/nginx/nginx.conf docker/html/index.html}
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -18,6 +18,14 @@ set :linked_files, %w{config/database.yml config/master.key .env docker-compose.
 set :all_roles, %i[web worker db]
 
 namespace :deploy do
+  task :cleanup_orphaned_containers do
+    on roles(:web) do
+      within release_path do
+        execute("cd #{release_path} && docker system prune -a -f --volumes")
+      end
+    end
+  end
+
   task :create_nginx_network do
     on roles(:web) do
       within release_path do
@@ -58,15 +66,18 @@ append :linked_dirs, 'tmp/pids', 'tmp/sockets', 'public'
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-set :keep_releases, 10
+set :keep_releases, 2
 
 set :connection_timeout, 5
+before "deploy:starting", "deploy:cleanup"
 
 before 'deploy:check', 'linked_files:upload'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 after 'deploy:updated', 'deploy:create_nginx_network'
-after 'deploy:create_nginx_network', 'deploy:run_composer'
+after 'deploy:create_nginx_network', 'deploy:cleanup_orphaned_containers'
+after 'deploy:cleanup_orphaned_containers', 'deploy:run_composer'
+
 # sidekiq
 #set :sidekiq_roles, %i[worker]
 #set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }

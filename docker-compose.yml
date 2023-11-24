@@ -3,13 +3,14 @@ version: '3'
 services:
 
   nginx:
-    build: ./
+    image: nginx:latest
     ports:
       - 80:80
     restart: unless-stopped
     depends_on:
       - sharcst_web
     volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
       - ./docker/html:/usr/share/nginx/html
     networks:
       - nginx_network
