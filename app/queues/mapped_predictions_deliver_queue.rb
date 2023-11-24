@@ -1,5 +1,4 @@
 class MappedPredictionsDeliverQueue
-  include BasicPublisher
   def initialize(records, values)
     @records = records
     @values = values
@@ -17,9 +16,8 @@ class MappedPredictionsDeliverQueue
     Hash[@records.pluck(:name).zip(@values)]
   end
 
-
   def execute
-    direct_exchange.publish(data_hash.to_json)
+    BasicPublisher.direct_exchange(exchange_name, queue_name, data_hash.to_json)
   rescue Interrupt => e
     Rails.logger.error(e.message)
   end
