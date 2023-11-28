@@ -9,7 +9,7 @@ class MappedPredictionsDeliverQueue
   end
 
   def exchange_name
-    'sneakers'
+    'snickers'
   end
 
   def data_hash
