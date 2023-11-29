@@ -7,7 +7,7 @@ include Sidekiq::Status::Worker
   end
 
   def ids
-    RecordsForPeriod.new(User, Date.today).ids
+    RecordsForPeriod.new(User, Date.today.prev_month, Date.today).ids
   end
 
   def perform

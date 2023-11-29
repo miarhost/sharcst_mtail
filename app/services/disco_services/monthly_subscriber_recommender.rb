@@ -11,7 +11,7 @@ module DiscoServices
 
       recommender.fit(datas)
       recs_per_user = recommender.user_recs(user.id)
-      user_ rating = recommender.predict(datas)
+      user_rating = recommender.predict(datas)
       { recs: recs_per_user, future_rating: user_rating }
     end
   end

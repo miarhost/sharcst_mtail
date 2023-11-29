@@ -1,0 +1,10 @@
+
+Hello , <%= @user.first_name %>
+This month the most popular items based on your choice were
+<% @recommendations[:recs].each do |id| %>
+  item = Upload.find(id)
+  <%= item.name %> for <%= item.date %>
+<% end %>
+The best subscription we can propose is:
+ <% sub = Subscription.where('subscriptions.upload_ratings >= ?',  @recommendations[:future_rating]) %>
+ <%= sub.title %>
