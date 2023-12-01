@@ -4,6 +4,7 @@ require 'capistrano/linked_files'
 require 'capistrano/scm/git'
 require 'capistrano/nginx'
 require 'capistrano/sidekiq'
+require 'whenever/capistrano'
 
 install_plugin Capistrano::Sidekiq
 install_plugin Capistrano::Sidekiq::Systemd

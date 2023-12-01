@@ -46,6 +46,9 @@ end
 
 set :upload_roles, %i[web worker db]
 
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles, %i[web worker db]
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
@@ -77,8 +80,3 @@ before 'deploy:check', 'linked_files:upload'
 after 'deploy:updated', 'deploy:create_nginx_network'
 after 'deploy:create_nginx_network', 'deploy:cleanup_orphaned_containers'
 after 'deploy:cleanup_orphaned_containers', 'deploy:run_composer'
-
-# sidekiq
-#set :sidekiq_roles, %i[worker]
-#set :sidekiq_config, -> { Rails.root.join('config', 'sidekiq.yml') }
-#set :sidekiq_default_hooks, true

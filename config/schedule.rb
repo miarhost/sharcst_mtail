@@ -9,3 +9,8 @@ every :day, at: '15:00 pm' do
   rake 'subscriptions:update_ratings'
   command "puts 'DB ratings update'"
 end
+
+every 4.weeks, at: '9:00 am' do
+  rake 'emails:send_monthly_recs'
+  command "puts 'monthly user recs emails'"
+end
