@@ -48,7 +48,7 @@ module Errors
       render json: { status: :forbidden, message: error.message }, status: 403
     end
 
-    def external_api_error
+    def external_api_error(error)
       render json: { status: :bad_request, message: error.message }, status: 400
     end
 

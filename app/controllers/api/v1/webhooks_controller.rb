@@ -10,6 +10,11 @@ module Api
         render json: { "status": "done", "message": result }
       end
 
+      def messenger_alert_for_admins
+        result = TwilioServices::WhatsappSender.call(User.admins, permitted_notifier_params[:tech_alert])
+        render json: result
+      end
+
       def create
         @webhook = Webhook.create!(webhook_params.merge(user_id: @current_user&.id))
         render json: { 'status': :created, 'webhook': @webhook }, status: 201
@@ -26,7 +31,7 @@ module Api
 
       private
       def permitted_notifier_params
-        params.permit(:resource_id, :id)
+        params.permit(:resource_id, :id, :tech_alert)
       end
 
       def webhook_params
