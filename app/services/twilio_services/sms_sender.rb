@@ -18,5 +18,8 @@ module TwilioServices
         )
     end
 
+    def sender
+      @sender = ENV['TWILIO_SMS_SERVICE']
+    end
   end
 end

@@ -26,7 +26,5 @@ class TwilioServices::BaseTwilioService < ApplicationService
     @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_TOKEN'])
   end
 
-  def sender
-    @sender = ENV['TWILIO_SMS_SERVICE']
-  end
+  def sender; end
 end

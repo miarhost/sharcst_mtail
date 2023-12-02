@@ -17,5 +17,9 @@ module TwilioServices
           to: "whatsapp:#{number}"
         )
     end
+
+    def sender
+      @sender = ENV['TWILIO_WHATSAPP_SERVICE']
+    end
   end
 end
