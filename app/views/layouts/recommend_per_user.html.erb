@@ -6,7 +6,8 @@ This month the most popular items based on your choice were
   <%= item.name %> for <%= item.date %>
 <% end %>
 The best subscription we can propose is:
- <% subs = Subscription.where(uploads_ratings: @recommendations[:future_rating]) %>
+ <% subs = Subscription.select("uploads_ratings -> 'r'", @recommendations[:future_rating][0].round) %>
  <% subs.each do |sub| %>
- <%= sub.title %>
+ <%= sub&.id %>
+  With rating <%= @recommendations[:future_rating][0] %>
  <% end %>
