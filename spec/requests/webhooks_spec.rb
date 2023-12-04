@@ -12,6 +12,9 @@ describe 'Webhooks', type: :request do
       params: { webhook: { secret: 'updated secret'} }
 
       include_examples 'v1:unauthorized_request', :delete, '/api/v1/webhooks/1', params: { id: 1 }
+
+      include_examples 'v1:unauthorized_request', :post, '/api/v1/webhooks/messenger_alert_for_admins',
+      params: { tech_alert: 'Test Alert' }
     end
   end
 
@@ -150,6 +153,24 @@ describe 'Webhooks', type: :request do
 
       expect(response.status).to eq(204)
       expect { webhook.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'POST /api/v1/webhooks/messenger_alert_for_admins' do
+    include_context 'v1:authorized_request'
+    it 'delivers whatsapp message and gets success response' do
+      post "/api/v1/webhooks/messenger_alert_for_admins",
+      params: { tech_alert: 'Test Alert'},
+      headers: { Authorization: "Bearer #{authenticate}"}
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to eq(
+        [
+          {
+          "body": "Successfully sent"
+          }
+        ]
+      )
     end
   end
 end

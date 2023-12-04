@@ -49,15 +49,15 @@ services:
 
   minio:
     image: minio/minio
-    command: server --console-address ":38821" /data
-    container_name: minio_s3_next
+    command: server --console-address ":9001" /data
+    container_name: minio
     ports:
       - 9000:9000
-      - 38821:38821
+      - 9001:9001
     env_file:
     - .env
     volumes:
-      - s3_minio_data:/data
+      - minio_data:/data
 
   opensearch:
     image: opensearchproject/opensearch:latest
@@ -129,7 +129,7 @@ services:
 volumes:
   postgres-data:
   opensearch:
-  s3_minio_data:
+  minio_data:
   redis_data:
   rabbitmq:
 

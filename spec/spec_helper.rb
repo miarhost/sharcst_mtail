@@ -62,13 +62,24 @@ RSpec.configure do |config|
       }).
       to_return(status: 200, body: 'ok', headers: {})
 
-    stub_request(:post, "https://api.twilio.com/#{DateTime.now.strftime("%y-%m-%d")}/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/#{ENV['TWILIO_SERVICE_NUMBER']}.json").
+    stub_request(:post, "https://api.twilio.com/#{DateTime.now.strftime("%y-%m-%d")}/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/#{ENV['TWILIO_SMS_SERVICE']}.json").
     with(:headers => {'Accept'=>'application/json',
       'Accept-Charset'=>'utf-8',
       'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
       'User-Agent'=>'twilio-rest-client/4.7.1 (ruby/x86_64-darwin15 2.2.4-p230)'}).
       to_return(:status => 200, :body => "[{'body': 'Sent from your Twilio trial account - New Event', 'status': 'queued'}]", :headers => {})
-  end
+
+    stub_request(:post, "https://api.twilio.com/#{DateTime.now.strftime("%y-%m-%d")}/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}.Messages.json").
+    with(
+      body: {"Body"=>"Test Alert", "From"=>"whatsapp:#{ENV['TWILIO_SMS_SERVICE']}", "To"=>"whatsapp:#{ENV['TWILIO_TEST_USER_NUMBER']}"},
+      headers: {'Accept'=>'application/json',
+      'Accept-Charset'=>'utf-8',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization'=>"Basic #{ENV['TW_MESSENGER_TOKEN']}",
+      'Content-Type'=>'application/x-www-form-urlencoded',
+      'User-Agent'=>'twilio-ruby/6.7.0 (linux-gnu x86_64) Ruby/2.7.1'}).
+      to_return(:status => 200, :body => "Successfully sent", :headers => {})
+    end
 
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.

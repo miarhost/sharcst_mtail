@@ -8,10 +8,9 @@ docker-compose -f docker-compose.dev.yml up
 
 also for local env locally run rails s -p 3001 and sidekiq, for all the rest run docker-compose up
 
-===================
-## Another production server installing schedule
-## /Amazon EC 2/Amazon Linux 2023 deployed by Capistrano and run by docker-compose
-===================
+
+### New production server installing schedule
+
 sudo mkdir -p /var/www
 
 sudo chown ec2-user /var/www
