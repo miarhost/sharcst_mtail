@@ -12,4 +12,8 @@ class RecordsForPeriod
   def user_active_for_month
     @relation.joins(:uploads).where('uploads.date is not null and uploads.date between ? and ?', @starts, @ends)
   end
+
+  def infos_active_for_month
+    @relation.joins(:upload).where('uploads.date is not null and uploads.date between ? and ?', @starts, @ends)
+  end
 end

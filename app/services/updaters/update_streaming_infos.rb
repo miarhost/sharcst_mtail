@@ -1,4 +1,4 @@
-class UpdateStreamingInfos < ApplicationService
+class Updaters::UpdateStreamingInfos < ApplicationService
   def self.call(record_id)
     result = UploadsInfos::UpdateStreamingInfosWorker.perform_in(1.seconds, record_id)
     sleep 6

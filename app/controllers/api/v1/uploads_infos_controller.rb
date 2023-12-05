@@ -26,7 +26,7 @@ module Api
       end
 
       def generate_report
-        render json: Csvs::GenerateUploadsInfoReport.call(@uploads_info.id)
+        render json: Reports::UploadsMonthlyData.call(@uploads_info.id)
       end
 
       def remove_report
@@ -36,7 +36,7 @@ module Api
       end
 
       def update_streaming_infos
-        render json: UpdateStreamingInfos.call(@uploads_info.id)
+        render json: Updaters::UpdateStreamingInfos.call(@uploads_info.id)
       end
 
       private
