@@ -365,6 +365,8 @@ GEM
     sshkit (1.21.5)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    tf-idf-similarity (0.2.0)
+      unicode_utils (~> 1.4)
     thor (1.2.1)
     thread_safe (0.3.6)
     timeout (0.4.0)
@@ -377,6 +379,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
+    unicode_utils (1.4.0)
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -436,6 +439,7 @@ DEPENDENCIES
   sidekiq-status
   spring
   spring-watcher-listen (~> 2.0.0)
+  tf-idf-similarity
   twilio-ruby
   tzinfo-data
   webmock

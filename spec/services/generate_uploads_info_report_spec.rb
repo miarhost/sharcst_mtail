@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'csv'
 
-describe GenerateUploadsInfoReport, type: :service do
+describe Csvs::GenerateUploadsInfoReport, type: :service do
   let!(:user) { create(:user) }
   let!(:upload) { create(:upload) }
   let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload.id, user_id: user.id) }

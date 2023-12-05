@@ -1,7 +1,7 @@
 require 'csv'
 require 'tempfile'
 
-class GenerateUploadsInfoReport
+class Csvs::GenerateUploadsInfoReport
   def initialize(record_id)
     @record = UploadsInfo.find(record_id)
   end

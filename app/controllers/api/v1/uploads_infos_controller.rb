@@ -26,7 +26,7 @@ module Api
       end
 
       def generate_report
-        render json: GenerateUploadsInfoReport.call(@uploads_info.id)
+        render json: Csvs::GenerateUploadsInfoReport.call(@uploads_info.id)
       end
 
       def remove_report

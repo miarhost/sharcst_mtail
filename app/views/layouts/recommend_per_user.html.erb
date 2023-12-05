@@ -1,9 +1,10 @@
 
-Hello , <%= @user.first_name %>
+Hello, <%= @user.first_name %>
 This month the most popular items based on your choice were
-<% @recommendations[:recs].each do |id| %>
-  item = Upload.find(id)
+<% @recommendations[:recs].each do |pos| %>
+  <% item = Upload.find(pos[:item_id]) %>
   <%= item.name %> for <%= item.date %>
+  With score <%= pos[:score] %>
 <% end %>
 The best subscription we can propose is:
  <% subs = Subscription.select("uploads_ratings -> 'r'", @recommendations[:future_rating][0].round) %>
