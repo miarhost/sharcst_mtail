@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       resources :disco_recommendations, only: [] do
         collection do
           post 'queue_recommendations_for_user', to: 'disco_recommendations#queue_recommendations_for_user'
+          get 'queue_daily_recommendations_for_items', to: 'disco_recommendations#queue_daily_recommendations_for_items'
         end
       end
 

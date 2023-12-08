@@ -16,9 +16,15 @@ module Api
         render json: [data, { 'status': job_status, result: job_result }]
       end
 
-      def queue_recommendations_for_upload_period; end
-
-      def queue_recommendations_for_logs_period; end
+      def queue_daily_recommendations_for_items
+        records = Upload.for_period(Date.today.beginning_of_day, Date.today.end_of_day)
+        result = DiscoServices::TodaysItemsRecommender.call(@current_user, records)
+        preferences = []
+        result.each do |hash|
+          preferences << { 'item': Upload.find(hash[:item_id])&.name, 'score': (hash[:score] * 100).round(2) }
+        end
+        render json: preferences.to_json
+      end
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_04_152555) do
+ActiveRecord::Schema.define(version: 2023_12_08_161331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,9 @@ ActiveRecord::Schema.define(version: 2023_12_04_152555) do
     t.integer "downloads_count", default: 0
     t.string "status", default: "public"
     t.string "ahoy_visit_id"
+    t.integer "rating", default: 0
+    t.string "category", default: "", null: false
+    t.string "topic", default: ""
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 

@@ -4,9 +4,8 @@ module TwilioServices
 
     def initialize(newsletter)
       @text = newsletter.header
-      @users = User.where('subscription_ids IS NOT NULL AND subscription_ids @> ARRAY[?]::varchar[]',
-                          [newsletter.subscription_id])
-                  .order(email: :asc)
+      @users.similar_subscriptions([newsletter.subscription_id])
+            .order(email: :asc)
     end
 
     def twilio(number)
