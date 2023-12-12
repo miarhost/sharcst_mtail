@@ -17,8 +17,9 @@ module Api
       end
 
       def queue_daily_recommendations_for_items
-        records = Upload.for_period(Date.today.beginning_of_day, Date.today.end_of_day)
+        records = Upload.for_period(Date.today.beginning_of_day.prev_month, Date.today.end_of_day)
         result = DiscoServices::TodaysItemsRecommender.call(@current_user, records)
+        Uploads::TodayItemsWorker.perform_async(@current_user.id, result.to_json)
         preferences = []
         result.each do |hash|
           preferences << { 'item': Upload.find(hash[:item_id])&.name, 'score': (hash[:score] * 100).round(2) }
