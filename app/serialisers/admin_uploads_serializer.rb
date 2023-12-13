@@ -1,5 +1,4 @@
 class AdminUploadsSerializer < ActiveModel::Serializer
-  attributes: :name
-  cached
+  attributes :name
   delegate :cache_key, to: :object
 end

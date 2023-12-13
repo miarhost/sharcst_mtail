@@ -10,7 +10,7 @@ class RatingsQuery
 
   def users
     user_ids = ActiveRecord::Base.connection.exec_query(
-      "SELECT user_id FROM uploads WHERE updated_at is null OR updated_at::date > '#{Time.now.prev_month.strftime("%Y-%d-%m")}'")
+      "SELECT user_id FROM uploads WHERE updated_at is null OR updated_at::date > '#{Time.now.prev_month}'")
 
     User.where(id: user_ids.rows.flatten.uniq)
   end
@@ -21,7 +21,7 @@ class RatingsQuery
 
   def upload_ids
     upload_ids = ActiveRecord::Base.connection.exec_query(
-      "SELECT id FROM uploads WHERE updated_at is null OR updated_at::date > '#{Time.now.prev_month.strftime("%Y-%d-%m")}'")
+      "SELECT id FROM uploads WHERE updated_at is null OR updated_at::date > '#{Time.now.prev_month}'")
       .rows
       .flatten
   end
