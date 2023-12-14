@@ -1,9 +1,9 @@
 require 'redis'
 module Uploads
-  class UploadsRatingsStoreWorker
+  class UploadsRecommendationsStoreWorker
     include Sidekiq::Worker
     include Sidekiq::Status::Worker
-    sidekiq_options queue: :updater
+    sidekiq_options queue: :updater, retry: 2, backtrace: 3
 
     def perform(ratings_hash)
       redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])

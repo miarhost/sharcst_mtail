@@ -6,7 +6,7 @@ module Api
       def queue_recommendations_for_user
         data = DiscoServices::UserRecommender.call(@current_user)
         StoredPredictionsDeliverQueue.new(data.to_json).execute
-        store_ratings = Uploads::UploadsRatingsStoreWorker.
+        store_ratings = Uploads::UploadsRecommendationsStoreWorker.
                           perform_async({'user' => @current_user.id, 'ratings' => data[:result]}.to_json)
         sleep 1
         job_status = Sidekiq::Status.get(store_ratings, :status)

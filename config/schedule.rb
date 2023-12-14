@@ -15,3 +15,7 @@ end
 every :day, at: '21:41 pm' do
   runner 'DailyRecsQueue.new.execute'
 end
+
+every 7.days, at: '12:00 pm' do
+  rake 'uploads:send_weekly_user_rates'
+end

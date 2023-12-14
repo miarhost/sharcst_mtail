@@ -29,6 +29,11 @@ module Api
 
       def update
         @upload.update!(upload_params)
+        current_user_rate = { 'user_id': @current_user.id, 'upload_id': @upload.id, 'rating': @upload.rating }.to_json
+        if @upload.saved_change_to_rating?
+          collect_rates = Uploads::IndRatesCollectingWorker.perform_async(current_user_rate)
+          Rails.logger.info(Sidekiq::Status.get(collect_rates, :result))
+        end
         render json: @upload, serializer: serializer
       end
 
@@ -98,7 +103,7 @@ module Api
       end
 
       def upload_params
-        params.require(:upload).permit(:user_id, :name, :file)
+        params.require(:upload).permit(:user_id, :name, :file, :rating, :category, :topic, :date)
       end
 
       def set_upload

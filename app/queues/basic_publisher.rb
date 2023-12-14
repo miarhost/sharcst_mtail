@@ -13,6 +13,5 @@ module BasicPublisher
       connection.close
       connection = nil
       channel = nil
-
   end
 end
