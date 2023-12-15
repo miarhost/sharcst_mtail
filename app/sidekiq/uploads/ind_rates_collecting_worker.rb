@@ -2,11 +2,15 @@ class Uploads::IndRatesCollectingWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker
 
-  sidekiq_options queue: 'uploads', retry: 2, backtrace: 3
+  sidekiq_options queue: :updater, retry: 2, backtrace: 3
 
   def perform(payload)
     redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
-    redis.set("#{Time.now}", {"rate": "#{payload}"})
+    uid = JSON.parse(payload)["user_id"]
+    rate = JSON.parse(payload)["rating"]
+    date = Date.today.strftime("%d%m%Y").to_i
+    upload = JSON.parse(payload)["upload_id"]
+    redis.hmset("exprate#{date}", "date", date, "rate", rate, "user", uid, "upload", upload )
     store result: {"#{Time.now}": "updated"}.to_json
   rescue StandardError => e
     store result: e.message

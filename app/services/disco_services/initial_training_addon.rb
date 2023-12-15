@@ -1,6 +1,6 @@
 require 'matrix'
 require 'tf-idf-similarity'
-require 'ruby-svd'
+# require 'ruby-svd' remove
 
 module DiscoServices
   class InitialTrainingAddon
