@@ -6,10 +6,10 @@ class Uploads::IndRatesCollectingWorker
 
   def perform(payload)
     redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
-    uid = JSON.parse(payload)["user_id"]
-    rate = JSON.parse(payload)["rating"]
-    date = Date.today.strftime("%d%m%Y").to_i
-    upload = JSON.parse(payload)["upload_id"]
+    uid = JSON.parse(payload)['user_id']
+    rate = JSON.parse(payload)['rating']
+    date = Date.today.strftime('%d-%m-%Y')
+    upload = JSON.parse(payload)['upload_id']
     redis.hmset("exprate#{date}", "date", date, "rate", rate, "user", uid, "upload", upload )
     store result: {"#{Time.now}": "updated"}.to_json
   rescue StandardError => e
