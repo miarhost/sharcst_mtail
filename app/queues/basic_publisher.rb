@@ -7,7 +7,7 @@ module BasicPublisher
       queue = channel.queue(queue_name, durable: true)
       ex = channel.direct("#{exchange_name}", durable: true)
       queue.bind(exchange_name)
-      ex.publish(message)
+      ex.publish(message, routing_key: queue_name)
       sleep 6
 
       connection.close
