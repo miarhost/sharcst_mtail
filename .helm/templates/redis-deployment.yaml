@@ -31,212 +31,212 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: APP_GMAIL_PWD
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: APP_NAME
               valueFrom:
                 configMapKeyRef:
                   key: APP_NAME
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: AWS_ACCESS_KEY
               valueFrom:
                 configMapKeyRef:
                   key: AWS_ACCESS_KEY
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: AWS_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: AWS_BUCKET
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: AWS_SECRET_KEY_ID
               valueFrom:
                 configMapKeyRef:
                   key: AWS_SECRET_KEY_ID
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: BINDING
               valueFrom:
                 configMapKeyRef:
                   key: BINDING
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: CLIENT_URL
               valueFrom:
                 configMapKeyRef:
                   key: CLIENT_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: DB_URL
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: JWT_ALG
               valueFrom:
                 configMapKeyRef:
                   key: JWT_ALG
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: JWT_HMAC
               valueFrom:
                 configMapKeyRef:
                   key: JWT_HMAC
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: JWT_TTL
               valueFrom:
                 configMapKeyRef:
                   key: JWT_TTL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MAILER_PASS
               valueFrom:
                 configMapKeyRef:
                   key: MAILER_PASS
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MAIN_MAILER
               valueFrom:
                 configMapKeyRef:
                   key: MAIN_MAILER
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 configMapKeyRef:
                   key: MINIO_ACCESS_KEY
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MINIO_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: MINIO_BUCKET
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: MINIO_ROOT_PASSWORD
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MINIO_ROOT_USER
               valueFrom:
                 configMapKeyRef:
                   key: MINIO_ROOT_USER
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: MINIO_SECRET_KEY
               valueFrom:
                 configMapKeyRef:
                   key: MINIO_SECRET_KEY
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: POSTGRES_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: POSTGRES_PASSWORD
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: PROD_CLIENT_URL
               valueFrom:
                 configMapKeyRef:
                   key: PROD_CLIENT_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: PWD
               valueFrom:
                 configMapKeyRef:
                   key: PWD
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: RABBITMQ_DEFAULT_PASS
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_DEFAULT_PASS
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: RABBITMQ_DEFAULT_USER
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_DEFAULT_USER
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name:sharcst-mtail--env
             - name: RABBITMQ_DEFAULT_VHOST
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_DEFAULT_VHOST
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: RABBITMQ_EXCHANGE
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_EXCHANGE
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: RABBITMQ_HOST
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_HOST
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: RABBITMQ_PORT
               valueFrom:
                 configMapKeyRef:
                   key: RABBITMQ_PORT
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: REDIS_DEV_CACHE_URL
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_DEV_CACHE_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_HOST
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name:sharcst-mtail--env
             - name: REDIS_PORT
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_PORT
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: REDIS_PROD_CACHE_URL
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_PROD_CACHE_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: REDIS_URL
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: SLACK_URL
               valueFrom:
                 configMapKeyRef:
                   key: SLACK_URL
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: SM_DATABASE_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: SM_DATABASE_PASSWORD
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: SM_DATABASE_USER
               valueFrom:
                 configMapKeyRef:
                   key: SM_DATABASE_USER
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: SSH_PATH
               valueFrom:
                 configMapKeyRef:
                   key: SSH_PATH
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TWILIO_ACCOUNT_SID
               valueFrom:
                 configMapKeyRef:
                   key: TWILIO_ACCOUNT_SID
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TWILIO_SMS_SERVICE
               valueFrom:
                 configMapKeyRef:
                   key: TWILIO_SMS_SERVICE
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TWILIO_TEST_USER_NUMBER
               valueFrom:
                 configMapKeyRef:
                   key: TWILIO_TEST_USER_NUMBER
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TWILIO_TOKEN
               valueFrom:
                 configMapKeyRef:
                   key: TWILIO_TOKEN
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TWILIO_WHATSAPP_SERVICE
               valueFrom:
                 configMapKeyRef:
                   key: TWILIO_WHATSAPP_SERVICE
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
             - name: TW_MESSENGER_TOKEN
               valueFrom:
                 configMapKeyRef:
                   key: TW_MESSENGER_TOKEN
-                  name: home-rghost-workspace00-sharcst-sharcst_mtail--env
+                  name: sharcst-mtail--env
           image: redis:6.2.13
           name: redis
           ports:
