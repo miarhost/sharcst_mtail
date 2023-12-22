@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: "2023-12-21T21:26:50.52Z"
+  labels:
+    io.kompose.service: dashboards
+  name: dashboards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dashboards
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: "2023-12-21T21:26:50.52Z"
+      labels:
+        io.kompose.network/sharcst-mtail-opensearch-net: "true"
+        io.kompose.service: dashboards
+    spec:
+      containers:
+        - env:
+            - name: OPENSEARCH_HOSTS
+              value: '["http://opensearch:9200","https://opensearch:9200"]'
+            - name: OPENSEARCH_PASSWORD
+              value: admin
+            - name: OPENSEARCH_USERNAME
+              value: admin
+          image: opensearchproject/opensearch-dashboards:latest
+          name: dashboards
+          ports:
+            - containerPort: 5601
+              hostPort: 5601
+              protocol: TCP
+              resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "64Mi"
+                cpu: "50m"
+      restartPolicy: Always
+status: {}

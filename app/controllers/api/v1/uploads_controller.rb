@@ -12,7 +12,9 @@ module Api
                 .references(:upload_attachment)
                 .order(name: :asc)
         end
-        render json: public_uploads, each_serializer: PublicUploadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
+        public_uploads_paginated = paginate_collection(uploads_filtered(public_uploads), params[:page], 5)
+        render json: public_uploads_paginated, each_serializer: PublicUploadsSerializer,
+          include: [:upload_attachment, UploadAttachmentSerializer]
       end
 
       def dashboard
@@ -87,7 +89,9 @@ module Api
                           .downloaded
                           .eager_load(:upload_attachment)
                           .order(downloads_count: :desc)
-        render json: downloads, each_serializer: PublicDownloadsSerializer, include: [:upload_attachment, UploadAttachmentSerializer]
+        public_downloads_paginated = paginate_collection(uploads_filtered(downloads), params[:page], 5)
+        render json: public_downloads_paginated, each_serializer: PublicDownloadsSerializer,
+          include: [:upload_attachment, UploadAttachmentSerializer]
       end
 
       protected
@@ -108,6 +112,18 @@ module Api
 
       def set_upload
         @upload = Upload.find(params[:id])
+      end
+
+      def filter_params
+        params[:filter] ? params.require[:search].permit(:user_id, :topic, :category, :date, :name) : {}
+      end
+
+      def filter
+        filter_params[:search].present? ? filter_params[:search] : ''
+      end
+
+      def uploads_filtered(collection)
+        SelectUploads.new(collection).call(filter)
       end
     end
   end

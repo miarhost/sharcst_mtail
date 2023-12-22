@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sharcst-web
+  name: sharcst_web
+spec:
+  ports:
+    - name: "14441"
+      port: 14441
+      targetPort: 14441
+    - name: "14440"
+      port: 14440
+      targetPort: 80
+  selector:
+    io.kompose.service: sharcst-web
+status:
+  loadBalancer: {}
