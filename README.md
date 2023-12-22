@@ -33,26 +33,6 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 docker-compose version
 
-### Setup kubectl
-
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl.sha256"
-echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-kubectl version --client
-
-### Setup minikube
-
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-minikube start
-
-### Setup kompose
-
-curl -L https://github.com/kubernetes/kompose/releases/download/v1.31.2/kompose-linux-amd64 -o kompose
-chmod +x kompose
-sudo mv ./kompose /usr/local/bin/kompose
-
 ### deploy last update
 
 from local: cap production deploy

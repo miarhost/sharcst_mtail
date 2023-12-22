@@ -31,5 +31,3 @@
 /config/credentials.yml.enc
 
 settings.json
-
-.helm/templates/sharcst-mtail-env-configmap.yaml
