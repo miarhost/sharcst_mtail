@@ -46,12 +46,13 @@ module Api
       end
 
       def permitted_params
-        params.require(:uploads_info).permit(:name, :protocol, :upload_id, :user_id, :number_of_seeds, :description,
-                                             :duration, :provider, :streaming_infos)
+        params.require(:uploads_info).permit(:name, :rating, :date, :log_tag, :upload_id, :user_id,
+                                             :upl_count, :down_count, :description, :duration, :provider, :streaming_infos)
+
       end
 
       def filter_params
-        params[:filter] ? params.require[:search].permit(:number_of_seeds, :name, :protocol, :user_id) : {}
+        params[:filter] ? params.require[:search].permit(:rating, :name, :date, :user_id, :log_tag) : {}
       end
 
       def filter
@@ -59,7 +60,7 @@ module Api
       end
 
       def uploads_infos
-        SelectUploadsInfos.new.call(filter)
+        SelectRecords.new(UploadsInfo).call(filter)
       end
     end
   end

@@ -4,9 +4,9 @@ FactoryBot.define do
     name { Faker::Internet.name }
     user
     upload
-    protocol { 'http' }
+    log_tag { Faker::Internet.password }
     media_type { rand(1..5) }
-    number_of_seeds { rand(0..300) }
+    rating { rand(0..15) }
     provider { Faker::Company.name }
     duration {  rand(22..1300) }
     description { Faker::Quotes::Chiquito.joke }

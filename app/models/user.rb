@@ -14,6 +14,7 @@ class User < ApplicationRecord
   validates_presence_of :email
   has_many :uploads, dependent: :destroy
   has_one :webhook, dependent: :destroy
+  belongs_to :team, optional: true
   has_secure_password
   has_recommended :uploads
 

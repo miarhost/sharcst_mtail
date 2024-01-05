@@ -20,17 +20,17 @@ describe 'UploadsInfos', type: :request do
 
   describe 'GET /api/v1/uploads_infos' do
     it 'shows filtered records ordered list with additional reporting attributes' do
-      get '/api/v1/uploads_infos', params: { user_id: user.id, protocol: uploads_infos[0].protocol }
+      get '/api/v1/uploads_infos', params: { user_id: user.id, log_tag: uploads_infos[0].log_tag }
       expect(response).to have_http_status(200)
       expect(response.body).to include_json(
         [
           {
             "user_id": uploads_infos[0].user_id,
             "upload_id": uploads_infos[0].upload_id,
-            "protocol": uploads_infos[0].protocol,
+            "log_tag": uploads_infos[0].log_tag,
             "name": uploads_infos[0].name,
             "media_type": uploads_infos[0].media_type,
-            "number_of_seeds": uploads_infos[0].number_of_seeds,
+            "rating": uploads_infos[0].rating,
             "provider": uploads_infos[0].provider,
             "duration": uploads_infos[0].duration.to_s,
             "description": uploads_infos[0].description,
@@ -101,13 +101,13 @@ describe 'UploadsInfos', type: :request do
           {
             "user_id": uploads_info.user_id,
             "upload_id": uploads_info.upload_id,
-            "protocol": uploads_info.protocol,
+            "log_tag": uploads_info.log_tag,
             "name": uploads_info.name,
             "streaming_infos": {
               "logging_url": webhook.url
             },
             "media_type": uploads_info.media_type,
-            "number_of_seeds": uploads_info.number_of_seeds,
+            "rating": uploads_info.rating,
             "provider": uploads_info.provider,
             "duration": uploads_info.duration.to_s,
             "description": uploads_info.description,
@@ -131,7 +131,7 @@ describe 'UploadsInfos', type: :request do
     context 'successfully updates a record' do
       it 'returns serialized record' do
         patch "/api/v1/uploads_infos/#{uploads_info.id}",
-        params: { uploads_info: { description: 'Updated description', number_of_seeds: 2100 } },
+        params: { uploads_info: { description: 'Updated description', rating: 3 } },
         headers: { Authorization: "Bearer #{authenticate}" }
 
         expect(response).to have_http_status(:success)
@@ -139,11 +139,11 @@ describe 'UploadsInfos', type: :request do
           {
             "user_id": uploads_info.user_id,
             "upload_id": uploads_info.upload_id,
-            "protocol": uploads_info.protocol,
+            "log_tag": uploads_info.log_tag,
             "name": uploads_info.name,
             "streaming_infos": nil,
             "media_type": uploads_info.media_type,
-            "number_of_seeds": 2100,
+            "rating": 3,
             "provider": uploads_info.provider,
             "duration": uploads_info.duration.to_s,
             "description": 'Updated description',

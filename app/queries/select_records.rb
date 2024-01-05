@@ -1,5 +1,5 @@
-class SelectUploads
-  def initialize(relation)
+class SelectRecords
+  def initialize(relation = UploadsInfo)
     @relation = relation
   end
 

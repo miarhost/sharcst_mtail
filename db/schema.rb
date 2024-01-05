@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_08_161331) do
+ActiveRecord::Schema.define(version: 2024_01_05_161009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,11 @@ ActiveRecord::Schema.define(version: 2023_12_08_161331) do
     t.datetime "started_at"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "tag"
+    t.string "title", null: false
   end
 
   create_table "disco_recommendations", force: :cascade do |t|
@@ -159,6 +164,20 @@ ActiveRecord::Schema.define(version: 2023_12_08_161331) do
     t.datetime "created_at"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "tag"
+    t.integer "category_id"
+    t.integer "topic_id"
+    t.index ["category_id"], name: "index_teams_on_category_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "tag"
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_topics_on_category_id"
+  end
+
   create_table "upload_attachments", force: :cascade do |t|
     t.bigint "upload_id"
     t.datetime "created_at", precision: 6, null: false
@@ -191,12 +210,17 @@ ActiveRecord::Schema.define(version: 2023_12_08_161331) do
     t.bigint "upload_id", null: false
     t.json "streaming_infos"
     t.integer "media_type", default: 0
-    t.integer "number_of_seeds", default: 0
-    t.string "protocol"
     t.string "name", null: false
     t.text "description"
     t.decimal "duration"
     t.string "provider"
+    t.integer "rating", default: 0
+    t.integer "upl_count", default: 0
+    t.integer "down_count", default: 0
+    t.string "log_tag"
+    t.datetime "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["upload_id"], name: "index_uploads_infos_on_upload_id"
     t.index ["user_id"], name: "index_uploads_infos_on_user_id"
   end
@@ -217,6 +241,7 @@ ActiveRecord::Schema.define(version: 2023_12_08_161331) do
     t.string "subscription_ids", array: true
     t.string "phone_number"
     t.string "roles", array: true
+    t.integer "team_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -237,6 +262,7 @@ ActiveRecord::Schema.define(version: 2023_12_08_161331) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "topics", "categories"
   add_foreign_key "upload_attachments", "uploads"
   add_foreign_key "uploads", "users"
   add_foreign_key "uploads_info_attacments", "uploads_infos"
