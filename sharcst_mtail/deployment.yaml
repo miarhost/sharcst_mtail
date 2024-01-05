@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sharcst_mtail
+spec:
+  selector:
+    matchLabels:
+      app: sharcst_mtail
+  template:
+    metadata:
+      labels:
+        app: sharcst_mtail
+    spec:
+      containers:
+        - name: sharcst_mtail
+          image: sharcst_mtail
+          resources:
+            limits:
+              memory: "4080Mi"
+              cpu: "4050m"
+            ports:
+              - containerPort: 6060
