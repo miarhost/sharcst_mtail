@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app: sharcst_mtail
+resources:
+  - dashboards-deployment.yaml
+  - dashboards-service.yaml
+  - db-deployment.yaml
+  - db-service.yaml
+  - mailcatcher-deployment.yaml
+  - mailcatcher-service.yaml
+  - minio-data-persistentvolumeclaim.yaml
+  - minio-deployment.yaml
+  - minio-service.yaml
+  - nginx-deployment.yaml
+  - nginx-service.yaml
+  - nginx-claim0-persistentvolumeclaim.yaml
+  - nginx-claim1-persistentvolumeclaim.yaml
+  - opensearch-deployment.yaml
+  - opensearch-service.yaml
+  - opensearch-persistentvolumeclaim.yaml
+  - postgres-data-persistentvolumeclaim.yaml
+  - rabbitmq-deployment.yaml
+  - rabbitmq-service.yaml
+  - rabbitmq-persistentvolumeclaim.yaml
+  - redis-deployment.yaml
+  - redis-service.yaml
+  - redis-data-persistentvolumeclaim.yaml
+  - web-deployment.yaml
+  - web-service.yaml
+  - worker-deployment.yaml

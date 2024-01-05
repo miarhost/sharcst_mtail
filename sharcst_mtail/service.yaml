@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sharcst_mtail
+spec:
+  selector:
+    app: sharcst_mtail
+  ports:
+    - port: 6060
+      targetPort: 6060
