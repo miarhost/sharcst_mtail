@@ -63,6 +63,9 @@ Rails.application.routes.draw do
       end
 
       resources :subscriptions
+
+      resources :teams
+      patch 'users/update_membership', to: 'users#update_membership'
     end
   end
 end
