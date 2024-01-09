@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_05_161009) do
+ActiveRecord::Schema.define(version: 2024_01_09_211151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,6 +197,8 @@ ActiveRecord::Schema.define(version: 2024_01_05_161009) do
     t.integer "rating", default: 0
     t.string "category", default: "", null: false
     t.string "topic", default: ""
+    t.bigint "topic_id"
+    t.index ["topic_id"], name: "index_uploads_on_topic_id"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 

@@ -10,7 +10,7 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :delete_all
 
-  has_many :upload_infos, dependent: :destroy
+  has_many :uploads_infos, dependent: :destroy
   validates_presence_of :email
   has_many :uploads, dependent: :destroy
   has_one :webhook, dependent: :destroy
