@@ -19,3 +19,7 @@ end
 every 7.days, at: '12:00 pm' do
   rake 'uploads:send_weekly_user_rates'
 end
+
+every :day, at: '22.00 pm' do
+  runner 'Mailers::TeamRecommenderMailJob.perform_async'
+end

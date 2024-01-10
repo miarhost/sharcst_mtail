@@ -26,6 +26,10 @@ module Api
         end
         render json: preferences.to_json
       end
+
+      def store_recommendations_for_team
+        DiscoServices::TeamRecommender.call(@current_user.team_id)
+      end
     end
   end
 end

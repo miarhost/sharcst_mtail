@@ -1,7 +1,7 @@
 class DiscoRecommendationsQueries
   class << self
 
-    #-------query results of recs objects saved to pg
+    #------- query results of recs objects saved to pg
 
     def scores_for_uploads(id)
       query = <<-SQL
@@ -37,7 +37,18 @@ class DiscoRecommendationsQueries
       ActiveRecord::Base.connection.execute(query)
     end
 
-   #--------presets for recs
+    def daily_recs_for_team(tid)
+      query = <<-SQL
+      select item_id, score
+      from disco_recommendations
+      where subject_id = #{tid} and subject_type = 'team'
+      and created_at between '#{Time.now.yesterday.to_date}' and '#{Time.now.to_date}';
+      SQL
+      result = ActiveRecord::Base.connection.execute(query)
+      result.to_a
+    end
+
+   #-------- data presets for recs
 
     def basic_dataset_from_infos_to_teams(tid)
       query = <<-SQL
@@ -58,6 +69,23 @@ class DiscoRecommendationsQueries
       and teams.id = #{tid}
       group by uploads.id, uploads.rating
       limit 3;
+      SQL
+      result = ActiveRecord::Base.connection.execute(query)
+      result.to_a
+    end
+
+    #-------- use recs columns to get composite values
+
+    def implicit_helper_values_top_list
+      query = <<-SQL
+      select uploads.id as item_id,
+      uploads_infos.rating*uploads.downloads_count/disco_recommendations.score as importance
+      from uploads, uploads_infos, disco_recommendations
+      where ( uploads.rating > 1 and uploads.downloads_count > 2 )
+      and uploads_infos.upload_id = uploads.id
+      and disco_recommendations.item_id = uploads.id
+      and disco_recommendations.item_type = 'upload'
+      limit 20;
       SQL
       result = ActiveRecord::Base.connection.execute(query)
       result.to_a
