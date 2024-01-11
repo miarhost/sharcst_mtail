@@ -48,6 +48,21 @@ class DiscoRecommendationsQueries
       result.to_a
     end
 
+    def last_team_recs
+      query = <<-SQL
+      select item_id as upload_id, subject_id as team_id
+      from disco_recommendations
+      where subject_type = 'team'
+      and created_at between '#{Time.now.3.days.ago.to_date}' and '#{Time.now.to_date}'
+      order by score desc
+      limit 10;
+      SQL
+      result = ActiveRecord::Base.connection.execute(query)
+
+      result.to_a
+        .group_by{|h| h[:team_id]}
+        .map{|_, s| s.reduce{|p| p.merge{|v| v[:uploads_ids] << h[:upload_id]}}}
+
    #-------- data presets for recs
 
     def basic_dataset_from_infos_to_teams(tid)

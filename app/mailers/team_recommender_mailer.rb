@@ -3,7 +3,7 @@ class TeamRecommenderMailer < ApplicationMailer
 
   def recommend_by_team
     @user = params[:user]
-    @recommendations = params[:recs]
+    @recs = params[:recs]
     mail(to: @user.email, subject: "Team shares the links for #{Date.today.strftime('%B')}")
     Rails.logger.info "Delivered to #{@user.email}"
   rescue => e

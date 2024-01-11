@@ -1,0 +1,7 @@
+<% @recs.each do |id| %>
+  <% rec = Upload.find(id) %>
+  <%= link_to "Download", root_url +
+  Rails.application.routes.url_helpers
+    .rails_blob_path(rec.upload_attachment.file,
+      disposition: 'attachment', only_path: true) %>
+<% end %>
