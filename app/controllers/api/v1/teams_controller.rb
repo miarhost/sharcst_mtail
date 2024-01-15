@@ -18,6 +18,10 @@ module Api
         @team.destroy!
       end
 
+      def store_recommendations_for_team
+        DiscoServices::TeamRecommender.call(params[:id])
+      end
+
       private
 
       def serializer

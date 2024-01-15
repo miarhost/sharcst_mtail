@@ -27,8 +27,11 @@ module Api
         render json: preferences.to_json
       end
 
-      def store_recommendations_for_team
-        DiscoServices::TeamRecommender.call(@current_user.team_id)
+      def queue_importance_values_lists
+        payload = DiscoRecommendationsQueries
+                    .implicit_helper_values_top_list.to_json
+
+        ImportanceListDeliverQueue.execute(payload)
       end
     end
   end

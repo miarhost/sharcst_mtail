@@ -59,12 +59,17 @@ Rails.application.routes.draw do
         collection do
           post 'queue_recommendations_for_user', to: 'disco_recommendations#queue_recommendations_for_user'
           get 'queue_daily_recommendations_for_items', to: 'disco_recommendations#queue_daily_recommendations_for_items'
+          post 'queue_importance_values_lists', to: 'disco_recommendations#queue_importance_values_lists'
         end
       end
 
       resources :subscriptions
 
-      resources :teams
+      resources :teams do
+        member do
+          post 'store_recommendations_for_team',to: 'teams#store_recommendations_for_team'
+        end
+      end
       patch 'users/update_membership', to: 'users#update_membership'
     end
   end
