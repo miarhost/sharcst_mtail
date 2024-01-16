@@ -3,7 +3,7 @@ class Upload < ApplicationRecord
   has_many :uploads_infos, dependent: :destroy
   has_recommended :uploads_infos
   belongs_to :user
-  validates_presence_of :name, :category
+  validates_presence_of :name
   visitable :ahoy_visit
 
   scope :public_status, -> { where(status: 'public')}

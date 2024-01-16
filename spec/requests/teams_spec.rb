@@ -1,4 +1,6 @@
 require 'rails_helper'
+require 'disco'
+
 describe 'Teams', type: :request do
   let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
   let!(:category) { create(:category) }
@@ -10,6 +12,7 @@ describe 'Teams', type: :request do
       include_examples 'v1:unauthorized_request', :post, '/api/v1/teams', params: { team: { tag: 'test category' } }
       include_examples 'v1:unauthorized_request', :patch, '/api/v1/teams/1', params: { team: { tag: 'change tag'} }
       include_examples 'v1:unauthorized_request', :delete, '/api/v1/teams/1', params: {}
+      include_examples 'v1:unauthorized_request', :post, '/api/v1/teams/1/store_recommendations_for_team', params: {}
     end
   end
 
@@ -94,6 +97,39 @@ describe 'Teams', type: :request do
 
       expect(response).to have_http_status(:no_content)
       expect{ team.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'POST /api/v1/teams/:id/store_recommendations_for_team/' do
+    let!(:user_1) { create(:user, team_id: team.id)}
+    let!(:upload) { create(:upload, user_id: user_1.id, rating: 3, topic_id: topic.id)}
+    let!(:upload_1) { create(:upload, user_id: user.id, rating: 9, topic_id: topic_1.id)}
+    let!(:uploads_infos) { create_list(:uploads_info, 3, user_id: user_1.id, upload_id: upload.id) }
+    let!(:uploads_infos_1) { create_list(:uploads_info, 3, user_id: user.id, upload_id: upload_1.id) }
+    let!(:topic) { create(:topic, category_id: category.id)}
+    let!(:topic_1) { create(:topic, category_id: category.id)}
+    let!(:category) { create(:category)}
+
+    before do
+      team.update(topic_id: topic.id, category_id: category.id)
+      user.update(team_id: team.id)
+    end
+
+    include_context 'v1:authorized_request'
+    it 'creates disco recs record for a team' do
+      expect do
+        post "/api/v1/teams/#{team.id}/store_recommendations_for_team",
+          headers: { Authorization: "Bearer #{authenticate}" }
+      end.to change(DiscoRecommendation, :count).by(1)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include_json(
+      [
+        {
+            "id": upload.id,
+            "max": upload.rating
+        }
+      ])
     end
   end
 end

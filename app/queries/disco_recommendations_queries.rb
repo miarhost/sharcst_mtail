@@ -42,7 +42,7 @@ class DiscoRecommendationsQueries
       select item_id, score
       from disco_recommendations
       where subject_id = #{tid} and subject_type = 'team'
-      and created_at between '#{Time.now.yesterday.to_date}' and '#{Time.now.to_date}';
+      and created_at between '#{Date.yesterday}' and '#{Date.today}';
       SQL
       result = ActiveRecord::Base.connection.execute(query)
       result.to_a
@@ -108,6 +108,7 @@ class DiscoRecommendationsQueries
       and uploads_infos.upload_id = uploads.id
       and disco_recommendations.item_id = uploads.id
       and disco_recommendations.item_type = 'upload'
+      and disco_recommendations.created_at between '#{Date.today - 1.week}' and '#{Date.today}'
       limit 20;
       SQL
       result = ActiveRecord::Base.connection.execute(query)

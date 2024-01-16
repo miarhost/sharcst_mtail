@@ -19,7 +19,7 @@ module Api
       end
 
       def store_recommendations_for_team
-        DiscoServices::TeamRecommender.call(params[:id])
+        render json: DiscoServices::TeamRecommender.call(params[:id])
       end
 
       private

@@ -9,10 +9,10 @@ class ImportanceListDeliverQueue
     end
 
     def execute(payload)
-      BasicPublisher.direct_exchange(exchange_name, queue_name, payload)
+      BasicPublisher.direct_exchange(exchange_name, queue_name, payload.to_json)
       Rails.logger.info "Importances payload sent to consumer at #{Time.now}"
     rescue StandardError => e
-      Rails.logger.error(e.full_messages.to_sentence)
+      Rails.logger.error(e.message)
     end
   end
 end

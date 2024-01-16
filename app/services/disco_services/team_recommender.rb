@@ -10,7 +10,8 @@ class DiscoServices::TeamRecommender
             item_id: rec[:item_id],
             score: rec[:score],
             subject_id: tid,
-            subject_type: 'team'
+            subject_type: 'team',
+            item_type: 'upload'
           )
         end
       end
