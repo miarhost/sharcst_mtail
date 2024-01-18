@@ -32,4 +32,4 @@
 
 settings.json
 
-.helm/templates/sharcst-mtail-env-configmap.yaml
+app/constants/external_resources.rb

@@ -101,7 +101,7 @@ class DiscoRecommendationsQueries
 
     def implicit_helper_values_top_list
       query = <<-SQL
-      select uploads.id as item_id,
+      select uploads.id as item_id, disco_recommendations.item_type,
       uploads_infos.rating*uploads.downloads_count/disco_recommendations.score as importance
       from uploads, uploads_infos, disco_recommendations
       where ( uploads.rating > 1 and uploads.downloads_count > 2 )
