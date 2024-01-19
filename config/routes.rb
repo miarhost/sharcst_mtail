@@ -69,6 +69,7 @@ Rails.application.routes.draw do
         member do
           post 'store_recommendations_for_team',to: 'teams#store_recommendations_for_team'
           post 'queue_parsing_by_topic', to: 'teams#queue_parsing_by_topic'
+          get 'show_parsed_by_topic', to: 'teams#show_parsed_by_topic'
         end
       end
       patch 'users/update_membership', to: 'users#update_membership'

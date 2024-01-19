@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_09_211151) do
+ActiveRecord::Schema.define(version: 2024_01_19_173938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,13 @@ ActiveRecord::Schema.define(version: 2024_01_09_211151) do
     t.index ["category_id"], name: "index_teams_on_category_id"
   end
 
+  create_table "topic_digests", force: :cascade do |t|
+    t.bigint "topic_id", null: false
+    t.string "list_of_5", array: true
+    t.json "full_list"
+    t.index ["topic_id"], name: "index_topic_digests_on_topic_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string "title", null: false
     t.string "tag"
@@ -264,6 +271,7 @@ ActiveRecord::Schema.define(version: 2024_01_09_211151) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "topic_digests", "topics"
   add_foreign_key "topics", "categories"
   add_foreign_key "upload_attachments", "uploads"
   add_foreign_key "uploads", "users"

@@ -27,6 +27,11 @@ module Api
         render json: { message: message, result: Parsers::EdTopicParserQueue.execute(message) }
       end
 
+      def show_parsed_by_topic
+        result = Parsers::ParsedReceiverQueue.execute(@team.id)
+        render json: result
+      end
+
       private
 
       def serializer
