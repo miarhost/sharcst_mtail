@@ -5,11 +5,11 @@ module BasicSubscriber
     connection.start
     channel = connection.create_channel
     sleep 5
-    queue = channel.queue(queue_name, exclusive: true)
-    ex = channel.direct("#{exchange_name}", durable: true)
+    queue = channel.queue(queue_name, durable: true)
+
     queue.bind(exchange_name)
     result = []
-    queue.subscribe { |_delivery_info, _properties, message|  result << message }
+    queue.subscribe(block: false) { |_delivery_info, _properties, message|  result << message }
 
     connection.close
     connection = nil
