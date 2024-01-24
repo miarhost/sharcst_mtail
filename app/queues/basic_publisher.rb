@@ -8,7 +8,6 @@ module BasicPublisher
       ex = channel.direct("#{exchange_name}", durable: true)
       queue.bind(exchange_name)
       ex.publish(message, routing_key: queue_name, content_type: 'application/json')
-      sleep 6
 
       connection.close
       connection = nil

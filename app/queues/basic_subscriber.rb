@@ -4,7 +4,7 @@ module BasicSubscriber
     connection = Bunny.new
     connection.start
     channel = connection.create_channel
-    sleep 5
+
     queue = channel.queue(queue_name, durable: true)
 
     queue.bind(exchange_name)
