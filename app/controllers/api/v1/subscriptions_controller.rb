@@ -18,11 +18,10 @@ module Api
       def destroy
         @subscription.destroy!
       end
-
       private
 
       def subs_params
-        params.require(:subscription).permit(:title)
+        params.require(:subscription).permit(:title, :topic_id, :subs_rate, :subs_rating, :subs_rating_infos)
       end
 
       def set_subscription

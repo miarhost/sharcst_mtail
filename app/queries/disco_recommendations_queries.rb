@@ -23,7 +23,8 @@ class DiscoRecommendationsQueries
       or subscriptions.id in(#{subids}))
       and users.team_id = teams.id;
       SQL
-      ActiveRecord::Base.connection.execute(query)
+      result = ActiveRecord::Base.connection.execute(query)
+      result.to_a
     end
 
     def recs_for_category_teams(cid)

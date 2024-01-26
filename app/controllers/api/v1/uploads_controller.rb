@@ -123,7 +123,7 @@ module Api
       end
 
       def uploads_filtered(collection)
-        SelectRecords.new(collection).call(filter)
+        FilterRecords.new(collection).call(filter)
       end
     end
   end

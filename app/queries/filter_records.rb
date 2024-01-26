@@ -1,4 +1,4 @@
-class SelectRecords
+class FilterRecords
   def initialize(relation = UploadsInfo)
     @relation = relation
   end

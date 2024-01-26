@@ -14,14 +14,17 @@ module Api
       def create
         @newsletter = Newsletter.new(newsletter_params)
         @newsletter.save!
-        NewsletterMailer.with(user: @current_user, newsletter: @newsletter).current_news.deliver_now
+        NewsletterMailer.with(user: @current_user, newsletter: @newsletter)
+                        .current_news
+                        .deliver_now
         render json: @newsletter, status: 201
       end
 
       def update
         authorize @newsletter
         @newsletter.update!(newsletter_params)
-        NewsletterMailer.with(user: @current_user, newsletter: @newsletter).current_news.deliver_now
+        NewsletterMailer.with(user: @current_user, newsletter: @newsletter)
+                        .current_news.deliver_now
         render json: @newsletter, status: 200
       end
 
@@ -44,7 +47,8 @@ module Api
       end
 
       def newsletter_params
-        params.require(:newsletter).permit(:header, :body, :name, :uploads_info_id, :date, :subscription_id)
+        params.require(:newsletter)
+              .permit(:header, :body, :name, :uploads_info_id, :date, :subscription_id)
       end
     end
   end

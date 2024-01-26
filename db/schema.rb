@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_19_173938) do
+ActiveRecord::Schema.define(version: 2024_01_26_123226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,11 @@ ActiveRecord::Schema.define(version: 2024_01_19_173938) do
     t.jsonb "newsletters_ratings"
     t.datetime "updated_at"
     t.datetime "created_at"
+    t.bigint "topic_id"
+    t.integer "subs_rate", default: 0
+    t.integer "subs_rating", default: 0
+    t.json "subs_ratings_infos"
+    t.index ["topic_id"], name: "index_subscriptions_on_topic_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -173,8 +178,10 @@ ActiveRecord::Schema.define(version: 2024_01_19_173938) do
 
   create_table "topic_digests", force: :cascade do |t|
     t.bigint "topic_id", null: false
-    t.string "list_of_5", array: true
+    t.string "list_of_5"
     t.json "full_list"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["topic_id"], name: "index_topic_digests_on_topic_id"
   end
 
@@ -271,6 +278,7 @@ ActiveRecord::Schema.define(version: 2024_01_19_173938) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "subscriptions", "topics"
   add_foreign_key "topic_digests", "topics"
   add_foreign_key "topics", "categories"
   add_foreign_key "upload_attachments", "uploads"

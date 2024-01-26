@@ -60,7 +60,7 @@ module Api
       end
 
       def uploads_infos
-        SelectRecords.new(UploadsInfo).call(filter)
+        FilterRecords.new(UploadsInfo).call(filter)
       end
     end
   end
