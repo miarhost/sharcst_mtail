@@ -21,8 +21,8 @@ class User < ApplicationRecord
   scope :admins, -> { select{ |u| u.roles.include?('admin')} }
 
   scope :similar_subscriptions, ->(arr) do
-    where('subscription_ids IS NOT NULL AND subscription_ids @> ARRAY[?]::varchar[]', arr)
-  end # at least one of atm
+    where('subscription_ids IS NOT NULL AND subscription_ids @> ARRAY[?]::integer[]', arr)
+  end
 
   def admin_list_cached
     Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do

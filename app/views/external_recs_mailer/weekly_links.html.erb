@@ -1,0 +1,7 @@
+<h4><%= @newsletter.name %></h4>
+<div>
+  <% @newsletter.body.split(',').each_with_index do |link, idx| %>
+    <%= link_to "Recommendation #{idx}", "#{link}" %>
+    ,
+  <% end %>
+</div>

@@ -2,7 +2,7 @@ require 'rails_helper'
 describe 'Newsletters', type: :request do
   let!(:subscription) { create(:subscription) }
   let!(:newsletter) { create(:newsletter, subscription_id: subscription.id) }
-  let!(:user) { create(:user, subscription_ids: [subscription.id.to_s]) }
+  let!(:user) { create(:user, subscription_ids: [subscription.id]) }
   let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
 
   describe 'Token authorization' do

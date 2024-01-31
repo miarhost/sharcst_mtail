@@ -14,7 +14,7 @@ class DiscoRecommendationsQueries
     end
 
     def users_subs_rates_for_teams(uid)
-      subids = "#{User.find(uid).subscription_ids.map(&:to_i)}".delete("[]")
+      subids = "#{User.find(uid).subscription_ids}".delete("[]")
       query = <<-SQL
       select disco_recommendations.score, teams.tag, subscriptions.title
       from disco_recommendations, users, teams, subscriptions

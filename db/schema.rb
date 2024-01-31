@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_26_123226) do
+ActiveRecord::Schema.define(version: 2024_01_31_173159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,7 +254,7 @@ ActiveRecord::Schema.define(version: 2024_01_26_123226) do
     t.integer "sign_in_count", default: 0, null: false
     t.inet "current_sign_in_ip"
     t.string "jti", default: "", null: false
-    t.string "subscription_ids", array: true
+    t.integer "subscription_ids", default: [], array: true
     t.string "phone_number"
     t.string "roles", array: true
     t.integer "team_id"

@@ -18,7 +18,7 @@ class SubscriptionsQueries
       select subscriptions.id, users.email
       from users, subscriptions
       where subscriptions.topic_id = '#{topic_id}'
-      and  convert(char(subscriptions.id)) = any (users.subscription_ids);
+      and  subscriptions.id = any(users.subscription_ids);
       SQL
       result = ActiveRecord::Base.connection.execute(query)
       result.to_a

@@ -27,7 +27,7 @@ module DiscoServices
     def lsv_matrix
       user_corpus = []
       User.first(3).each do |u|
-        user_corpus << [u.id, u.subscription_ids.map(&:to_i)].flatten
+        user_corpus << [u.id, u.subscription_ids].flatten
       end
       infos_matrix = DiscoServices::InitialTrainingAddon.new(UploadsInfo, 'id', 'media_type').rsv_matrix
       user_matrix = Matrix[ user_corpus ]
