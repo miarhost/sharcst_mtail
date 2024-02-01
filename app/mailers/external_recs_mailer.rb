@@ -1,7 +1,8 @@
 class ExternalRecsMailer < ApplicationMailer
 
   def weekly_links
-    @newsletter = params[:newsletter]
-    mail(to: params[:email], subject: "#{@newsletter.header} for #{@newsletter.date}")
+    @newsletter = Newsletter.find(params[:newsletter])
+    @user = User.find(params[:user])
+    mail(to: @user.email, subject: "#{@newsletter.header} for #{@newsletter.date}")
   end
 end

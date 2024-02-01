@@ -10,3 +10,4 @@ production:
   - default
   - updater
   - mailer
+  - messengers

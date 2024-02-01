@@ -24,6 +24,8 @@ class User < ApplicationRecord
     where('subscription_ids IS NOT NULL AND subscription_ids @> ARRAY[?]::integer[]', arr)
   end
 
+  scope :have_subscription, =>(id) { where(id: subscription_ids) }
+
   def admin_list_cached
     Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do
       uploads.includes(:upload_attachment, :webhooks)

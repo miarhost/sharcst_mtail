@@ -1,8 +1,8 @@
 class TopicDigest < ApplicationRecord
   belongs_to :topic
-  after_create :notify_single_users
+  after_create :create_newsletters
 
-  def notify_single_users
+  def create_newsletters
    Email::WeeklyTopicLinks.call(topic_id)
   end
 end

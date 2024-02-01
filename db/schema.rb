@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_31_173159) do
+ActiveRecord::Schema.define(version: 2024_02_01_131525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,10 @@ ActiveRecord::Schema.define(version: 2024_01_31_173159) do
     t.text "body"
     t.datetime "date"
     t.integer "uploads_info_id"
+    t.integer "type", default: 0
+    t.string "tag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["date"], name: "index_newsletters_by_dates", unique: true
     t.index ["subscription_id"], name: "index_newsletters_on_subscription_id"
   end
