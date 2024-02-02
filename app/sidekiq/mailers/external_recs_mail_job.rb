@@ -1,4 +1,4 @@
-class Mailers::ExternalRecsJob
+class Mailers::ExternalRecsMailJob
   include Sidekiq::Worker
 
   sidekiq_options queue: :mailer, retry: false, backtrace: 1
@@ -10,7 +10,7 @@ class Mailers::ExternalRecsJob
       .deliver_now
   end
 
-  def self.mail_queue(nid)
+  def self.bulk_mail(nid)
     User.have_subscription(Newsletter.find(nid).subscription_id).each do |user|
       perform_async(nid, user.id)
     end
