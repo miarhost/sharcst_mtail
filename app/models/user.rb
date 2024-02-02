@@ -24,7 +24,13 @@ class User < ApplicationRecord
     where('subscription_ids IS NOT NULL AND subscription_ids @> ARRAY[?]::integer[]', arr)
   end
 
-  scope :have_subscription, =>(id) { where(id: subscription_ids) }
+  scope :have_subscription, ->(id) do
+    query = <<-SQL
+      select * from users
+      where #{id} = any(users.subscription_ids);
+    SQL
+    find_by_sql(query)
+  end
 
   def admin_list_cached
     Rails.cache.fetch([cache_key, __method__], expires_in: 1.hour) do

@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2024_02_01_131525) do
     t.text "body"
     t.datetime "date"
     t.integer "uploads_info_id"
-    t.integer "type", default: 0
+    t.integer "ad_type", default: 0
     t.string "tag"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -3,6 +3,6 @@ class TopicDigest < ApplicationRecord
   after_create :create_newsletters
 
   def create_newsletters
-   Email::WeeklyTopicLinks.call(topic_id)
+   Newsletters::WeeklyTopicLinks.call(topic_id)
   end
 end

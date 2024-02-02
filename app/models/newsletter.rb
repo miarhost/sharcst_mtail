@@ -4,6 +4,6 @@ class Newsletter < ApplicationRecord
   after_create :notify_single_users
 
   def notify_single_users
-      Mailers::ExternalRecsJob.perform_async(id) if type == 1
+      Mailers::ExternalRecsJob.mail_queue(id) if ad_type == 1
   end
 end
