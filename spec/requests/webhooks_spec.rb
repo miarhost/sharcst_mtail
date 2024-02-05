@@ -126,7 +126,7 @@ describe 'Webhooks', type: :request do
 
   describe 'POST /api/v1/webhooks/:id/slack_notification_for_report' do
     include_context 'v1:authorized_request'
-    let!(:webhook) { create(:webhook, url: ENV['SLACK_URL'], description: 'slack') }
+    let!(:webhook) { create(:webhook, url: ENV['ADMIN_SLACK_URL'], description: 'slack') }
     let!(:upload_attachment) { create(:upload_attachment) }
     before do
     end

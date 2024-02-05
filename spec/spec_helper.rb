@@ -48,7 +48,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.before(:each) do
-    stub_request(:post, ENV['SLACK_URL']).
+    stub_request(:post, ENV['ADMIN_SLACK_URL']).
     with(
       body: {"text": "You have new report for bucket logging for #{Time.now.utc}.
                Please download it on "}.to_json,
@@ -61,6 +61,20 @@ RSpec.configure do |config|
         'User-Agent'=>'rest-client/2.1.0 (linux-gnu x86_64) ruby/2.7.1p83'
       }).
       to_return(status: 200, body: 'ok', headers: {})
+
+
+    stub_request(:post, ENV['TEAMS_SLACK_URL']).
+    with(
+      body: {"Today's links": "https://example.com?download=, https://example1.com?download=, https://example2.com?download="}.to_json,
+      headers: {
+      'Accept'=>'application/json',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Length'=>'113',
+      'Content-Type'=>'application/json',
+      'Host'=>'hooks.slack.com',
+      'User-Agent'=>'rest-client/2.1.0 (linux-gnu x86_64) ruby/2.7.1p83'
+      }).
+    to_return(status: 200, body: "Sent to channel", headers: {})
 
     stub_request(:post, "https://api.twilio.com/#{DateTime.now.strftime("%y-%m-%d")}/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/#{ENV['TWILIO_SMS_SERVICE']}.json").
     with(:headers => {'Accept'=>'application/json',
