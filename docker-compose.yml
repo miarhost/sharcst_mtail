@@ -125,6 +125,22 @@ services:
     volumes:
     - rabbitmq:/var/lib/rabbitmq
 
+  newrelic:
+    env_file:
+    - .env
+    build:
+      context: .
+      dockerfile: newrelic-infra.dockerfile
+    container_name: newrelic-infra
+    cap_add:
+    - SYS_PTRACE
+    network_mode: host
+    pid: host
+    privileged: true
+    volumes:
+    - /:/host:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
 
 volumes:
   postgres-data:

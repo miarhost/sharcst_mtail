@@ -33,3 +33,5 @@
 settings.json
 
 app/constants/external_resources.rb
+
+/docker/newrelic-infra/*
