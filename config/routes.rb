@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         end
         collection do
           post 'messenger_alert_for_admins', to: 'webhooks#messenger_alert_for_admins'
+          post 'parsed_queue_slack_logs', to: 'webhooks#parsed_queue_slack_logs'
         end
       end
 

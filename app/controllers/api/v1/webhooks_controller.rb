@@ -15,6 +15,10 @@ module Api
         render json: result
       end
 
+      def parsed_queue_slack_logs
+        Webhooks::NewRelicQueueLogs.call
+      end
+
       def create
         @webhook = Webhook.create!(webhook_params.merge(user_id: @current_user&.id))
         render json: { 'status': :created, 'webhook': @webhook }, status: 201
