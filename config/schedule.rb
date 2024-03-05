@@ -13,7 +13,7 @@ every :day, at: '19:10 pm' do
 end
 
 every :day, at: '16:12 pm' do
-  runner 'DailyRecsQueue.new.execute'
+  runner 'DailyRecsQueue.new(Date.today).execute'
 end
 
 every :day, at: '12:07 pm' do

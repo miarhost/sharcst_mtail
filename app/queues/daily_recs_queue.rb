@@ -1,6 +1,6 @@
 class DailyRecsQueue
-    def initialize
-      @data = RedisData::CollectDailyRecs.call(Date.today)
+    def initialize(date)
+      @date = RedisData::CollectDailyRecs.call(date)
     end
 
   def exchange_name
@@ -12,7 +12,7 @@ class DailyRecsQueue
   end
 
   def execute
-    BasicPublisher.direct_exchange(exchange_name, queue_name, @data.to_json)
+    BasicPublisher.direct_exchange(exchange_name, queue_name, @date.to_json)
     Rails.logger.info "Daily recs sent to consumer at #{Time.now}"
   rescue StandardError => e
     Rails.logger.error(e.message)
