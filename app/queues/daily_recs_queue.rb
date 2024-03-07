@@ -1,5 +1,5 @@
 class DailyRecsQueue
-    def initialize(date)
+    def initialize(date=Date.today)
       @date = RedisData::CollectDailyRecs.call(date)
     end
 

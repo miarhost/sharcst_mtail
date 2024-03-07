@@ -9,9 +9,16 @@ Rails.application.routes.draw do
   use_doorkeeper
   namespace :api do
     namespace :v1 do
-
       root 'uploads#public_downloads_list'
-      post '/users/login', to: 'users#login'
+
+      resources :users, only: [] do
+        collection do
+          post 'login', to: 'users#login'
+          patch 'update_membership', to: 'users#update_membership'
+          post 'enqueue_parser_topic', to: 'users#profile'
+        end
+      end
+
       resources :uploads do
         member do
           post 'upload_file', to: 'uploads#upload_file'
@@ -73,7 +80,6 @@ Rails.application.routes.draw do
           get 'show_parsed_by_topic', to: 'teams#show_parsed_by_topic'
         end
       end
-      patch 'users/update_membership', to: 'users#update_membership'
     end
   end
 end

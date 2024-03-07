@@ -13,6 +13,14 @@ module Api
         render json: @current_user, serializer: MemberSerializer
       end
 
+      def profile
+        result = Parsers::RecommendedExternalQueue
+          .new(@current_user.id, params[:starts], params[:ends])
+          .execute
+        status = result.key?(:errors) ? 422 : 201
+        render json: result, status: status
+      end
+
       private
 
       def login_params
@@ -21,6 +29,10 @@ module Api
 
       def member_params
         params.permit(:team_id)
+      end
+
+      def profile_params
+        params.permit(:starts, :ends)
       end
     end
   end
