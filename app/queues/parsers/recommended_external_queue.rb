@@ -9,7 +9,7 @@ class Parsers::RecommendedExternalQueue
   end
 
   def queue_name
-    'parsing'
+    'parsing.topic'
   end
 
   def data

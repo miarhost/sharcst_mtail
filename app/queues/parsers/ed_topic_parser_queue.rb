@@ -5,7 +5,7 @@ class Parsers::EdTopicParserQueue
     end
 
     def queue_name
-      'parsing'
+      'parsing.link'
     end
 
     def execute(message)
