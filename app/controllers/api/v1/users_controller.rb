@@ -14,11 +14,11 @@ module Api
       end
 
       def profile
-        result = Parsers::RecommendedExternalQueue
+        request = Parsers::RecommendedExternalQueue
           .new(@current_user.id, params[:starts], params[:ends])
           .execute
-        status = result.key?(:errors) ? 422 : 201
-        render json: result, status: status
+        status = request.key?(:errors) ? 422 : 201
+        render json: request[:result], status: status
       end
 
       private
@@ -29,10 +29,6 @@ module Api
 
       def member_params
         params.permit(:team_id)
-      end
-
-      def profile_params
-        params.permit(:starts, :ends)
       end
     end
   end
