@@ -20,11 +20,11 @@ module RedisData
         date.prepend("0") if date.length < 8
         if redis.hget(key, 'user') == @user_id.to_s && Date.strptime(date, "%d%m%Y").between?(@starts, @ends)
           upload = Upload.find(redis.hget(key, 'upload').to_i)
-          topic = Topic.find_by(id: 445)
+          topic = Topic.find_by(id: upload.topic_id)
           title = topic ? topic.title.delete(" ") : 'undefined'
 
           result['rate'] = redis.hget(key, 'rate')
-          result['topic'] = title
+          result['topics'] = [] << title
           result['user'] = @user_id
         end
       end

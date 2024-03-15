@@ -21,6 +21,11 @@ module Api
         render json: request[:result], status: status
       end
 
+      def subscriptions_info
+        ratings = SubscriptionsQueries.show_subs_ratings_per_user(@current_user.id)
+        render json: ratings
+      end
+
       private
 
       def login_params

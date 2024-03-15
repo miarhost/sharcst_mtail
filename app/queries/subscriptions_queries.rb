@@ -49,5 +49,18 @@ class SubscriptionsQueries
       result = ActiveRecord::Base.connection.execute(query)
       result.to_a
     end
+
+    def show_subs_ratings_per_user(uid)
+      query = <<-SQL
+      select uploads_ratings as rating
+      from users, subscriptions
+      where subscriptions.id = any(users.subscription_ids)
+      SQL
+      result = ActiveRecord::Base.connection.execute(query)
+      result.to_a
+            .map{ |c| c["rating"] }
+            .compact
+            .map { |e| sprintf("%0.09f", JSON.parse(e)["info_ratings"].delete("[]")) }
+    end
   end
 end

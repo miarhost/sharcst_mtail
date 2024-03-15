@@ -17,6 +17,9 @@ Rails.application.routes.draw do
           patch 'update_membership', to: 'users#update_membership'
           post 'enqueue_parser_topic', to: 'users#profile'
         end
+        member do
+          get 'subscriptions_info', to: 'users#subscriptions_info'
+        end
       end
 
       resources :uploads do
