@@ -13,12 +13,16 @@ module Api
         render json: @current_user, serializer: MemberSerializer
       end
 
-      def profile
+      def enqueue_parser_topic
         request = Parsers::RecommendedExternalQueue
           .new(@current_user.id, params[:starts], params[:ends])
           .execute
         status = request.key?(:errors) ? 422 : 201
         render json: request[:result], status: status
+      end
+
+      def show_parsed_topic
+        Parsers::ParsedTopicQueue.execute(@current_user.id)
       end
 
       def subscriptions_info

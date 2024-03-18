@@ -15,7 +15,8 @@ Rails.application.routes.draw do
         collection do
           post 'login', to: 'users#login'
           patch 'update_membership', to: 'users#update_membership'
-          post 'enqueue_parser_topic', to: 'users#profile'
+          post 'enqueue_parser_topic', to: 'users#enqueue_parser_topic'
+          get 'show_parsed_topic', to: 'users#show_parsed_topic'
         end
         member do
           get 'subscriptions_info', to: 'users#subscriptions_info'

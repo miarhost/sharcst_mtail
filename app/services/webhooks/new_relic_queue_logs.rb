@@ -14,7 +14,7 @@ class Webhooks::NewRelicQueueLogs
         library: 'rabbitmq',
         destination_name: 'snickers',
         headers: nil,
-        routing_key: 'parsed',
+        routing_key: 'parsed.*',
         reply_to: nil,
         correlation_id: nil,
         exchange_type: 'direct'
