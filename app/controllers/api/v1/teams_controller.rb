@@ -28,7 +28,7 @@ module Api
       end
 
       def show_parsed_by_topic
-        result = Parsers::ParsedReceiverQueue.execute(@team.id)
+        result = Parsers::ParsedLinksQueue.execute(@team.id)
         Webhooks::TeamsSlackMessenger.call(result)
         render json: result
       end
