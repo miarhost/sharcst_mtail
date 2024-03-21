@@ -31,6 +31,7 @@ gem 'redis-store'
 gem 'rest-client'
 gem 'sidekiq'
 gem 'sidekiq-status'
+gem 'swagger-blocks'
 gem 'tf-idf-similarity'
 gem 'twilio-ruby'
 gem 'whenever', require: false

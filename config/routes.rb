@@ -7,6 +7,7 @@ Sidekiq::Web.use ActionDispatch::Session::CookieStore, key: '_required'
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   use_doorkeeper
+  resources :api_docs, only: [:index]
   namespace :api do
     namespace :v1 do
       root 'uploads#public_downloads_list'

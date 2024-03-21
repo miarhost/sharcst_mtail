@@ -1,6 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      include SwagDocs::UsersDoc
       before_action :authorize_request, except: %i[login]
 
       def login
