@@ -26,7 +26,7 @@ module SwagDocs::UsersDoc
         response 201 do
           key :description, 'response shows payload sent by queue to consumer'
           schema do
-            key :'$ref', :ParserResponseModel
+            key :'$ref', :RecTopicsPayloadModel
           end
         end
       end
@@ -34,10 +34,10 @@ module SwagDocs::UsersDoc
   end
 end
 
-class ParserResponseModel
+class RecTopicsPayloadModel
   include Swagger::Blocks
 
-  swagger_schema :PayloadToParserModel do
+  swagger_schema :RecTopicsPayloadModel do
     key :required, [:rate, :topics, :user, :subtopics]
     property :rate do
       key :type, :integer

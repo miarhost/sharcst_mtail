@@ -142,12 +142,26 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
+  swaggerui:
+    image: swaggerapi/swagger-ui
+    container_name: swaggerui
+    depends_on:
+    - nginx
+    networks:
+    - nginx_network
+    environment:
+      SWAGGER_JSON_URL: 'http://localhost:3000/api_docs.json'
+      EMBEDDING: 'true'
+    volumes:
+      - ./swagger:/usr/share/nginx/html/swagger
+
 volumes:
   postgres-data:
   opensearch:
   minio_data:
   redis_data:
   rabbitmq:
+  swagger:
 
 networks:
   opensearch-net:
