@@ -27,8 +27,12 @@ module Api
       end
 
       def subscriptions_info
+        last_links = []
         ratings = SubscriptionsQueries.show_subs_ratings_per_user(@current_user.id)
-        render json: ratings
+        @current_user.subscription_ids.each do |sid|
+          last_links << SubscriptonQueries.users_and_extlinks_by_subscription(sid)[:links]
+        end
+        render json: {'subscriptions_ratings': ratings, links: last_links.flatten }
       end
 
       private

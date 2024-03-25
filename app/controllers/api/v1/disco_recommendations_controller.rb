@@ -33,6 +33,10 @@ module Api
 
         ImportanceListDeliverQueue.execute(payload)
       end
+
+      def update_subscriptions_recs
+        DiscoServices::SubscriptionsUpdater.call(@current_user.id, params[:category_id])
+      end
     end
   end
 end
