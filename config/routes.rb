@@ -73,6 +73,7 @@ Rails.application.routes.draw do
           post 'queue_recommendations_for_user', to: 'disco_recommendations#queue_recommendations_for_user'
           get 'queue_daily_recommendations_for_items', to: 'disco_recommendations#queue_daily_recommendations_for_items'
           post 'queue_importance_values_lists', to: 'disco_recommendations#queue_importance_values_lists'
+          patch 'update_subscription_recs', to: 'disco_recommendations#update_subscriptions_recs'
         end
       end
 
