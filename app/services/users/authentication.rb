@@ -1,5 +1,7 @@
 module Users
   class Authentication < ApplicationService
+    include IssueTokens
+
     def initialize(email, password)
       @email = email
       @password = password
@@ -10,11 +12,7 @@ module Users
     end
 
     def call
-      attach_token
-    end
-
-    def attach_token
-      Jwt::JwtAuth.new(user).generate_token if user&.authenticate(@password)
+      attach_tokens(user) if user&.authenticate(@password)
     end
   end
 end

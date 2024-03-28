@@ -3,6 +3,7 @@ module Errors
     class JwtDecodeError < StandardError; end
     class JwtVerificationError < StandardError; end
     class JwtExpiredSignatureError < StandardError; end
+    class ExpirationRefreshTokenError < StandardError; end
     class Errors::ErrorsHandler::JwtInvalidPayload; end
     class Twilio::REST::TwilioError < StandardError; end
     class Twilio::REST::RestError < Twilio::REST::TwilioError; end
@@ -25,6 +26,7 @@ module Errors
         rescue_from Errors::ErrorsHandler::TwilioRestError, with: :external_api_error
         rescue_from Twilio::REST::RestError, with: :external_api_error
         rescue_from Pundit::NotAuthorizedError, with: :policy_restriction_for_user
+        rescue_from Errors::ErrorsHandler::ExpirationRefreshTokenError, with: :refresh_token_expired
       end
     end
 
@@ -55,5 +57,8 @@ module Errors
     def policy_restriction_for_user
       render json: { status: :forbidden, message: 'You are not authorized to perform this action'}, status: 403
     end
+
+    def refresh_token_expired
+      render json: { status: :unauthorized, message: 'Refresh token is expired'}, status: 401
   end
 end

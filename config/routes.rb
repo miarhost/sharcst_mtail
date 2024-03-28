@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       resources :users, only: [] do
         collection do
           post 'login', to: 'users#login'
+          post 'refresh_token', to: 'users#refresh_token'
           patch 'update_membership', to: 'users#update_membership'
           post 'enqueue_parser_topic', to: 'users#enqueue_parser_topic'
           get 'show_parsed_topic', to: 'users#show_parsed_topic'

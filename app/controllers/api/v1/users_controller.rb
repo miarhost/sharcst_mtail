@@ -2,11 +2,17 @@ module Api
   module V1
     class UsersController < ApplicationController
       include SwagDocs::UsersDoc
-      before_action :authorize_request, except: %i[login]
+      before_action :authorize_request, except: %i[login refresh_token]
 
       def login
         result = Users::Authentication.call(login_params[:email], login_params[:password])
         result.nil? ? not_authorized_message : (render json: { 'authorization': result })
+      end
+
+      def refresh_token
+        rt_token = RedisData::FetchRt.call(bearer, session[:user_id])
+        result = Users::RefreshToken.call(rt_token)
+        render json: result
       end
 
       def update_membership
@@ -38,7 +44,7 @@ module Api
       private
 
       def login_params
-        params.permit(:email, :password)
+        params.permit(:email, :password, :refresh_token)
       end
 
       def member_params
