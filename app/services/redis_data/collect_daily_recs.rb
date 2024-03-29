@@ -1,12 +1,12 @@
 module RedisData
   class CollectDailyRecs < ApplicationService
+    include RedisCache::RedisClient
     def initialize(date)
       @date = date
     end
 
     def call
       result = []
-      redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
       redis.scan_each(match: "*user*") do |key|
         if redis.type(key) == "string"
            set = redis.get(key)

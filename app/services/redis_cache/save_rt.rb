@@ -1,11 +1,18 @@
 module RedisCache
-  class SaveRt < ApplicationService
+  class SaveRt  < ApplicationService
     include RedisClient
-    def call(token, refresh_token, user_id)
-      redis.hmset(token, 'userId', user_id.to_s, 'refreshToken', refresh_token, 'ttl', ttl)
+    def initialize(token, refresh_token, user_id)
+      @token = token
+      @ttl = ttl
+      @refresh_token = refresh_token
+    end
+
+    def call
+      redis.hmset(@token, 'userId', @user_id.to_s, 'refreshToken', @refresh_token, 'ttl', ttl)
     end
 
     def ttl
-      Time.now + ENV['REFRESH_TTL']
+      (Time.now.to_i + ENV['REFRESH_TTL'].to_i).to_s
     end
   end
+end

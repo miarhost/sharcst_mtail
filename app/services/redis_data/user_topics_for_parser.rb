@@ -1,5 +1,6 @@
 module RedisData
   class UserTopicsForParser < ApplicationService
+    include RedisCache::RedisClient
     def initialize(user_id, starts, ends)
       @user_id = user_id
       @starts = starts.to_date
@@ -14,7 +15,6 @@ module RedisData
 
     def from_exprates_collected
       result = {}
-      redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
       redis.scan_each(match: '*exprate*') do |key|
         date = redis.hget(key, 'date').delete("-")
         date.prepend("0") if date.length < 8

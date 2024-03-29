@@ -60,5 +60,6 @@ module Errors
 
     def refresh_token_expired
       render json: { status: :unauthorized, message: 'Refresh token is expired'}, status: 401
+    end
   end
 end
