@@ -4,8 +4,8 @@ module TwilioServices
 
     def initialize(newsletter)
       @text = newsletter.header
-      @users.similar_subscriptions([newsletter.subscription_id])
-            .order(email: :asc)
+      @users = User.similar_subscriptions([newsletter.subscription_id])
+        .order(email: :asc)
     end
 
     def twilio(number)

@@ -3,7 +3,6 @@ require 'bunny'
 describe 'Users', type: :request do
 
   let!(:user) { create(:user) }
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
   let!(:team) { create(:team) }
 
   describe 'Token authorization' do

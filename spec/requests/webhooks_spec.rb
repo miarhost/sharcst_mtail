@@ -1,7 +1,6 @@
 require 'rails_helper'
 describe 'Webhooks', type: :request do
   let!(:user){ create(:user) }
-  let!(:authenticate){ Users::Authentication.call(user.email, user.password) }
   let!(:webhook) { create(:webhook) }
   describe 'Token authorization' do
     context 'unauthorized' do

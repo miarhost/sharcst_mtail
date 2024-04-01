@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'disco'
 
 describe 'Teams', type: :request do
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
   let!(:category) { create(:category) }
   let!(:topic) { create(:topic) }
   let!(:team) { create(:team) }

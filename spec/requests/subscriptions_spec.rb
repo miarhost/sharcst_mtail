@@ -1,7 +1,6 @@
 require 'rails_helper'
 describe 'Subscriptions', type: :request do
 
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
   let!(:subscription) { create(:subscription) }
 
   describe 'Token authorization' do

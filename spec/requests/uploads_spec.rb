@@ -16,8 +16,6 @@ describe 'Uploads', type: :request do
 
   let!(:upload) { create(:upload) }
   let!(:user) { FactoryBot.create(:user) }
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
-
 
   describe 'GET /api/v1/uploads/:id/load_prediction_for_infos' do
     include_context 'v1:authorized_request'

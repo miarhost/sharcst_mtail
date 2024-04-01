@@ -16,7 +16,6 @@ describe 'UploadsInfos', type: :request do
   let!(:upload) { create(:upload) }
   let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload.id, user_id: user.id) }
   let!(:uploads_info) { create(:uploads_info, upload_id: upload.id, user_id: user.id) }
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
 
   describe 'GET /api/v1/uploads_infos' do
     it 'shows filtered records ordered list with additional reporting attributes' do

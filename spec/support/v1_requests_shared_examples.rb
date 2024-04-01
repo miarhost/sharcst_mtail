@@ -16,7 +16,8 @@
 
   shared_context 'v1:authorized_request' do
     let(:user) { FactoryBot.create(:user) }
+    let!(:authenticate) { Users::Authentication.call(user.email, user.password)[:jwt_token] }
     it 'calls authorization check and return user if user is valid' do
-      allow(Users::Authorization).to receive(:call).and_return(user)
+      expect(authenticate).to start_with('ey')
     end
   end

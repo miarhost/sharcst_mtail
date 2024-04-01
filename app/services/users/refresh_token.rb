@@ -1,4 +1,4 @@
-module User
+module Users
   class RefreshToken < ApplicationService
     include IssueTokens
     def initialize(token)
@@ -6,7 +6,7 @@ module User
     end
 
     def user
-      user_id = ClaimRefreshToken.decode(@token)[0].deep_symbolize_keys[:user][:id]
+      user_id = Jwt::ClaimRefreshToken.decode(@token)[0].deep_symbolize_keys[:user_id].to_i
       User.find(user_id)
     end
 

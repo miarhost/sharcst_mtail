@@ -10,7 +10,8 @@ module Api
       end
 
       def refresh_token
-        rt_token = RedisData::FetchRt.call(bearer, session[:user_id])
+        token = bearer.split(" ")[1]
+        rt_token = RedisCache::FetchRt.call(token)
         result = Users::RefreshToken.call(rt_token)
         render json: result
       end
@@ -36,7 +37,7 @@ module Api
         last_links = []
         ratings = SubscriptionsQueries.show_subs_ratings_per_user(@current_user.id)
         @current_user.subscription_ids.each do |sid|
-          last_links << SubscriptonQueries.users_and_extlinks_by_subscription(sid)[:links]
+          last_links << SubscriptionsQueries.users_and_extlinks_by_subscription(sid)[:links]
         end
         render json: {'subscriptions_ratings': ratings, links: last_links.flatten }
       end

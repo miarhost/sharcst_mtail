@@ -9,8 +9,6 @@ describe 'DiscoRecommendations', type: :request do
     end
   end
 
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password)}
-
   describe 'POST /api/v1/disco_recommendations/queue_recommendations_for_user' do
     include_context 'v1:authorized_request'
     context 'returns succesful responce result of triggered jobs' do

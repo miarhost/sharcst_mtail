@@ -1,9 +1,10 @@
 require 'rails_helper'
 describe 'Newsletters', type: :request do
-  let!(:subscription) { create(:subscription) }
+  let!(:subscription) { create(:subscription, topic_id: topic.id) }
   let!(:newsletter) { create(:newsletter, subscription_id: subscription.id) }
   let!(:user) { create(:user, subscription_ids: [subscription.id]) }
-  let!(:authenticate) { Users::Authentication.call(user.email, user.password) }
+  let!(:other_users) { create_list(:user, 3, subscription_ids: [subscription.id])}
+  let!(:topic) { create(:topic)}
 
   describe 'Token authorization' do
     context 'unauthorized' do
