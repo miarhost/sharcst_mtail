@@ -40,7 +40,14 @@ describe 'Users', type: :request do
         headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:created)
         expect(request.body).to include_json(
-           {"result": "user #{user} request for parser sent at #{Time.now}"}
+          {
+            "rate": message["rate"],
+            "topics": [
+                message["topics"]
+            ],
+            "user": user.id,
+            "subtopics": message["subtopics"]
+          }
         )
       end
     end
@@ -51,7 +58,10 @@ describe 'Users', type: :request do
         headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(request.body).to include_json(
-          {"errors": "undefined method `bytesize' for []:Array"}
+          {
+            "status": "unprocessable_entity",
+            "message": "Please fill the fields above"
+          }
         )
       end
     end

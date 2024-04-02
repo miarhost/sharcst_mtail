@@ -9,6 +9,7 @@ module Errors
     class Twilio::REST::RestError < Twilio::REST::TwilioError; end
     class Errors::ErrorsHandler::TwilioApiError; end
     class Errors::ErrorsHandler::TwilioRestError; end
+    class QueryParamsEmpty < StandardError; end
 
     def self.included(klass)
       klass.class_eval do
@@ -27,6 +28,7 @@ module Errors
         rescue_from Twilio::REST::RestError, with: :external_api_error
         rescue_from Pundit::NotAuthorizedError, with: :policy_restriction_for_user
         rescue_from Errors::ErrorsHandler::ExpirationRefreshTokenError, with: :refresh_token_expired
+        rescue_from Errors::ErrorsHandler::QueryParamsEmpty, with: :raise_if_blank
       end
     end
 
@@ -60,6 +62,10 @@ module Errors
 
     def refresh_token_expired
       render json: { status: :unauthorized, message: 'Refresh token is expired'}, status: 401
+    end
+
+    def raise_if_blank
+      render json: { status: :unprocessable_entity, message: 'Please fill the fields above' }, status: 422
     end
   end
 end

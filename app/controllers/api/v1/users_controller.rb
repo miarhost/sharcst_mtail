@@ -23,10 +23,12 @@ module Api
 
       def enqueue_parser_topic
         request = Parsers::RecommendedExternalQueue
-          .new(@current_user.id, params[:starts], params[:ends])
+          .new(@current_user.id, enqueue_params[:starts], enqueue_params[:ends])
           .execute
         status = request.key?(:errors) ? 422 : 201
         render json: request[:result], status: status
+      rescue StandardError
+        raise QueryParamsEmpty
       end
 
       def show_parsed_topic
@@ -50,6 +52,10 @@ module Api
 
       def member_params
         params.permit(:team_id)
+      end
+
+      def enqueue_params
+        params.permit(:starts, :ends)
       end
     end
   end
