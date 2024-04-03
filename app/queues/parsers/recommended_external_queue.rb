@@ -16,9 +16,10 @@ class Parsers::RecommendedExternalQueue
   def execute
     status = {}
     BasicPublisher.direct_exchange(exchange_name, queue_name, @data)
-    info_message = "#{@data} request for parser sent at #{Time.now}"
-    status[:result] = info_message
-    Rails.logger.info(info_message)
+    info_message = "request for parser sent at #{Time.now}"
+    status[:result] = JSON.parse(@data)
+    status[:message] = info_message
+    Rails.logger.info(info_message).to_json
     status
   rescue StandardError => e
     Rails.logger.error(e.message)

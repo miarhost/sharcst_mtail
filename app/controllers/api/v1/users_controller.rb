@@ -26,7 +26,7 @@ module Api
           .new(@current_user.id, enqueue_params[:starts], enqueue_params[:ends])
           .execute
         status = request.key?(:errors) ? 422 : 201
-        render json: request[:result], status: status
+        render json: request, status: status
       rescue StandardError
         raise QueryParamsEmpty
       end

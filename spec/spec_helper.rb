@@ -93,8 +93,44 @@ RSpec.configure do |config|
       'Content-Type'=>'application/x-www-form-urlencoded',
       'User-Agent'=>'twilio-ruby/6.7.0 (linux-gnu x86_64) Ruby/2.7.1'}).
       to_return(:status => 200, :body => "Successfully sent", :headers => {})
-    end
 
+    stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/Messages.json").
+    with(
+      body: {"Body"=>"New Event", "From"=>"#{ENV['TWILIO_SMS_SERVICE']}", "To"=>"#{ENV['TWILIO_TEST_USER_NUMBER']}"},
+      headers: {
+      'Accept'=>'application/json',
+      'Accept-Charset'=>'utf-8',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization'=>"Basic #{ENV['TW_MESSENGER_TOKEN']}",
+      'Content-Type'=>'application/x-www-form-urlencoded',
+      'User-Agent'=>'twilio-ruby/6.7.0 (linux-gnu x86_64) Ruby/2.7.1'
+      }).
+    to_return(status: 200, body: "", headers: {})
+    stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/Messages.json").
+    with(
+      body: {"Body"=>"New Event", "From"=>"#{ENV['TWILIO_SMS_SERVICE']}", "To"=>"+222222222"},
+      headers: {
+      'Accept'=>'application/json',
+      'Accept-Charset'=>'utf-8',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization'=>"Basic #{ENV['TW_MESSENGER_TOKEN']}",
+      'Content-Type'=>'application/x-www-form-urlencoded',
+      'User-Agent'=>'twilio-ruby/6.7.0 (linux-gnu x86_64) Ruby/2.7.1'
+      }).
+    to_return(status: 200, body: "", headers: {})
+    stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/#{ENV['TWILIO_ACCOUNT_SID']}/Messages.json").
+    with(
+      body: {"Body"=>"New Event", "From"=>"#{ENV['TWILIO_SMS_SERVICE']}", "To"=>"+333333333"},
+      headers: {
+      'Accept'=>'application/json',
+      'Accept-Charset'=>'utf-8',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization'=>"Basic #{ENV['TW_MESSENGER_TOKEN']}",
+      'Content-Type'=>'application/x-www-form-urlencoded',
+      'User-Agent'=>'twilio-ruby/6.7.0 (linux-gnu x86_64) Ruby/2.7.1'
+      }).
+    to_return(status: 200, body: "", headers: {})
+    end
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.
   #   # This allows you to limit a spec run to individual examples or groups

@@ -8,6 +8,7 @@ describe 'Users', type: :request do
   describe 'Token authorization' do
     context 'unauthorized' do
      include_examples 'v1:unauthorized_request', :patch, '/api/v1/users/update_membership', params: { team_id: 1 }
+     include_examples 'v1:unauthorized_request', :post, '/api/v1/users/enqueue_parser_topic',  params: { starts: '2023-09-07', ends: '2024-03-07'}
     end
   end
 
@@ -30,7 +31,7 @@ describe 'Users', type: :request do
   end
 
   describe 'POST /api/v1/users/enqueue_parser_topic' do
-    let!(:publisher) { Parsers::RecommendedExternalQueue.new(user.id, Date.today, Date.today - 3.months)}
+    let!(:publisher) { Parsers::RecommendedExternalQueue.new(user.id, Date.today, Date.today - 3.months).execute }
     let!(:message) { RedisData::UserTopicsForParser.call(user.id, Date.today, Date.today - 3.months)}
 
     include_context "v1:authorized_request"
@@ -39,16 +40,13 @@ describe 'Users', type: :request do
         post '/api/v1/users/enqueue_parser_topic', params: { starts: '2023-09-07', ends: '2024-03-07'},
         headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:created)
-        expect(request.body).to include_json(
+        expect(response.body).to include_json(
           {
-            "rate": message["rate"],
-            "topics": [
-                message["topics"]
-            ],
-            "user": user.id,
-            "subtopics": message["subtopics"]
+              "result": message,
+              "message": publisher[:message]
           }
         )
+
       end
     end
 
@@ -57,7 +55,7 @@ describe 'Users', type: :request do
         post '/api/v1/users/enqueue_parser_topic', params: {},
         headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(request.body).to include_json(
+        expect(response.body).to include_json(
           {
             "status": "unprocessable_entity",
             "message": "Please fill the fields above"

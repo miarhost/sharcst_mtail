@@ -3,7 +3,8 @@ describe 'Newsletters', type: :request do
   let!(:subscription) { create(:subscription, topic_id: topic.id) }
   let!(:newsletter) { create(:newsletter, subscription_id: subscription.id) }
   let!(:user) { create(:user, subscription_ids: [subscription.id]) }
-  let!(:other_users) { create_list(:user, 3, subscription_ids: [subscription.id])}
+  let!(:another_user_1) { create(:user, subscription_ids: [subscription.id], phone_number: "+222222222")}
+  let!(:another_user_2) { create(:user, subscription_ids: [subscription.id], phone_number: "+333333333")}
   let!(:topic) { create(:topic)}
 
   describe 'Token authorization' do
@@ -20,13 +21,13 @@ describe 'Newsletters', type: :request do
       headers: { Authorization: "Bearer #{authenticate}"}
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to eq(
-        [
+      expect(response.body).to include_json(
+        UnorderedArray([
           {
-          "status": "queued",
-          "body": "Sent from your Twilio trial account - New Event"
+            "status": "queued",
+            "body": "Sent from your Twilio trial account - New Event"
           }
-        ]
+        ])
       )
     end
   end
