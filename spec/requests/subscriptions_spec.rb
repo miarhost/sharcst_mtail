@@ -1,7 +1,8 @@
 require 'rails_helper'
 describe 'Subscriptions', type: :request do
 
-  let!(:subscription) { create(:subscription) }
+  let!(:subscription) { create(:subscription, topic_id: topic.id) }
+  let!(:topic) { create(:topic) }
 
   describe 'Token authorization' do
     context 'unauthorized' do
@@ -16,7 +17,7 @@ describe 'Subscriptions', type: :request do
     context 'successfully creates a record' do
       it 'creates new subscription record' do
         post '/api/v1/subscriptions',
-            params: { subscription: { title: 'Created Subscription'} },
+            params: { subscription: { title: 'Created Subscription', topic_id: topic.id } },
             headers: { Authorization: "Bearer #{authenticate}"}
 
         expect(response).to have_http_status(:created)
@@ -36,7 +37,7 @@ describe 'Subscriptions', type: :request do
         expect(response.body).to include_json(
           {
             "status": "unprocessable_entity",
-            "message": "Title can't be blank"
+            "message": "Title can't be blank and Topic must exist"
           }
         )
       end

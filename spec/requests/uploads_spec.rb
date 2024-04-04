@@ -15,7 +15,7 @@ describe 'Uploads', type: :request do
   end
 
   let!(:upload) { create(:upload) }
-  let!(:user) { FactoryBot.create(:user) }
+  let!(:user) { create(:user) }
 
   describe 'GET /api/v1/uploads/:id/load_prediction_for_infos' do
     include_context 'v1:authorized_request'
@@ -29,10 +29,11 @@ describe 'Uploads', type: :request do
       get "/api/v1/uploads/#{upload.id}/load_prediction_for_infos", params: { id: upload.id },
       headers: { Authorization: "Bearer #{authenticate}" }
 
-      result = DiscoServices::UploadsRecommender.call(uploads_infos.pluck(:id))
+      prediction = DiscoServices::UploadsRecommender.call(uploads_infos.pluck(:id))
 
       expect(response).to have_http_status(200)
-      expect(response.body).to include_json({ 'predicted rating': result.to_s })
+      expect(uploads_infos.first.reload.rating).to eq(prediction)
+      expect(response.body).to include_json({ 'predicted rating': prediction.to_s })
     end
   end
 
