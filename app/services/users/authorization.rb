@@ -19,9 +19,18 @@ module Users
     private
 
     def decoded_token
-      token = @headers['HTTP_AUTHORIZATION'].split(' ').last
-      decoded = Jwt::JwtToken.decode(token)
+      decoded =
+    begin
+      Jwt::JwtToken.decode(token)
+    rescue
+      jwt_token = Jwt::JwtToken.refresh_token(token)
+      Jwt::JwtToken.decode(jwt_token[:jwt_token])
+    end
       decoded[0].deep_symbolize_keys[:user][:id]
+    end
+
+    def token
+      @headers['HTTP_AUTHORIZATION'].split(' ').last
     end
   end
 end

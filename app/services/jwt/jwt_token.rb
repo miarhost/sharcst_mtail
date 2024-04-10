@@ -7,10 +7,11 @@ module Jwt
 
     def self.decode(token)
       JWT.decode(token, ENV['JWT_HMAC'], true, { algorithm: ENV['JWT_ALG'] })
-    rescue JWT::ExpiredSignature => e
-      raise Errors::ErrorsHandler::JwtVerificationError, e.message
-    rescue JWT::DecodeError => e
-      raise Errors::ErrorsHandler::JwtDecodeError, e.message
+    end
+
+    def self.refresh_token(token)
+      rt_token = RedisCache::FetchRt.call(token)
+      Users::RefreshToken.call(rt_token)
     end
   end
 end
