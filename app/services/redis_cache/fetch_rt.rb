@@ -1,18 +1,22 @@
 
 module RedisCache
-  class FetchRt < ApplicationService
+  class  < ApplicationService
     include RedisClient
     def initialize(token)
       @token = token
     end
 
+    def record_found
+     redis.keys(@token).first if @token
+    end
+
     def ttl_valid?(key)
-      redis.hget(key, "ttl") >= Time.now
+      ttl = redis.hget(key, "ttl").to_i
+      redis.hget(key, "ttl") >= Time.now.to_i
     end
 
     def call
-      token = redis.keys(@token).first if @token
-      redis.hget(token, 'refreshToken')
+     redis.hget(record_found, 'refreshToken') if ttl_valid?(record_found)
     end
   end
 end
