@@ -23,3 +23,7 @@ end
 every :day, at: '20.20 pm' do
   runner 'Mailers::TeamRecommenderMailJob.perform_async'
 end
+
+every 3.days, at: '01.00 am' do
+  rake 'redis_cache:remove_unused_tokens'
+end
