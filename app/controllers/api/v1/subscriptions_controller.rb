@@ -4,6 +4,12 @@ module Api
       before_action :authorize_request
       before_action :set_subscription, except: :create
 
+      def store_topic_recommendations
+        if subscription.topic
+          TopicSuscriptionsUpdater.call(current_user.id, @subscription.topic.category.id)
+        end
+      end
+
       def create
         @subscription = Subscription.new(subs_params)
         @subscription.save!
@@ -18,6 +24,7 @@ module Api
       def destroy
         @subscription.destroy!
       end
+
       private
 
       def subs_params
