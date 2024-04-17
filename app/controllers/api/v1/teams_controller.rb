@@ -1,6 +1,7 @@
 module Api
   module V1
     class TeamsController < ApplicationController
+      include SwagDocs::TeamsDoc
       before_action :authorize_request
       before_action :set_team, except: :create
 
@@ -19,7 +20,7 @@ module Api
       end
 
       def store_recommendations_for_team
-        render json: DiscoServices::TeamRecommender.call(params[:id])
+        render json: DiscoServices::TeamRecommender.call(params[:id]), status: 201
       end
 
       def queue_parsing_by_topic

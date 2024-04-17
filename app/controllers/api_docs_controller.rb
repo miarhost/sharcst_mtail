@@ -28,6 +28,8 @@ class ApiDocsController < ActionController::Base
 
   SWAGGERED_CLASSES = [
     Api::V1::UsersController,
+    SwagDocs::RecTopicsPayloadModel,
+    SwagDocs::TargetTopicsMaxRatedModel,
     self,
   ].freeze
 

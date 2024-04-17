@@ -23,7 +23,7 @@ module SwagDocs::UsersDoc
           key :type, :string
           key :required, :true
         end
-        response 201 do
+        response 202 do
           key :description, 'response shows payload sent by queue to consumer'
           schema do
             key :'$ref', :RecTopicsPayloadModel
@@ -32,26 +32,26 @@ module SwagDocs::UsersDoc
       end
     end
   end
-end
 
-class RecTopicsPayloadModel
-  include Swagger::Blocks
+  class RecTopicsPayloadModel
+    include Swagger::Blocks
 
-  swagger_schema :RecTopicsPayloadModel do
-    key :required, [:rate, :topics, :user, :subtopics]
-    property :rate do
-      key :type, :integer
-      key :format, :int32
-    end
-    property :topics do
-      key :type, :array
-    end
-    property :user do
-      key :type, :integer
-      key :format, :int32
-    end
-    property :subtopics do
-      key :type, :string
+    swagger_schema :RecTopicsPayloadModel do
+      key :required, [:rate, :topics, :user, :subtopics]
+      property :rate do
+        key :type, :integer
+        key :format, :int32
+      end
+      property :topics do
+        key :type, :array
+      end
+      property :user do
+        key :type, :integer
+        key :format, :int32
+      end
+      property :subtopics do
+        key :type, :string
+      end
     end
   end
 end

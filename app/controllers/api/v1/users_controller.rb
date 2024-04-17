@@ -25,14 +25,14 @@ module Api
         request = Parsers::RecommendedExternalQueue
           .new(@current_user.id, enqueue_params[:starts], enqueue_params[:ends])
           .execute
-        status = request.key?(:errors) ? 422 : 201
+        status = request.key?(:errors) ? 422 : 202
         render json: request, status: status
       rescue StandardError
         raise QueryParamsEmpty
       end
 
       def show_parsed_topic
-        Parsers::ParsedTopicQueue.execute(@current_user.id)
+        result = Parsers::ParsedTopicQueue.execute(@current_user.id)
       end
 
       def subscriptions_info
