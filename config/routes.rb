@@ -78,7 +78,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :subscriptions
+      resources :subscriptions do
+        member do
+          post 'store_topic_recommendations'
+        end
+      end
 
       resources :teams do
         member do

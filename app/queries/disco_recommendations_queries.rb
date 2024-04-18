@@ -29,13 +29,13 @@ class DiscoRecommendationsQueries
 
     def recs_for_category_teams(cid)
       query = <<-SQL
-      select disco_recommendations.item_id, users.email
+      select disco_recommendations.item_id, users.id as user_id
       from disco_recommendations, teams, users, categories
       where disco_recommendations.subject_id = users.id
       and users.team_id = teams.id
       and teams.category_id = #{cid};
       SQL
-      ActiveRecord::Base.connection.execute(query)
+      ActiveRecord::Base.connection.execute(query).to_a
     end
 
     def daily_recs_for_team(tid)

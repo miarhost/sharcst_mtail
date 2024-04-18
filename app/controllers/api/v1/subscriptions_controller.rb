@@ -5,9 +5,12 @@ module Api
       before_action :set_subscription, except: :create
 
       def store_topic_recommendations
-        if subscription.topic
-          TopicSuscriptionsUpdater.call(current_user.id, @subscription.topic.category.id)
-        end
+        return skip_action unless @subscription.topic
+        result = DiscoServices::TopicSubscriptionsUpdater
+            .call(@current_user.id, @subscription.topic.category.id)
+
+        status = result[:status] ? result[:status] : 200
+        render json: result.to_json, status: status
       end
 
       def create

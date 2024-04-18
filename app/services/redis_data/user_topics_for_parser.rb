@@ -11,8 +11,6 @@ module RedisData
       from_exprates_collected
     end
 
-    private
-
     def from_exprates_collected
       result = {}
       redis.scan_each(match: '*exprate*') do |key|
