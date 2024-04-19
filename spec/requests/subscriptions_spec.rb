@@ -86,4 +86,43 @@ describe 'Subscriptions', type: :request do
       expect{ subscription.reload }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe 'POST /api/v1/subscriptions/:id/store_topic_recommendations' do
+    include_context 'v1:authorized_request'
+
+    context 'updates recommendations records for subscription' do
+      it 'returns successful disco service output' do
+        post "/api/v1/subscriptions/#{subscription.id}/store_topic_recommendations",
+        headers: { Authorization: "Bearer#{authenticate}"}
+
+        expect(response).to have_http_status(:success)
+        expect(DiscoServices::TopicSubscriptionsUpdater).to receive(:call).with(user.id, topic.category,id)
+      end
+    end
+
+    context 'no updates due to training data inconsistency' do
+      it 'returns traning data handler message' do
+        post "/api/v1/subscriptions/#{subscription.id}/store_topic_recommendations",
+        headers: { Authorization: "Bearer#{authenticate}"}
+
+        expect(response).to have_http_status(303)
+        expect(response).to include_json(
+          { message: 'No data updated', status: 303 }
+        )
+      end
+    end
+
+    context 'no updates due to empty topic' do
+      let!(:subscription_1) { create(:subscription, topic_id: nil)}
+      it 'returns empty response message' do
+        post "/api/v1/subscriptions/#{subscription_1.id}/store_topic_recommendations",
+        headers: { Authorization: "Bearer#{authenticate}"}
+
+        expect(response).to have_http_status(405)
+        expect(response).to include_json(
+          {  message: 'No results' }
+        )
+      end
+    end
+  end
 end
