@@ -165,6 +165,8 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    geocoder (1.8.2)
+    geoip (1.6.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -418,6 +420,8 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faraday
+  geocoder
+  geoip
   image_processing (~> 1.2)
   jwt
   kaminari

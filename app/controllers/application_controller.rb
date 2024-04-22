@@ -37,4 +37,13 @@ class ApplicationController < ActionController::API
   def pundit_user
     authorize_request
   end
+
+  def location_setup
+    location_object = request.location
+    location = Location.create!(
+      city: location_object.first[:city],
+      city: location_object.first[:country]
+    )
+    { location: location.id, location_type: location.locatable_type }
+  end
 end
