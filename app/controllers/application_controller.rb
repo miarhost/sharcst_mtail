@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
   include Errors::Helpers
   include Pundit::Authorization
-  after_action :refresh_token, only: [:authorize_request], if: :token_expired?
+  after_action :refresh_token, only: :authorize_request, if: :token_expired?
 
   def doorkeeper_unauthorized_render_options(error = nil)
     { json: { error => 'Not Authorized by OAuth' } }

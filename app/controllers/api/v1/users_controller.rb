@@ -5,7 +5,7 @@ module Api
       before_action :authorize_request, except: %i[login refresh_token]
 
       def login
-        result = Users::Authentication.call(login_params[:email], login_params[:password])
+        result = Users::Authentication.call(login_params[:email], login_params[:password], request.remote_ip)
         result.nil? ? not_authorized_message : (render json: { 'authorization': result })
       end
 

@@ -12,9 +12,6 @@ module Users
       @current_user = User.find(decoded_token)
     end
 
-    def track_login
-      current_user.update!(remember_created_at: Time.now, login_count: current_user.login_count + 1)
-    end
 
     private
 
