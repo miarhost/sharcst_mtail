@@ -17,6 +17,7 @@ module Api
       end
 
       def update_membership
+        location_setup(@current_user)
         @current_user.update!(team_id: member_params[:team_id])
         render json: @current_user, serializer: MemberSerializer
       end

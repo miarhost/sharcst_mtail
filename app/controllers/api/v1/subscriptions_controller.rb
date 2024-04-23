@@ -5,6 +5,7 @@ module Api
       before_action :set_subscription, except: :create
 
       def store_topic_recommendations
+        location_setup(@current_user) if Rails.env.production?
         return skip_action unless @subscription.topic
         result = DiscoServices::TopicSubscriptionsUpdater
             .call(@current_user.id, @subscription.topic.category.id)

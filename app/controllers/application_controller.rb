@@ -31,19 +31,22 @@ class ApplicationController < ActionController::API
   end
 
   def token_expired?
-    authorize_request["message"] == "Signature has expired"
+    JSON.parse(authorize_request)['message'] == "Signature has expired"
   end
 
   def pundit_user
     authorize_request
   end
 
-  def location_setup
+  def location_setup(record)
     location_object = request.location
     location = Location.create!(
       city: location_object.first[:city],
-      city: location_object.first[:country]
+      country: location_object.first[:country],
+      locatable_type: record.class.name,
+      locatable_id: record.id
     )
-    { location: location.id, location_type: location.locatable_type }
+
+    Rails.logger.info({ location: location.id, location_type: location.locatable_type })
   end
 end

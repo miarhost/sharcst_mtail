@@ -64,6 +64,7 @@ module Api
         if @upload.upload_attachment && @upload.upload_attachment.attached?
         download = @upload.upload_attachment.blob.download
         @upload.update!(downloads_count: @upload.downloads_count + 1)
+        location_setup(@upload) if Rails.env.production?
         render json: { "file": Base64.encode64(download.to_s) }
         else
           raise ActiveRecord::RecordNotFound
