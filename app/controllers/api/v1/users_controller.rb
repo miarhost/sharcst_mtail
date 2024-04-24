@@ -2,7 +2,8 @@ module Api
   module V1
     class UsersController < ApplicationController
       include SwagDocs::UsersDoc
-      before_action :authorize_request, except: %i[login refresh_token]
+      before_action :authorize_request, except: %i[login refresh_token subscriptions_info]
+      before_action :doorkeeper_authorize!, only: :subscriptions_info
 
       def login
         result = Users::Authentication.call(login_params[:email], login_params[:password], request.remote_ip)
@@ -38,8 +39,8 @@ module Api
 
       def subscriptions_info
         last_links = []
-        ratings = SubscriptionsQueries.show_subs_ratings_per_user(@current_user.id)
-        @current_user.subscription_ids.each do |sid|
+        ratings = SubscriptionsQueries.show_subs_ratings_per_user(current_resource_owner.id)
+        current_resource_owner.subscription_ids.each do |sid|
           last_links << SubscriptionsQueries.users_and_extlinks_by_subscription(sid)[:links]
         end
         render json: {'subscriptions_ratings': ratings, links: last_links.flatten }

@@ -49,4 +49,8 @@ class ApplicationController < ActionController::API
 
     Rails.logger.info({ location: location.id, location_type: location.locatable_type })
   end
+
+  def current_resource_owner
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
 end

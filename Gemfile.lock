@@ -147,6 +147,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.6.6)
       railties (>= 5)
+    doorkeeper-jwt (0.4.1)
+      jwt (>= 2.1)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -415,7 +417,8 @@ DEPENDENCIES
   capistrano-sidekiq
   cloudinary
   disco
-  doorkeeper (~> 5.5)
+  doorkeeper
+  doorkeeper-jwt
   dotenv-rails
   factory_bot_rails
   faker
