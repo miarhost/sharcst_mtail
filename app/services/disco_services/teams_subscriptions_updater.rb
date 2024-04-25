@@ -12,7 +12,7 @@ module DiscoServices
       recommender = Disco::Recommender.new
       recs = recommender.fit(data)
       topics.each do |topic|
-        topic.update_recommended_subscriptions(recs)
+        topic.update_recommended_subscriptions(data)
       end
     end
 
