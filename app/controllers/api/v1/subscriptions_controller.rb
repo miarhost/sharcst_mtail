@@ -29,6 +29,11 @@ module Api
         @subscription.destroy!
       end
 
+      def update_stats_preferences
+        folder_id = User.find(params[:user_id])&.current_folder.id || current_user.current_folder.id
+        DiscoRecommendations::UpdateRecommendedInfos.call(@subscription.id, folder_id)
+      end
+
       private
 
       def subs_params

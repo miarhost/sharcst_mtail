@@ -80,7 +80,8 @@ Rails.application.routes.draw do
 
       resources :subscriptions do
         member do
-          post 'store_topic_recommendations'
+          post 'store_topic_recommendations', to: 'subscriptions#store_topic_recommendations'
+          put 'update_stats_preferences', to: 'subscriptions#update_stats_preferences'
         end
       end
 

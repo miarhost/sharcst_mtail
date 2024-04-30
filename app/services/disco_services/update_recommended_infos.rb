@@ -1,4 +1,4 @@
-module DiscoRecommendations
+module DiscoServices
   class UpdateRecommendedInfos < ApplicationService
 
     def initialize(sid, fid)

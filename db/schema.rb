@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_25_182557) do
+ActiveRecord::Schema.define(version: 2024_04_30_180159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,15 @@ ActiveRecord::Schema.define(version: 2024_04_25_182557) do
     t.datetime "updated_at"
     t.index ["upload_id"], name: "index_uploads_infos_on_upload_id"
     t.index ["user_id"], name: "index_uploads_infos_on_user_id"
+  end
+
+  create_table "uploads_stats", force: :cascade do |t|
+    t.integer "upload_id"
+    t.integer "folder_version"
+    t.json "infos_ratings"
+    t.date "datetime"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|

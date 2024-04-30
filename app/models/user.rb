@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_secure_password
   has_recommended :uploads
   has_many :locations, as: :locatable
+  has_many :folder_versions
 
   scope :admins, -> { select{ |u| u.roles.include?('admin')} }
 
@@ -40,4 +41,9 @@ class User < ApplicationRecord
                   .order(name: :asc)
     end
   end
+
+  def current_folder
+    folder_versions.order(version: :desc).first
+  end
+
 end
