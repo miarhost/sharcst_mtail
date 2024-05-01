@@ -12,7 +12,6 @@ module Api
         job_status = Sidekiq::Status.get(store_ratings, :status)
 
         job_result = Sidekiq::Status.get(store_ratings, :result)
-        @current_user.update_recommended_uploads(job_result)
         render json: [data, { 'status': job_status, result: job_result }]
       end
 

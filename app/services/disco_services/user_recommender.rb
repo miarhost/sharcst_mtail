@@ -1,11 +1,8 @@
 require 'disco'
 class DiscoServices::UserRecommender < ApplicationService
   def self.call(user)
-    data = []
     recommender = Disco::Recommender.new(factors: 2)
-    user.uploads.each do |u|
-     data << { user_id: user.id, item_id: u.id }
-    end
+    data = DataSets::ImplicitFeedback.items_by_download
     recommender.fit(data)
     user_recommendations = recommender.user_recs(user.id)
     recommendations = recommender.predict(data)

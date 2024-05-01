@@ -7,7 +7,7 @@ module DiscoServices
     end
 
     def data(sid)
-      DiscoRecommendationsQueries
+      DataSets::RatingBased
         .target_topic_max_rated_by_subscription(@sid)
         .map(&:symbolize_keys)
     end

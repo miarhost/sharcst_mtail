@@ -1,32 +1,34 @@
-module SwagDocs::UsersDoc
-  include Swagger::Blocks
-  extend ActiveSupport::Concern
-  included do
-    swagger_path 'users/enqueue_parser_topic' do
-      operation :post do
-        security do
-          key :jwt, []
-        end
-        key :operationId, 'gueueRequestParserTopics'
-        key :description, 'trigger publisher queue with request to parser at process_ratings (sneakers) for external links by related topics'
-        key :tags, ['external', 'amqp', 'user']
-        key :produces, ['application/json']
-        parameter do
-          key :name, :starts
-          key :in, :query
-          key :type, :string
-          key :required, :true
-        end
-        parameter do
-          key :name, :ends
-          key :in, :query
-          key :type, :string
-          key :required, :true
-        end
-        response 202 do
-          key :description, 'response shows payload sent by queue to consumer'
-          schema do
-            key :'$ref', :RecTopicsPayloadModel
+module SwagDocs
+  module UsersDoc
+    include Swagger::Blocks
+    extend ActiveSupport::Concern
+    included do
+      swagger_path 'users/enqueue_parser_topic' do
+        operation :post do
+          security do
+            key :jwt, []
+          end
+          key :operationId, 'gueueRequestParserTopics'
+          key :description, 'trigger publisher queue with request to parser at process_ratings (sneakers) for external links by related topics'
+          key :tags, ['external', 'amqp', 'user']
+          key :produces, ['application/json']
+          parameter do
+            key :name, :starts
+            key :in, :query
+            key :type, :string
+            key :required, :true
+          end
+          parameter do
+            key :name, :ends
+            key :in, :query
+            key :type, :string
+            key :required, :true
+          end
+          response 202 do
+            key :description, 'response shows payload sent by queue to consumer'
+            schema do
+              key :'$ref', :RecTopicsPayloadModel
+            end
           end
         end
       end

@@ -18,7 +18,7 @@ class DiscoServices::TeamRecommender
     end
 
     def data(tid)
-      DiscoRecommendationsQueries
+      DataSets::UploadsInfos
         .basic_dataset_from_infos_to_teams(tid)
     end
 
