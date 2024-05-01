@@ -8,7 +8,7 @@ module DataSets
         where uploads.downloads_count > 2
         SQL
         result = ActiveRecord::Base.connection.execute(query)
-        result.to_a
+        result.to_a.map(&:symbolize_keys)
       end
     end
   end

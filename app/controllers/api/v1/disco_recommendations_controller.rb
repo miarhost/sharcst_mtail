@@ -1,6 +1,7 @@
 module Api
   module V1
     class DiscoRecommendationsController < ApplicationController
+      include SwagDocs::DiscoRecommendationsDoc
       before_action :authorize_request
 
       def queue_recommendations_for_user
