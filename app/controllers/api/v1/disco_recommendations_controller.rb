@@ -25,6 +25,8 @@ module Api
           preferences << { 'item': Upload.find(hash[:item_id])&.name, 'score': (hash[:score] * 100).round(2) }
         end
         render json: preferences.to_json
+      rescue ArgumentError
+        render json: no_training_data, status: no_training_data[:status]
       end
 
       def queue_importance_values_lists

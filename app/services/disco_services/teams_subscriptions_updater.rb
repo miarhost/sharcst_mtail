@@ -1,7 +1,6 @@
 require 'disco'
 module DiscoServices
   class TeamsSubscriptionsUpdater < ApplicationService
-    include Errors::Helpers
 
     def initialize(uid, cid)
       @uid, @cid = uid, cid

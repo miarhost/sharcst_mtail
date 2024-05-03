@@ -1,5 +1,6 @@
 module Errors
   module ErrorsHandler
+    include Helpers
     class JwtDecodeError < StandardError; end
     class JwtVerificationError < StandardError; end
     class JwtExpiredSignatureError < StandardError; end
