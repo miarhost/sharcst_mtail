@@ -85,6 +85,10 @@ module Api
         render json: { 'predicted rating': result }
       end
 
+      def update_recs
+        UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id)
+      end
+
       def public_downloads_list
         downloads = Upload.public_status
                           .downloaded

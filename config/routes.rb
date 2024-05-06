@@ -32,6 +32,7 @@ Rails.application.routes.draw do
           get 'load_prediction_for_infos', to: 'uploads#load_prediction_for_infos'
           get 'webhook_infos', to: 'uploads#webhook_infos'
           get 'download_file', to: 'uploads#download_file'
+          patch 'update_recs', to: 'uploads#update_recs'
         end
         collection do
           get 'public_downloads_list', to: 'uploads#public_downloads_list'

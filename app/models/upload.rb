@@ -6,6 +6,7 @@ class Upload < ApplicationRecord
   validates_presence_of :name
   visitable :ahoy_visit
   has_many :locations, as: :locatable
+  has_recommended :uploads_infos
 
   scope :public_status, -> { where(status: 'public')}
   scope :downloaded, -> { where('downloads_count > 0')}

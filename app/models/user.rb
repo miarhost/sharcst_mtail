@@ -17,6 +17,7 @@ class User < ApplicationRecord
   belongs_to :team, optional: true
   has_secure_password
   has_recommended :uploads
+  has_recommended :uploads_infos
   has_many :locations, as: :locatable
   has_many :folder_versions
 

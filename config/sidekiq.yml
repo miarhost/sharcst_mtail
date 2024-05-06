@@ -11,3 +11,4 @@ production:
   - updater
   - mailer
   - messengers
+  - queries
