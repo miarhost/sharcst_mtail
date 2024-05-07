@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_30_180159) do
+ActiveRecord::Schema.define(version: 2024_05_07_123550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 2024_04_30_180159) do
     t.string "category", default: "", null: false
     t.string "topic", default: ""
     t.bigint "topic_id"
+    t.integer "version", default: 0
     t.index ["topic_id"], name: "index_uploads_on_topic_id"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
@@ -268,7 +269,7 @@ ActiveRecord::Schema.define(version: 2024_04_30_180159) do
 
   create_table "uploads_stats", force: :cascade do |t|
     t.integer "upload_id"
-    t.integer "folder_version"
+    t.integer "folder_version_id"
     t.json "infos_ratings"
     t.date "datetime"
     t.datetime "created_at", precision: 6, null: false

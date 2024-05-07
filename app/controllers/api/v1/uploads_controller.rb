@@ -51,6 +51,7 @@ module Api
             content_type: file.content_type
           )
           attachment.save!
+          @upload.update!(version: @upload.version + 1)
           render json: attachment, serializer: UploadAttachmentSerializer
         end
       end
@@ -86,7 +87,8 @@ module Api
       end
 
       def update_recs
-        UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id)
+        fv = FolderVersion.create!(upload_id: @upload_id, user_id: @current_user.id, version: 1)
+        UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id, fv.id)
       end
 
       def public_downloads_list

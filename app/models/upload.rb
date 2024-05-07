@@ -1,6 +1,7 @@
 class Upload < ApplicationRecord
   has_one :upload_attachment, dependent: :destroy
   has_many :uploads_infos, dependent: :destroy
+  has_many :folder_versions
 
   belongs_to :user
   validates_presence_of :name
