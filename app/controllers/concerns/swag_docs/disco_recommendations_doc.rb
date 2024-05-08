@@ -75,7 +75,7 @@ module SwagDocs
     swagger_schema :ScoresModel do
       key :required, [:item, :score]
       property :item do
-        key, :type, :string
+        key :type, :string
       end
       property :score do
         key :type, :float

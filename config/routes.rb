@@ -33,6 +33,7 @@ Rails.application.routes.draw do
           get 'webhook_infos', to: 'uploads#webhook_infos'
           get 'download_file', to: 'uploads#download_file'
           patch 'update_recs', to: 'uploads#update_recs'
+          post 'update_recs_by_infos', to: 'uploads#update_recs_by_infos'
         end
         collection do
           get 'public_downloads_list', to: 'uploads#public_downloads_list'

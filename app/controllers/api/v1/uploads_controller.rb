@@ -4,6 +4,7 @@ module Api
       before_action :authorize_request, except: %i[show index public_downloads_list]
       before_action :set_upload, except: %i[create index dashboard public_downloads_list]
       after_action :track_action, only: %i[download_file]
+      after_action :update_infos_dataset, only: %i[create update upload_file download_file]
 
       def index
         public_uploads = Rails.cache.fetch([Upload.first.cache_key, __method__], expires_in: 20.minutes) do
@@ -86,9 +87,16 @@ module Api
         render json: { 'predicted rating': result }
       end
 
-      def update_recs
+      def update_infos_dataset
         fv = FolderVersion.create!(upload_id: @upload_id, user_id: @current_user.id, version: 1)
-        UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id, fv.id)
+        job = UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id, fv.id)
+        Rails.logger.info(Sidekiq::Status.get(job, :bulk_results))
+      end
+
+      def update_recs_by_infos
+        DiscoServices::UpdateInfosRecsToVersion.(@upload.id)
+      rescue StandardError
+        render json: no_training_data, status: no_training_data[:status]
       end
 
       def public_downloads_list

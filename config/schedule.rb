@@ -27,3 +27,8 @@ end
 every 3.days, at: '01.00 am' do
   rake 'redis_cache:remove_unused_tokens'
 end
+
+
+every 7.days, at: '22.23 pm' do
+  runner 'UploadsInfos::UpdateDatasetJob.bulk_update'
+end
