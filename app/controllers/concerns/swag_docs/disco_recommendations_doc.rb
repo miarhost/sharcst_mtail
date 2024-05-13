@@ -10,7 +10,7 @@ module SwagDocs
           end
           key :operationId, 'TriggerRatesWorkers'
           key :description, 'Trigger worker and queue to store updated user items ratings'
-          key :tags, ['disco_recs', 'user', 'uploads_ratings', 'predictions', 'queue_to_PR']
+          key :tags, ['disco_recs', 'user', 'uploads_ratings', 'predictions', 'external']
           key :produces, ['application/json']
           response 200 do
             key :description, 'shows result and status of worker with ratings and data hash'
@@ -51,7 +51,7 @@ module SwagDocs
   class PredictedRatingsModel
     include Swagger::Blocks
 
-    swagger_schema :PreductedRatingsModel do
+    swagger_schema :PredictedRatingsModel do
       key :required, [:result, :status]
       property :result do
         key :type, :array

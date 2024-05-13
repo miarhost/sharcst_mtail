@@ -1,6 +1,7 @@
 module Api
   module V1
     class UploadsController < ApplicationController
+      include SwagDocs::UploadsDoc
       before_action :authorize_request, except: %i[show index public_downloads_list]
       before_action :set_upload, except: %i[create index dashboard public_downloads_list]
       after_action :track_action, only: %i[download_file]

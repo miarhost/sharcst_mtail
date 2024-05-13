@@ -30,10 +30,14 @@ class ApiDocsController < ActionController::Base
     Api::V1::UsersController,
     Api::V1::TeamsController,
     Api::V1::DiscoRecommendationsController,
+    Api::V1::UploadsController,
     SwagDocs::RecTopicsPayloadModel,
     SwagDocs::TargetTopicsMaxRatedModel,
     SwagDocs::PredictedRatingsModel,
-    self,
+    SwagDocs::NoTrainingDataModel,
+    SwagDocs::PredictionInfosModel,
+    SwagDocs::RecordNotFoundModel,
+    self
   ].freeze
 
   def index
