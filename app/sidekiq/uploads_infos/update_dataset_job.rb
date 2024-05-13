@@ -11,17 +11,17 @@ module UploadsInfos
       store result: e.message
     end
 
-    def self.bulk_update(user_id, upl_id, fv_id)
+    def bulk_update(user_id, upl_id, fv_id)
       bulk_results = []
       records = UploadsInfo.where.not(user_id: user_id, upload_id: upl_id)
                            .where('down_count > 2 and media_type IN (0,1,2)')
       records.find_in_batches do |items_group|
         extracted_job = perform_async(user_id, upl_id, fv_id, items_group.pluck(:id))
-        bulk_results << { jid: extracted_job, result: Sidekiq::Status.get(extracted_job, :result)}
+        bulk_results << { jid: extracted_job, result: Sidekiq::Status.get_all(extracted_job, :result)}
       end
-      Sidekiq::Status::Worker.store(bulk_results: bulk_results.to_json)
+      store bulk_results: bulk_results.to_json
     rescue StandardError => e
-      Sidekiq::Status::Worker.store(bulk_results: e.message)
+      store bulk_results: e.message
     end
   end
 end

@@ -33,7 +33,7 @@ describe 'Uploads', type: :request do
 
       expect(response).to have_http_status(200)
       expect(uploads_infos.first.reload.rating).to eq(prediction)
-      expect(response.body).to include_json({ 'predicted rating': prediction.to_s })
+      expect(response.body).to include_json({ 'predicted rating': prediction })
     end
   end
 

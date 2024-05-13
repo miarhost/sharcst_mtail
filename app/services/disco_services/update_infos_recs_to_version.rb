@@ -1,3 +1,4 @@
+require 'disco'
 module DiscoServices
   class UpdateInfosRecsToVersion < ApplicationService
 

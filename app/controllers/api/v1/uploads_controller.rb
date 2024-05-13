@@ -82,14 +82,14 @@ module Api
       end
 
       def load_prediction_for_infos
-        result = DiscoServices::UploadsRecommender.call(@upload.uploads_infos.ids)
+        result = DiscoServices::UploadsRecommender.call(@upload.uploads_info_ids)
         @upload.uploads_infos.update_all(rating: result)
         render json: { 'predicted rating': result }
       end
 
       def update_infos_dataset
         fv = FolderVersion.create!(upload_id: @upload_id, user_id: @current_user.id, version: 1)
-        job = UploadsInfos::UpdateDatasetJob.bulk_update(@current_user.id, @upload.id, fv.id)
+        job = UploadsInfos::UpdateDatasetJob.new.bulk_update(@current_user.id, @upload.id, fv.id)
         Rails.logger.info(Sidekiq::Status.get(job, :bulk_results))
       end
 
