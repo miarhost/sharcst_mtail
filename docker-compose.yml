@@ -155,6 +155,17 @@ services:
     volumes:
       - ./swagger:/usr/share/nginx/html/swagger
 
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+    - 11434:11434
+    expose:
+    - "11434"
+    volumes:
+    - ollama:/root/.ollama
+    command: serve
+
 volumes:
   postgres-data:
   opensearch:
@@ -162,6 +173,7 @@ volumes:
   redis_data:
   rabbitmq:
   swagger:
+  ollama:
 
 networks:
   opensearch-net:
