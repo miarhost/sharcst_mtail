@@ -11,11 +11,12 @@ module Webhooks
     end
 
     def call
-      RestClient.post(url, data, { content_type: :json, accept: :json } )
+      result = RestClient.post(url, data)
+      result
     end
 
     def data
-      {"model": "mistral", "prompt: #{topics}"}
+      {model: "mistral", prompt: "Give a list of names of related topics to #{topics}"}.to_json
     end
 
     def topics
