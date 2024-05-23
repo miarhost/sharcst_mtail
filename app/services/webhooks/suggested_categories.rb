@@ -12,11 +12,11 @@ module Webhooks
 
     def call
       result = RestClient.post(url, data)
-      result
+      result.body
     end
 
     def data
-      {model: "mistral", prompt: "Give a list of names of related topics to #{topics}"}.to_json
+      { model: "mistral", prompt: "Give a list of names of related topics to #{topics}"}.to_json
     end
 
     def topics

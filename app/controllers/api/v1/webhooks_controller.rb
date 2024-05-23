@@ -33,6 +33,10 @@ module Api
         @webhook.destroy!
       end
 
+      def ollama_list_to_parse
+        Webhooks::ParseModelResponse.parse(current_user.id)
+      end
+
       private
       def permitted_notifier_params
         params.permit(:resource_id, :id, :tech_alert)

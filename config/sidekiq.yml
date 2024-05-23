@@ -12,3 +12,4 @@ production:
   - mailer
   - messengers
   - queries
+  - ollama

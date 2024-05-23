@@ -58,6 +58,7 @@ Rails.application.routes.draw do
         collection do
           post 'messenger_alert_for_admins', to: 'webhooks#messenger_alert_for_admins'
           post 'parsed_queue_slack_logs', to: 'webhooks#parsed_queue_slack_logs'
+          get 'ollama_list_to_parse', to: 'webhooks#ollama_list_to_parse'
         end
       end
 
