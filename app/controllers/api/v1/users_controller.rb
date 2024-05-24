@@ -23,18 +23,30 @@ module Api
         render json: @current_user, serializer: MemberSerializer
       end
 
-      def enqueue_parser_topic
-        request = Parsers::RecommendedExternalQueue
-          .new(@current_user.id, enqueue_params[:starts], enqueue_params[:ends])
+      def enqueue_parser(queue, data_instance)
+        request = queue
+          .constantize
+          .new(data_instance, @current_user.id, **enqueue_params)
           .execute
         status = request.key?(:errors) ? 422 : 202
         render json: request, status: status
-      rescue StandardError
-        raise QueryParamsEmpty
       end
 
       def show_parsed_topic
         result = Parsers::ParsedTopicQueue.execute(@current_user.id)
+      end
+
+      def enqueue_topic
+        raise QueryParamsEmpty unless enqueue_params
+        queue = 'Parsers::RecommendedExternalQueue'
+        instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
+        enqueue_parser(queue, instance)
+      end
+
+      def enqueue_related_topics
+        queue = 'Parsers::ExtendedFieldsQueue'
+        instance = Webhooks::ParseModelResponse.parse(@current_user.id)
+        enqueue_parser(queue, instance)
       end
 
       def subscriptions_info

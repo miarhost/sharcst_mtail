@@ -1,7 +1,7 @@
 class Parsers::RecommendedExternalQueue
 
-  def initialize(user_id, starts, ends)
-    @data = JSON.generate(RedisData::UserTopicsForParser.call(user_id, starts, ends))
+  def initialize(data, user_id, **args)
+    @data = JSON.generate(data.call)
   end
 
   def exchange_name

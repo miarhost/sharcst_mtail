@@ -1,10 +1,10 @@
 module RedisData
   class UserTopicsForParser < ApplicationService
     include RedisCache::RedisClient
-    def initialize(user_id, starts, ends)
+    def initialize(user_id, args)
       @user_id = user_id
-      @starts = starts.to_date
-      @ends = ends.to_date
+      @starts = args[:starts].to_date
+      @ends = args[:ends].to_date
     end
 
     def call
