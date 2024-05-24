@@ -1,8 +1,8 @@
 module SwagDocs
-  class RecordNotFoundModel
+  class ErrorResponseModel
     include Swagger::Blocks
 
-    swagger_schema :RecordNotFoundModel do
+    swagger_schema :ErrorResponseModel do
       key :required, [:status, :message]
       property :status do
         key :type, :string

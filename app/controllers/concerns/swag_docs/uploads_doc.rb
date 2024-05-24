@@ -23,7 +23,7 @@ module SwagDocs
           response 404 do
             key :description, 'handler response for record not found'
             schema do
-              key :'$ref', :RecordNotFoundModel
+              key :'$ref', :ErrorResponseModel
             end
           end
         end

@@ -34,9 +34,9 @@ class ApiDocsController < ActionController::Base
     SwagDocs::RecTopicsPayloadModel,
     SwagDocs::TargetTopicsMaxRatedModel,
     SwagDocs::PredictedRatingsModel,
-    SwagDocs::NoTrainingDataModel,
     SwagDocs::PredictionInfosModel,
-    SwagDocs::RecordNotFoundModel,
+    SwagDocs::ErrorResponseModel,
+    SwagDocs::MistralTopicsModel,
     self
   ].freeze
 

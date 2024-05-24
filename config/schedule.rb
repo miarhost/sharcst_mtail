@@ -32,3 +32,7 @@ end
 every 7.days, at: '22.23 pm' do
   runner 'UploadsInfos::UpdateDatasetJob.bulk_update'
 end
+
+every 2.days, at: '14.30 pm' do
+  runner 'MistralResponses::RecpmmendedFieldsWorker.perform_async'
+end

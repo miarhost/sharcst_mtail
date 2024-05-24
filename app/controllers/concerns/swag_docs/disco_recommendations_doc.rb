@@ -33,7 +33,7 @@ module SwagDocs
           response 303 do
             key :description, 'No Training Data response'
             schema do
-              key :'$ref', :NoTrainingDataModel
+              key :'$ref', :ErrorResponseModel
             end
           end
 
