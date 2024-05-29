@@ -2,16 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_07_123550) do
-
+ActiveRecord::Schema[7.0].define(version: 2024_05_29_124228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +19,7 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -31,9 +30,16 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "ahoy_events", force: :cascade do |t|
@@ -41,7 +47,7 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.bigint "user_id"
     t.string "name"
     t.jsonb "properties"
-    t.datetime "time"
+    t.datetime "time", precision: nil
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
     t.index ["user_id"], name: "index_ahoy_events_on_user_id"
@@ -73,9 +79,11 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "app_version"
     t.string "os_version"
     t.string "platform"
-    t.datetime "started_at"
+    t.datetime "started_at", precision: nil
+    t.index ["started_at"], name: "index_ahoy_visits_on_started_at"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
+    t.index ["visitor_token"], name: "index_ahoy_visits_on_visitor_token"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -90,8 +98,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.bigint "item_id"
     t.string "context"
     t.float "score"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["item_type", "item_id"], name: "index_disco_recommendations_on_item_type_and_item_id"
     t.index ["subject_type", "subject_id"], name: "index_disco_recommendations_on_subject_type_and_subject_id"
   end
@@ -100,17 +108,17 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.bigint "upload_id"
     t.bigint "user_id"
     t.string "version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["upload_id"], name: "index_folder_versions_on_upload_id"
     t.index ["user_id"], name: "index_folder_versions_on_user_id"
   end
 
   create_table "jwt_black_lists", force: :cascade do |t|
     t.string "jti", default: "", null: false
-    t.datetime "exp"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "exp", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -119,8 +127,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "country_code"
     t.string "locatable_type"
     t.bigint "locatable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["locatable_type", "locatable_id"], name: "index_locations_on_locatable_type_and_locatable_id"
   end
 
@@ -129,12 +137,12 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "header"
     t.string "name"
     t.text "body"
-    t.datetime "date"
+    t.datetime "date", precision: nil
     t.integer "uploads_info_id"
     t.integer "ad_type", default: 0
     t.string "tag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["date"], name: "index_newsletters_by_dates", unique: true
     t.index ["subscription_id"], name: "index_newsletters_on_subscription_id"
   end
@@ -145,8 +153,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
     t.string "scopes", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
@@ -159,8 +167,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
     t.string "scopes"
     t.string "previous_refresh_token", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
@@ -176,8 +184,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -185,8 +193,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "title"
     t.jsonb "uploads_ratings"
     t.jsonb "newsletters_ratings"
-    t.datetime "updated_at"
-    t.datetime "created_at"
+    t.datetime "updated_at", precision: nil
+    t.datetime "created_at", precision: nil
     t.bigint "topic_id"
     t.integer "subs_rate", default: 0
     t.integer "subs_rating", default: 0
@@ -205,8 +213,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.bigint "topic_id", null: false
     t.string "list_of_5"
     t.json "full_list"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["topic_id"], name: "index_topic_digests_on_topic_id"
   end
 
@@ -219,17 +227,17 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
 
   create_table "upload_attachments", force: :cascade do |t|
     t.bigint "upload_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["upload_id"], name: "index_upload_attachments_on_upload_id"
   end
 
   create_table "uploads", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
-    t.datetime "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "date", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "downloads_count", default: 0
     t.string "status", default: "public"
     t.string "ahoy_visit_id"
@@ -260,9 +268,9 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.integer "upl_count", default: 0
     t.integer "down_count", default: 0
     t.string "log_tag"
-    t.datetime "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "date", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["upload_id"], name: "index_uploads_infos_on_upload_id"
     t.index ["user_id"], name: "index_uploads_infos_on_user_id"
   end
@@ -272,8 +280,8 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.integer "folder_version_id"
     t.json "infos_ratings"
     t.date "datetime"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -281,10 +289,10 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
     t.string "first_name"
     t.string "last_name"
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "password_digest", default: "", null: false
     t.integer "sign_in_count", default: 0, null: false
     t.inet "current_sign_in_ip"
@@ -308,6 +316,7 @@ ActiveRecord::Schema.define(version: 2024_05_07_123550) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "newsletters", "subscriptions"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"

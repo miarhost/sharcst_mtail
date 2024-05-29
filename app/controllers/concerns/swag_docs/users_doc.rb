@@ -52,7 +52,7 @@ module SwagDocs
           response 200 do
             key :description, 'response shows payload sent by queue to consumer. List of topics proposed by language model'
             schema do
-              kwy :'$ref', :MistralTopicsModel
+              key :'$ref', :MistralTopicsModel
             end
           end
         end
