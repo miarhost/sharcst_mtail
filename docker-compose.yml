@@ -39,7 +39,7 @@ services:
       - nginx_network
 
   redis:
-    image: redis:6.2.13
+    image: redis:7.2.5-alpine
     ports:
     - 6379:6379
     volumes:
@@ -116,7 +116,7 @@ services:
       - 1080:1080
 
   rabbitmq:
-    image: rabbitmq:3.9.29-alpine
+    image: rabbitmq:3.13-alpine
     env_file:
     - .env
     ports:

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.1'
+ruby '3.2.1'
 
 gem 'active_model_serializers'
 gem 'activestorage-validator'
@@ -23,11 +23,11 @@ gem 'jwt'
 gem 'kaminari'
 gem 'newrelic_rpm'
 gem 'opensearch-ruby'
-gem 'pg'
+gem 'pg', '~> 1.5.6'
 gem 'puma', '~> 4.1'
 gem 'pundit'
 gem 'rack-cors'
-gem 'rails', '~> 6.0.3', '>= 6.0.3.5'
+gem 'rails', '~> 7.0.0'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace'
 gem 'redis-rails'
