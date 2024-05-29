@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.1'
+ruby '3.2.1'
 
 gem 'active_model_serializers'
 gem 'activestorage-validator'
@@ -23,17 +23,17 @@ gem 'jwt'
 gem 'kaminari'
 gem 'newrelic_rpm'
 gem 'opensearch-ruby'
-gem 'pg'
+gem 'pg', '~> 1.5.6'
 gem 'puma', '~> 4.1'
 gem 'pundit'
 gem 'rack-cors'
-gem 'rails', '~> 6.0.3', '>= 6.0.3.5'
+gem 'rails', '~> 7.0.0'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace'
 gem 'redis-rails'
 gem 'redis-store'
 gem 'rest-client'
-gem 'sidekiq'
+gem 'sidekiq', '~> 7.1', '>= 7.1.2'
 gem 'sidekiq-status'
 gem 'swagger-blocks'
 gem 'tf-idf-similarity'
@@ -44,7 +44,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'faker'
   gem 'factory_bot_rails'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
   gem 'webmock'
 end
 
@@ -61,8 +61,8 @@ group :development do
   gem 'capistrano-nginx'
   gem 'capistrano-linked-files'
   gem 'listen', '~> 3.2'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring', '~> 4.1'
+  gem 'spring-watcher-listen'
 end
 
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

@@ -11,5 +11,5 @@ Ahoy.geocode = true
 Ahoy.api_only = true
 Ahoy.server_side_visits = true
 Safely.report_exception_method = ->(e) { Rollbar.error(e) }
-Ahoy.cookies = false
+Ahoy.cookies = :none
 Ahoy.mask_ips = true
