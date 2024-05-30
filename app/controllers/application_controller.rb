@@ -39,6 +39,7 @@ class ApplicationController < ActionController::API
   end
 
   def location_setup(record)
+    return if Rails.env != 'production'
     location_object = request.location
     location = Location.create!(
       city: location_object.first[:city],

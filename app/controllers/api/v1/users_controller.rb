@@ -26,7 +26,7 @@ module Api
       def enqueue_parser(queue, data_instance)
         request = queue
           .constantize
-          .new(data_instance, @current_user.id, **enqueue_params)
+          .new(data_instance, @current_user.id, enqueue_params)
           .execute
         status = request.key?(:errors) ? 422 : 202
         render json: request, status: status
@@ -37,10 +37,13 @@ module Api
       end
 
       def enqueue_topic
-        raise QueryParamsEmpty unless enqueue_params
-        queue = 'Parsers::RecommendedExternalQueue'
-        instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
-        enqueue_parser(queue, instance)
+        if enqueue_params.blank?
+          raise_if_blank
+        else
+          queue = 'Parsers::RecommendedExternalQueue'
+          instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
+          enqueue_parser(queue, instance)
+        end
       end
 
       def enqueue_related_topics

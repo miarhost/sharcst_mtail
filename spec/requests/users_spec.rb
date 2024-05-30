@@ -8,7 +8,7 @@ describe 'Users', type: :request do
   describe 'Token authorization' do
     context 'unauthorized' do
      include_examples 'v1:unauthorized_request', :patch, '/api/v1/users/update_membership', params: { team_id: 1 }
-     include_examples 'v1:unauthorized_request', :post, '/api/v1/users/enqueue_parser_topic',  params: { starts: '2023-09-07', ends: '2024-03-07'}
+     include_examples 'v1:unauthorized_request', :post, '/api/v1/users/enqueue_topic',  params: { starts: '2023-09-07', ends: '2024-03-07' }
     end
   end
 
@@ -30,19 +30,20 @@ describe 'Users', type: :request do
     end
   end
 
-  describe 'POST /api/v1/users/enqueue_parser_topic' do
-    let!(:publisher) { Parsers::RecommendedExternalQueue.new(user.id, Date.today, Date.today - 3.months).execute }
-    let!(:message) { RedisData::UserTopicsForParser.call(user.id, Date.today, Date.today - 3.months)}
-
+  describe 'POST /api/v1/users/enqueue_topic' do
+    let(:params) { { starts: '2023-09-07', ends: '2024-03-07'} }
     include_context "v1:authorized_request"
     context 'successful request contains logger success message' do
       it 'returns enqueued logger message for current user id' do
-        post '/api/v1/users/enqueue_parser_topic', params: { starts: '2023-09-07', ends: '2024-03-07'},
+        post '/api/v1/users/enqueue_topic', params: ,
         headers: { Authorization: "Bearer #{authenticate}" }
-        expect(response).to have_http_status(:created)
+        message = RedisData::UserTopicsForParser.new(user.id, params)
+        publisher = Parsers::RecommendedExternalQueue.new(message, user.id, params).execute
+
+        expect(response).to have_http_status(:accepted)
         expect(response.body).to include_json(
           {
-              "result": message,
+              "result": message.call,
               "message": publisher[:message]
           }
         )
@@ -52,7 +53,7 @@ describe 'Users', type: :request do
 
     context 'queue processed with errors' do
       it 'returns logger error message' do
-        post '/api/v1/users/enqueue_parser_topic', params: {},
+        post '/api/v1/users/enqueue_topic', params: {},
         headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(
