@@ -37,10 +37,13 @@ module Api
       end
 
       def enqueue_topic
-        raise QueryParamsEmpty unless enqueue_params
-        queue = 'Parsers::RecommendedExternalQueue'
-        instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
-        enqueue_parser(queue, instance)
+        if enqueue_params.blank?
+          raise_if_blank
+        else
+          queue = 'Parsers::RecommendedExternalQueue'
+          instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
+          enqueue_parser(queue, instance)
+        end
       end
 
       def enqueue_related_topics
