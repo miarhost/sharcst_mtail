@@ -34,6 +34,8 @@
 # implementation.
   Rails.application.config.active_support.remove_deprecated_time_with_zone_name = true
 
+  Rails.application.config.active_record.legacy_connection_handling = false
+
 # Calls `Rails.application.executor.wrap` around test cases.
 # This makes test cases behave closer to an actual request or job.
 # Several features that are normally disabled in test, such as Active Record query cache

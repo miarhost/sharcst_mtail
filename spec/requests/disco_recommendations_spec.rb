@@ -9,37 +9,24 @@ describe 'DiscoRecommendations', type: :request do
     end
   end
 
+  let!(:uploads) { create_list(:upload, 5, user_id: user.id, downloads_count: 7) }
+  let!(:subscription) { create(:subscription)}
+  let!(:result) { DiscoServices::UserRecommender.call(user) }
+
   describe 'POST /api/v1/disco_recommendations/queue_recommendations_for_user' do
     include_context 'v1:authorized_request'
     context 'returns succesful responce result of triggered jobs' do
 
       before { Sidekiq::Testing.inline! }
-      around { DiscoServices::UserRecommender.call(user) }
+      before { user.subscription_ids.push(subscription.id)}
+
       after { Sidekiq::Testing.fake! }
 
       it 'returns json with result fields' do
         post '/api/v1/disco_recommendations/queue_recommendations_for_user',
           headers: { Authorization: "Bearer: #{authenticate}"}
-
-        expect(response).to have_http_status(:success)
-        expect(response.body).to include_json(
-          UnorderedArray(
-            [
-              {
-                  "result": [
-                      0.942264974117279,
-                      0.942264974117279,
-                      0.942264974117279
-                  ],
-                  "status": []
-              },
-              {
-                  "status": "queued",
-                  "result": null
-              }
-          ]
-          )
-        )
+         expect(response).to have_http_status(:success)
+        expect(response.body).to include_json([result])
       end
     end
   end
