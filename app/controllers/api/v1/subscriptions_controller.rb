@@ -6,12 +6,12 @@ module Api
 
       def store_topic_recommendations
         location_setup(@current_user) if Rails.env.production?
-        return skip_action unless @subscription.topic
         result = DiscoServices::TopicSubscriptionsUpdater
             .call(@current_user.id, @subscription.topic.category.id)
-
-        status = result[:status] ? result[:status] : 200
-        render json: result.to_json, status: status
+        recs = DiscoRecommendationsQueries.extract_created('Subscription')
+        render json: recs, each_serializer: DiscoRecommendationSerializer
+      rescue StandardError
+        dataset_structure_errors
       end
 
       def create

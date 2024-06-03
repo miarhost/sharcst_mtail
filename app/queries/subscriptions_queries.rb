@@ -6,8 +6,8 @@ class SubscriptionsQueries
         from subscriptions, topic_digests, topics
         where subscriptions.topic_id = '#{topic}'
         and topic_digests.topic_id = subscriptions.topic_id
-        and topic_digests.list_of_5 <> '{}'
-        and topic_digests.created_at between '#{Date.today - 1.week}' and '#{Date.today}'
+        and topic_digests.list_of_5 is not null
+        and topic_digests.created_at between '#{Date.today - 1.year}' and '#{Date.today}'
         SQL
         result = ActiveRecord::Base.connection.execute(query)
         result.to_a

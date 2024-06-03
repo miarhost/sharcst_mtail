@@ -1,11 +1,7 @@
 module DiscoServices
   class TopicSubscriptionsUpdater < TeamsSubscriptionsUpdater
     def data
-      result = []
-      topics.each do |topic|
-       result << SubscriptionsQueries.subs_group_for_external_links(topic).to_a
-      end
-      result.flatten
+     DataSets::Subscriptions.subs_of_users_of_rated_uploads
     end
 
     def topics

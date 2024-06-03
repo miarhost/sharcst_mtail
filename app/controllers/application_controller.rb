@@ -1,7 +1,6 @@
 
 class ApplicationController < ActionController::API
   include Errors::ErrorsHandler
-  include Errors::Helpers
   include Pundit::Authorization
   after_action :refresh_token, only: :authorize_request, if: :token_expired?
 

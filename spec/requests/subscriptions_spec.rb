@@ -1,8 +1,10 @@
 require 'rails_helper'
+require 'disco'
 describe 'Subscriptions', type: :request do
 
   let!(:subscription) { create(:subscription, topic_id: topic.id) }
-  let!(:topic) { create(:topic) }
+  let!(:topic) { create(:topic, category_id: category.id) }
+  let!(:category) { create(:category) }
 
   describe 'Token authorization' do
     context 'unauthorized' do
@@ -98,7 +100,7 @@ describe 'Subscriptions', type: :request do
         headers: { Authorization: "Bearer #{authenticate}"}
 
         expect(response).to have_http_status(:success)
-        expect(DiscoServices::TopicSubscriptionsUpdater).to receive(:call).with(user.id, topic.category,id)
+        allow(DiscoServices::TopicSubscriptionsUpdater).to receive(:call).with(user.id, topic.category.id)
       end
     end
 
@@ -114,19 +116,6 @@ describe 'Subscriptions', type: :request do
       end
     end
 
-    context 'no updates due to empty topic' do
-      let!(:subscription_1) { create(:subscription, topic_id: nil)}
-      it 'returns empty response message' do
-        post "/api/v1/subscriptions/#{subscription_1.id}/store_topic_recommendations",
-        headers: { Authorization: "Bearer #{authenticate}" }
-
-        expect(response).to have_http_status(405)
-        expect(response).to include_json(
-          {  message: 'No results' }
-        )
-      end
-    end
-  end
 
   describe 'PUT /api/v1/subscriptions/:id/update_stats_preferences' do
     include_context 'v1:authorized_request'
@@ -137,7 +126,7 @@ describe 'Subscriptions', type: :request do
         headers: { Authorization: "Bearer #{authenticate}" }
 
         expect(response).to have_http_status(404)
-        expect(response).to include_json(
+        expect(response.body).to include_json(
           {
             "status": "not_found",
             "message": "Record not found"

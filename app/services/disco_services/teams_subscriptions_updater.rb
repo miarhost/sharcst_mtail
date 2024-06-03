@@ -10,7 +10,9 @@ module DiscoServices
       return no_training_data if data.empty?
       recommender = Disco::Recommender.new
       recs = recommender.fit(data)
-      topics.each do |topic|
+      result = {}
+      topics.each do |topic_id|
+        topic = Topic.find(topic_id)
         topic.update_recommended_subscriptions(data)
       end
     end

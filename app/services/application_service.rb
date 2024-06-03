@@ -1,4 +1,5 @@
 class ApplicationService
+  include Errors::Helpers
   def initialize(*args); end
 
   def self.call(*args)

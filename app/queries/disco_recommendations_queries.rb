@@ -72,6 +72,10 @@ class DiscoRecommendationsQueries
       Hash[*hash_by_record.flatten]
     end
 
+    def extract_created(type)
+      Disco::Recommendation.where(item_type: type, created_at: (Time.now - 1.hour..Time.now))
+    end
+
     #-------- use recs columns to get composite values
 
     def implicit_helper_values_top_list
