@@ -7,11 +7,16 @@ module Api
       def store_topic_recommendations
         location_setup(@current_user) if Rails.env.production?
         result = DiscoServices::TopicSubscriptionsUpdater
-            .call(@current_user.id, @subscription.topic.category.id)
+          .call(@current_user.id, @subscription.topic.category.id)
         recs = DiscoRecommendationsQueries.extract_created('Subscription')
-        render json: recs, each_serializer: DiscoRecommendationSerializer
-      rescue StandardError
+        if result.is_a? Hash
+          render json: result, status: result[:status]
+        else
+          render json: recs, each_serializer: DiscoRecommendationSerializer
+        end
+      rescue StandardError => e
         dataset_structure_errors
+        Rails.logger.error(e)
       end
 
       def create

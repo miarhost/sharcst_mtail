@@ -9,7 +9,7 @@ module Errors
     end
 
     def dataset_structure_errors
-      render json: { message: 'Missing data entry in training set' }, status: 405
+      render json: { message: 'Missing data entry in training set', status: 405  }, status: 405
     end
     # which results to " 500 #<KeyError: key not found: :score>", or "Missing UserId"
   end

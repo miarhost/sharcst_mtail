@@ -6,6 +6,19 @@ describe 'Subscriptions', type: :request do
   let!(:topic) { create(:topic, category_id: category.id) }
   let!(:category) { create(:category) }
 
+  let!(:category_1) { create(:category) }
+
+  let!(:subscription_1) { create(:subscription, topic_id: topic_1.id) }
+  let!(:subscription_2) { create(:subscription, topic_id: topic_2.id) }
+
+  let!(:topic_1) { create(:topic, category_id: category.id) }
+  let!(:topic_2) { create(:topic, category_id: category_1.id) }
+
+  let!(:user_1) { create(:user, subscription_ids: [subscription_1.id])}
+  let!(:user_2) { create(:user, subscription_ids: [subscription_2.id])}
+
+  let!(:uploads_set_2) { create_list(:upload, 2, user_id: user_2.id, topic_id: topic_2.id) }
+
   describe 'Token authorization' do
     context 'unauthorized' do
       include_examples 'v1:unauthorized_request', :post, '/api/v1/subscriptions', params: { subscription: { title: 'Created Subscription'} }
@@ -92,15 +105,20 @@ describe 'Subscriptions', type: :request do
   end
 
   describe 'POST /api/v1/subscriptions/:id/store_topic_recommendations' do
+    let!(:service) { DiscoServices::TopicSubscriptionsUpdater.call(user.id, category.id) }
     include_context 'v1:authorized_request'
 
+    before { user.subscription_ids << subscription.id }
+
     context 'updates recommendations records for subscription' do
+      let!(:uploads_set_1) { create_list(:upload, 2, user_id: user_1.id, topic_id: topic_1.id, rating: 6) }
+
       it 'returns successful disco service output' do
         post "/api/v1/subscriptions/#{subscription.id}/store_topic_recommendations",
         headers: { Authorization: "Bearer #{authenticate}"}
 
-        expect(response).to have_http_status(:success)
-        allow(DiscoServices::TopicSubscriptionsUpdater).to receive(:call).with(user.id, topic.category.id)
+        expect(response).to have_http_status(200)
+        expect { service }.to change { Disco::Recommendation.count }.by(1)
       end
     end
 
@@ -110,11 +128,12 @@ describe 'Subscriptions', type: :request do
         headers: { Authorization: "Bearer #{authenticate}" }
 
         expect(response).to have_http_status(303)
-        expect(response).to include_json(
-          { message: 'No data updated', status: 303 }
+        expect(response.body).to include_json(
+          {message: "No data updated", status: 303}
         )
       end
     end
+  end
 
 
   describe 'PUT /api/v1/subscriptions/:id/update_stats_preferences' do
