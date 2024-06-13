@@ -2,22 +2,22 @@ require 'rails_helper'
 require 'disco'
 describe 'Subscriptions', type: :request do
 
-  let!(:subscription) { create(:subscription, topic_id: topic.id) }
+  let!(:subscription) { create(:subscription, topic_id: topic.id, subs_rating: 2) }
   let!(:topic) { create(:topic, category_id: category.id) }
   let!(:category) { create(:category) }
 
   let!(:category_1) { create(:category) }
 
-  let!(:subscription_1) { create(:subscription, topic_id: topic_1.id) }
-  let!(:subscription_2) { create(:subscription, topic_id: topic_2.id) }
+  let!(:subscription_1) { create(:subscription, topic_id: topic_1.id, subs_rating: 3) }
+  let!(:subscription_2) { create(:subscription, topic_id: topic_2.id, subs_rating: 7) }
 
   let!(:topic_1) { create(:topic, category_id: category.id) }
   let!(:topic_2) { create(:topic, category_id: category_1.id) }
 
-  let!(:user_1) { create(:user, subscription_ids: [subscription_1.id])}
+  let!(:user_1) { create(:user, subscription_ids: [subscription.id, subscription_1.id])}
   let!(:user_2) { create(:user, subscription_ids: [subscription_2.id])}
 
-  let!(:uploads_set_2) { create_list(:upload, 2, user_id: user_2.id, topic_id: topic_2.id) }
+  let!(:uploads_set) { create_list(:upload, 2, user_id: user.id, topic_id: topic.id, rating: 7) }
 
   describe 'Token authorization' do
     context 'unauthorized' do
@@ -112,15 +112,27 @@ describe 'Subscriptions', type: :request do
 
     context 'updates recommendations records for subscription' do
       let!(:uploads_set_1) { create_list(:upload, 2, user_id: user_1.id, topic_id: topic_1.id, rating: 6) }
+      let!(:uploads_set_2) { create_list(:upload, 2, user_id: user_2.id, topic_id: topic_2.id, rating: 6) }
 
       it 'returns successful disco service output' do
         post "/api/v1/subscriptions/#{subscription.id}/store_topic_recommendations",
         headers: { Authorization: "Bearer #{authenticate}"}
-
         expect(response).to have_http_status(200)
-        expect { service }.to change { Disco::Recommendation.count }.by(1)
+        rec = DiscoRecommendation.last(3).second
+        expect(response.body).to include_json(
+          UnorderedArray({
+            subject_type: "Topic",
+            subject_id: rec.subject_id,
+            item_type: "Subscription",
+            item_id: rec.item_id,
+            score: rec.score
+          })
+
+        )
       end
     end
+
+
 
     context 'no updates due to training data inconsistency' do
       it 'returns traning data handler message' do

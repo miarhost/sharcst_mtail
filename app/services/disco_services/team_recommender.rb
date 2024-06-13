@@ -6,7 +6,7 @@ class DiscoServices::TeamRecommender
       recommender.fit(data(tid))
       topical_proposals(tid).each do |hash|
         recommender.item_recs(hash["id"].to_i).each do |rec|
-          DiscoRecommendation.create!(
+          Disco::Recommendation.create!(
             item_id: rec[:item_id],
             score: rec[:score],
             subject_id: tid,
@@ -23,8 +23,8 @@ class DiscoServices::TeamRecommender
     end
 
     def topical_proposals(tid)
-      DiscoRecommendationsQueries
-        .target_topic_max_rated(tid)
+      DataSets::RatingBased
+      .target_topic_max_rated_by_team(tid)
     end
   end
 end
