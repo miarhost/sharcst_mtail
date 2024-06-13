@@ -1,6 +1,7 @@
 module Api
   module V1
     class SubscriptionsController < ApplicationController
+      include SwagDocs::SubscriptionsDoc
       before_action :authorize_request
       before_action :set_subscription, except: :create
 

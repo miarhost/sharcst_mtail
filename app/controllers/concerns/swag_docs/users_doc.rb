@@ -74,7 +74,7 @@ module SwagDocs
       end
       property :user do
         key :type, :integer
-        key :format, :int32
+        key :format, :int64
       end
       property :subtopics do
         key :type, :string
