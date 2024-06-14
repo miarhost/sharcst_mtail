@@ -1,8 +1,8 @@
-require 'rest-client'
+require 'faraday'
 class Webhooks::TeamsSlackMessenger
   class << self
     def call(payload)
-      RestClient.post(url, JSON.generate({"Today's links"=> payload }), { content_type: :json, accept: :json})
+      Faraday.post(url, JSON.generate({"Today's Links" => payload}), "Content-Type" => "application/json")
     end
 
     def url
