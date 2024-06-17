@@ -31,7 +31,7 @@ class ApiDocsController < ActionController::Base
     Api::V1::TeamsController,
     Api::V1::DiscoRecommendationsController,
     Api::V1::UploadsController,
-    Ap::V1::SubscriptionsController,
+    Api::V1::SubscriptionsController,
     SwagDocs::RecTopicsPayloadModel,
     SwagDocs::TargetTopicsMaxRatedModel,
     SwagDocs::PredictedRatingsModel,
@@ -39,6 +39,8 @@ class ApiDocsController < ActionController::Base
     SwagDocs::ErrorResponseModel,
     SwagDocs::MistralTopicsModel,
     SwagDocs::DiscoRecommendationModel,
+    SwagDocs::TeamFormModel,
+    SwagDocs::TeamSerializerModel,
     self
   ].freeze
 

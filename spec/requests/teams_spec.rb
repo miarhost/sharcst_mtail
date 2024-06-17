@@ -102,11 +102,7 @@ describe 'Teams', type: :request do
   describe 'POST /api/v1/teams/:id/store_recommendations_for_team/' do
     let!(:user_1) { create(:user, team_id: team.id)}
     let!(:upload) { create(:upload, user_id: user_1.id, rating: 3, topic_id: topic.id)}
-    let!(:upload_1) { create(:upload, user_id: user.id, rating: 9, topic_id: topic_1.id)}
-    let!(:uploads_infos) { create_list(:uploads_info, 3, user_id: user_1.id, upload_id: upload.id) }
-    let!(:uploads_infos_1) { create_list(:uploads_info, 3, user_id: user.id, upload_id: upload_1.id) }
-    let!(:topic) { create(:topic, category_id: category.id)}
-    let!(:topic_1) { create(:topic, category_id: category.id)}
+
     let!(:category) { create(:category)}
 
     before do
@@ -115,20 +111,41 @@ describe 'Teams', type: :request do
     end
 
     include_context 'v1:authorized_request'
-    it 'creates disco recs record for a team' do
-      expect do
+    context 'successfully obtain team recommendations' do
+      let!(:upload_1) { create(:upload, user_id: user.id, rating: 9, topic_id: topic_1.id)}
+      let!(:uploads_infos) { create_list(:uploads_info, 3, user_id: user_1.id, upload_id: upload.id) }
+      let!(:uploads_infos_1) { create_list(:uploads_info, 3, user_id: user.id, upload_id: upload_1.id) }
+      let!(:topic) { create(:topic, category_id: category.id)}
+      let!(:topic_1) { create(:topic, category_id: category.id)}
+      it 'creates disco recs record for a team' do
+        expect do
+          post "/api/v1/teams/#{team.id}/store_recommendations_for_team",
+            headers: { Authorization: "Bearer #{authenticate}" }
+        end.to change(DiscoRecommendation, :count).by(1)
+
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include_json(
+        [
+          {
+              "id": upload.id,
+              "max": upload.rating
+          }
+        ])
+      end
+    end
+
+    context 'fail to create and save team recommendations' do
+      it 'responds with error message' do
         post "/api/v1/teams/#{team.id}/store_recommendations_for_team",
           headers: { Authorization: "Bearer #{authenticate}" }
-      end.to change(DiscoRecommendation, :count).by(1)
-
-      expect(response).to have_http_status(:success)
-      expect(response.body).to include_json(
-      [
-        {
-            "id": upload.id,
-            "max": upload.rating
-        }
-      ])
+        expect(response).to have_http_status(:see_other)
+        expect(response.body).to eq(
+          {
+              "message": "No data updated",
+              "status": 303
+          }
+        )
+      end
     end
   end
 end
