@@ -24,6 +24,7 @@ module RedisData
           result['rate'] = redis.hget(key, 'rate')
           result['topics'] = [] << title
           result['user'] = @user_id
+          result['origin'] = 'existent'
         end
       end
       additional_topics.blank? ? result : result.merge({'subtopics' => additional_topics})

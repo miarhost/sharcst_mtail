@@ -1,7 +1,7 @@
 class Parsers::RecommendedExternalQueue
 
-  def initialize(data, user_id, args)
-    @data = JSON.generate(data.call)
+  def initialize(data, user_id)
+    @data = JSON.generate(data)
   end
 
   def exchange_name

@@ -23,10 +23,9 @@ module Api
         render json: @current_user, serializer: MemberSerializer
       end
 
-      def enqueue_parser(queue, data_instance)
-        request = queue
-          .constantize
-          .new(data_instance, @current_user.id, **enqueue_params)
+      def enqueue_parser(data_instance)
+        request = Parsers::RecommendedExternalQueue
+          .new(data_instance, @current_user.id)
           .execute
         status = request.key?(:errors) ? 422 : 202
         render json: request, status: status
@@ -40,16 +39,15 @@ module Api
         if enqueue_params.blank?
           raise_if_blank
         else
-          queue = 'Parsers::RecommendedExternalQueue'
-          instance = RedisData::UserTopicsForParser.new(@current_user.id, enqueue_params)
-          enqueue_parser(queue, instance)
+          instance = RedisData::UserTopicsForParser.call(@current_user.id, enqueue_params)
+          enqueue_parser(instance)
         end
       end
 
       def enqueue_related_topics
-        queue = 'Parsers::ExtendedFieldsQueue'
-        instance = Webhooks::ParseModelResponse.parse(@current_user.id)
-        enqueue_parser(queue, instance)
+        data = Webhooks::ParseModelResponse.parse(@current_user.id)
+        instance = { topics: data, origin: 'ollama' }
+        enqueue_parser(instance)
       end
 
       def subscriptions_info
