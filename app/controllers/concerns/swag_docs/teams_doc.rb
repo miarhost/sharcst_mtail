@@ -103,6 +103,27 @@ module SwagDocs
         end
       end
     end
+
+    swagger_path '/teams/{id}/queue_parsing_topic' do
+      operation :post do
+        key :operationId, 'queueTopic'
+        key :description, 'queue parser by topic'
+        key :tags, ['external', 'amqp', 'topics', 'team']
+        key :produces, ['application/json']
+        response 200 do
+          key :description, 'parser queue message and state'
+          schema do
+            key :'$ref', :SingleTopicParsingModel
+          end
+        end
+        response 405 do
+          key :description, 'warning message for cancelled action'
+          schema do
+            key :'$ref', :ErrorResponseModel
+          end
+        end
+      end
+    end
   end
 
   class TargetTopicsMaxRatedModel
@@ -160,6 +181,26 @@ module SwagDocs
       property :topic do
         key :type, :object
         property :title do
+          key :type, :string
+        end
+      end
+    end
+  end
+
+  class SingleTopicParsingModel
+    include Swagger::Blocks
+
+    swagger_schema :SingleTopicParsingModel do
+      key :required, [:message, :result]
+      property :message do
+        key :type, :object
+        property :url do
+          key :type, :string
+        end
+      end
+      property :result do
+        key :type, :object
+        property :success do
           key :type, :string
         end
       end

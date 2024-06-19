@@ -100,23 +100,23 @@ describe 'Teams', type: :request do
   end
 
   describe 'POST /api/v1/teams/:id/store_recommendations_for_team/' do
-    let!(:user_1) { create(:user, team_id: team.id)}
-    let!(:upload) { create(:upload, user_id: user_1.id, rating: 3, topic_id: topic.id)}
 
-    let!(:category) { create(:category)}
 
-    before do
-      team.update(topic_id: topic.id, category_id: category.id)
-      user.update(team_id: team.id)
-    end
 
     include_context 'v1:authorized_request'
     context 'successfully obtain team recommendations' do
+      let!(:user_1) { create(:user, team_id: team.id)}
+      let!(:upload) { create(:upload, user_id: user_1.id, rating: 3, topic_id: topic.id)}
       let!(:upload_1) { create(:upload, user_id: user.id, rating: 9, topic_id: topic_1.id)}
       let!(:uploads_infos) { create_list(:uploads_info, 3, user_id: user_1.id, upload_id: upload.id) }
       let!(:uploads_infos_1) { create_list(:uploads_info, 3, user_id: user.id, upload_id: upload_1.id) }
       let!(:topic) { create(:topic, category_id: category.id)}
       let!(:topic_1) { create(:topic, category_id: category.id)}
+      before do
+        team.update(topic_id: topic.id, category_id: category.id)
+        user.update(team_id: team.id)
+      end
+
       it 'creates disco recs record for a team' do
         expect do
           post "/api/v1/teams/#{team.id}/store_recommendations_for_team",
@@ -135,14 +135,51 @@ describe 'Teams', type: :request do
     end
 
     context 'fail to create and save team recommendations' do
+      let(:team_1) { create(:team, topic_id: nil, category_id: nil)}
       it 'responds with error message' do
-        post "/api/v1/teams/#{team.id}/store_recommendations_for_team",
+        post "/api/v1/teams/#{team_1.id}/store_recommendations_for_team",
           headers: { Authorization: "Bearer #{authenticate}" }
         expect(response).to have_http_status(:see_other)
-        expect(response.body).to eq(
+        expect(response.body).to include_json(
           {
-              "message": "No data updated",
-              "status": 303
+            "status": 303,
+            "message": "No Training Data"
+        }
+        )
+      end
+    end
+  end
+
+  describe 'POST /api/v1/teams/:id/queue_parsing_by_topic' do
+    include_context 'v1:authorized_request'
+    context 'successfully queue a message to parser' do
+      it 'responds with success queue message' do
+        post "/api/v1/teams/#{team.id}/queue_parsing_by_topic",
+          headers: { Authorization: "Bearer #{authenticate}" }
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include_json(
+          {
+            "message": {
+                "topic": topic.title
+            },
+            "result": {
+                "success": "in queue"
+            }
+        }
+        )
+      end
+    end
+
+    context 'failed to queue a message to parser' do
+      let!(:team_1) { create(:team, topic_id: nil) }
+      it 'responds with error message' do
+        post "/api/v1/teams/#{team_1.id}/queue_parsing_by_topic",
+          headers: { Authorization: "Bearer #{authenticate}" }
+        expect(response).to have_http_status(:method_not_allowed)
+        expect(response.body).to include_json(
+          {
+            "status": 405,
+            "message": "No results"
           }
         )
       end

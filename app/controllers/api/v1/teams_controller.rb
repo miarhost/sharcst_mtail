@@ -20,12 +20,18 @@ module Api
       end
 
       def store_recommendations_for_team
+        unless @team.topic
+          no_training_data_response
+        else
         render json: DiscoServices::TeamRecommender.call(params[:id]), status: 201
+        end
       end
 
       def queue_parsing_by_topic
         message = ({ url: ExternalResources::EDU, topic: @team&.topic.title }).as_json.with_indifferent_access
         render json: { message: message, result: Parsers::EdTopicParserQueue.execute(message) }
+      rescue StandardError
+        skip_action
       end
 
       def show_parsed_by_topic
