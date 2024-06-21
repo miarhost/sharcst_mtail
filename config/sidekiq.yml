@@ -13,3 +13,5 @@ production:
   - messengers
   - queries
   - ollama
+  - upload
+  - tail

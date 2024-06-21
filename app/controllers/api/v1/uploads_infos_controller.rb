@@ -2,7 +2,8 @@ module Api
   module V1
     class UploadsInfosController < ApplicationController
       before_action :authorize_request, except: %i[index show deliver_predictions]
-      before_action :set_info, except: %i[index remove_report deliver_predictions]
+      before_action :set_info, except: %i[index deliver_predictions download_report remove_report]
+      before_action :find_report, only: %i[download_report remove_report]
 
       def index
         uploads_infos_paginated = paginate_collection(uploads_infos, params[:page], 5)
@@ -29,10 +30,17 @@ module Api
         render json: Reports::UploadsMonthlyData.call(@uploads_info.id)
       end
 
+      def download_report
+        if @attachment.blob[:byte_size] >= 130_000_000
+          UploadsInfos::DownloadsPartitionWorker.perform_async(@attachment.id, 20_000_000)
+        else
+          @attachment.blob.download
+        end
+      end
+
       def remove_report
-        uploads_info_attachment = UploadsInfoAttacment.find_by!(id: params[:attachment_id])
-        uploads_info_attachment.purge
-        uploads_info_attachment.destroy!
+        @attachment.purge
+        @attachment.destroy!
       end
 
       def update_streaming_infos
@@ -61,6 +69,10 @@ module Api
 
       def uploads_infos
         FilterRecords.new(UploadsInfo).call(filter)
+      end
+
+      def find_report
+        @attachment = UploadsInfoAttacment.find_by!(id: params[:attachment_id])
       end
     end
   end

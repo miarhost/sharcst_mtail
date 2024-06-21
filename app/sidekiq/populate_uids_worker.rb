@@ -1,7 +1,8 @@
 require 'redis'
 class PopulateUidsWorker
-include Sidekiq::Worker
-include Sidekiq::Status::Worker
+  include Sidekiq::Worker
+  include Sidekiq::Status::Worker
+  sidekiq_options queue: :default
   def redis
     @redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
   end
