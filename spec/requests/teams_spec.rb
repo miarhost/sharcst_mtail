@@ -101,8 +101,6 @@ describe 'Teams', type: :request do
 
   describe 'POST /api/v1/teams/:id/store_recommendations_for_team/' do
 
-
-
     include_context 'v1:authorized_request'
     context 'successfully obtain team recommendations' do
       let!(:user_1) { create(:user, team_id: team.id)}
@@ -182,6 +180,19 @@ describe 'Teams', type: :request do
             "message": "No results"
           }
         )
+      end
+    end
+  end
+
+  describe 'GET /api/v1/teams/:id/show_parsed_by_topic' do
+    include_context 'v1:authorized_request'
+    context 'results as successful links list record' do
+      it 'shows serialized topic_digest with list_of_5 with parsed links value' do
+        expect do
+        get "/api/v1/teams/#{team.id}/show_parsed_by_topic",
+        headers: { Authorization: "Bearer #{authenticate}" }
+        end.to change(TopicDigest, :count).by(1)
+        expect(response).to have_http_status(:success)
       end
     end
   end

@@ -7,12 +7,12 @@ module Api
 
       def create
         @team = Team.create!(team_params)
-        render json: @team, serializer: serializer, status: 201
+        render json: @team, serializer: , status: 201
       end
 
       def update
         @team.update!(team_params)
-        render json: @team, serializer: serializer
+        render json: @team, serializer:
       end
 
       def destroy

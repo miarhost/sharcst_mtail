@@ -124,6 +124,21 @@ module SwagDocs
         end
       end
     end
+
+    swagger_path 'teams/{id}/show_parsed_by_topic' do
+      operation :get do
+        key :operationId, 'parsedLinksResult'
+        key :description, 'responds with created TopicDigest with parser payload'
+        key :tags, ['external', 'amqp', 'topics', 'team']
+        key :produces, ['application/json']
+        response 200 do
+          key :description, 'TopicDigest record with parsed links'
+          schema do
+            key :'$ref', :TopicDigestModel
+          end
+        end
+      end
+    end
   end
 
   class TargetTopicsMaxRatedModel

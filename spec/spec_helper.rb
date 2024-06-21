@@ -58,7 +58,7 @@ RSpec.configure do |config|
       'Content-Length'=>'113',
       'Content-Type'=>'application/json',
       'Host'=>'hooks.slack.com',
-      'User-Agent'=>'rest-client/2.1.0 (linux-gnu x86_64) ruby/2.7.1p83'
+      'User-Agent'=>'Faraday v2.9.0'
       }).
     to_return(status: 200, body: "Sent to channel", headers: {})
 
