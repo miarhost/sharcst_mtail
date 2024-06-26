@@ -8,21 +8,17 @@ class Parsers::ParsedLinksQueue
       'parsed.links'
     end
 
-    def message(id)
-      Team.find(id).topic&.title || ''
-    end
-
     def save_to_records(payload, id)
       Parsers::TeamLinksList.call(payload, id)
     end
 
     def execute(id)
-      BasicPublisher.direct_exchange(exchange_name, queue_name, message(id))
 
-      payload = BasicSubscriber.direct_exchange(exchange_name, queue_name)
+      payload = Subscriber.direct_exchange(exchange_name, queue_name)
 
-      save_to_records(payload, id)
-    rescue StandardError => e
+      record = save_to_records(payload, id)
+      record
+     rescue StandardError => e
       Rails.logger.error(e.message)
     end
   end

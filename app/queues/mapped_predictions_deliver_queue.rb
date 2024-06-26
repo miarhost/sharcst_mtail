@@ -17,7 +17,7 @@ class MappedPredictionsDeliverQueue
   end
 
   def execute
-    BasicPublisher.direct_exchange(exchange_name, queue_name, data_hash.to_json)
+    Publisher.direct_exchange(exchange_name, queue_name, data_hash.to_json)
   rescue Interrupt => e
     Rails.logger.error(e.message)
   end

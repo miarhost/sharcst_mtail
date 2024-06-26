@@ -19,7 +19,7 @@ Rails.application.routes.draw do
           patch 'update_membership', to: 'users#update_membership'
           post 'enqueue_topic', to: 'users#enqueue_topic'
           post 'enqueue_related_topics', to: 'users#enqueue_related_topics'
-          get 'show_parsed_topic', to: 'users#show_parsed_topic'
+          get 'show_parsed_topics', to: 'users#show_parsed_topics'
         end
         member do
           get 'subscriptions_info', to: 'users#subscriptions_info'

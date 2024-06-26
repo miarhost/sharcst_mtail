@@ -8,6 +8,10 @@ module Errors
       { message: 'No data updated', status: 303 }
     end
 
+    def self.no_payload
+      { message: 'No payload received', status: 303 }
+    end
+
     def no_training_data_response
       render json: { status: 303, message: 'No Training Data'}, status: 303
     end

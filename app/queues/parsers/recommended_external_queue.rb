@@ -15,7 +15,7 @@ class Parsers::RecommendedExternalQueue
 
   def execute
     status = {}
-    BasicPublisher.direct_exchange(exchange_name, queue_name, @data)
+    Publisher.direct_exchange(exchange_name, queue_name, @data)
     info_message = "request for parser sent at #{Time.now}"
     status[:result] = JSON.parse(@data)
     status[:message] = info_message

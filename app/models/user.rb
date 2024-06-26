@@ -20,6 +20,7 @@ class User < ApplicationRecord
   has_recommended :uploads_infos
   has_many :locations, as: :locatable
   has_many :folder_versions
+  has_many :user_links_proposals
 
   scope :admins, -> { select{ |u| u.roles.include?('admin')} }
 

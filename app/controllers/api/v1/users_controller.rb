@@ -31,8 +31,10 @@ module Api
         render json: request, status: status
       end
 
-      def show_parsed_topic
+      def show_parsed_topics
         result = Parsers::ParsedTopicQueue.execute(@current_user.id)
+        status = result.is_a?(Hash) ? 303 : 201
+        render json: result, status:
       end
 
       def enqueue_topic

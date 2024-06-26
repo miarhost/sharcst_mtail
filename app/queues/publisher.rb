@@ -1,5 +1,5 @@
 require 'bunny'
-module BasicPublisher
+module Publisher
   def self.direct_exchange(exchange_name, queue_name, message)
       connection = Bunny.new
       connection.start

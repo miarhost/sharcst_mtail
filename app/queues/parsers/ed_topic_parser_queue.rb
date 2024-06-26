@@ -9,7 +9,7 @@ class Parsers::EdTopicParserQueue
     end
 
     def execute(message)
-      BasicPublisher.direct_exchange(exchange_name, queue_name, message.to_json)
+      Publisher.direct_exchange(exchange_name, queue_name, message.to_json)
       Rails.logger.info("Requested parsing from#{message}")
       {'success': 'in queue'}
     rescue => e
