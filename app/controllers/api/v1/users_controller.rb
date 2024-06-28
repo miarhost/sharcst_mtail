@@ -47,7 +47,7 @@ module Api
       end
 
       def enqueue_related_topics
-        data = Webhooks::ParseModelResponse.parse(@current_user.id)
+        data = Webhooks::ParseModelResponse.call(@current_user.id)
         instance = { topics: data, origin: 'ollama' }
         enqueue_parser(instance)
       end

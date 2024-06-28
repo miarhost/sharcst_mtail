@@ -1,7 +1,18 @@
 module Webhooks
-  class ParseModelResponse
-    def self.parse(user_id)
-      response = RedisData::CollectMistralResponses.call(user_id)
+  class ParseModelResponse < ApplicationService
+    def initialize(user_id); @user_id = user_id; end
+
+    def call
+      record = UserLinksProposal.create!(
+        user_id: @user_id,
+        origin: 'ollama',
+        topics: parse
+      )
+      record.topics
+    end
+
+    def parse
+      response = RedisData::CollectMistralResponses.call(@user_id)
       res = []
       array_of_chunks = response.split('"response":')
 

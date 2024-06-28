@@ -3,11 +3,12 @@ class Parsers::TopicLinksList
     return Errors::Helpers.no_payload unless payload
     redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
     redis.hmset('userLinks', 'links', payload, 'user', id)
-    UserLinksProposal.create!(
-      user_id: id,
-      links: payload,
-      origin: 'ollama',
-      parsed: true
-    )
+
+    record = UserLinksProposal
+      .where('user_id = ? and origin = ?', id, "ollama")
+      .last
+
+    record.update!(links: payload, parsed: true)
+    record
   end
 end
