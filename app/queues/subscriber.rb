@@ -4,14 +4,11 @@ module Subscriber
     connection = Bunny.new
     connection.start
     channel = connection.create_channel
-
     queue = channel.queue(queue_name, durable: true)
     result = []
-    consumer = Bunny::Consumer.new(channel, queue, true)
-
-    consumer.on_delivery do |delivery_info, metadata, payload|
-      result << payload
-      Rails.logger.info(delivery_info)
+    queue.bind(exchange_name).subscribe(manual_ack: true) do  |delivery_info, properties, payload|
+       result << payload
+       Rails.logger.info("Received #{[payload]} from #{delivery_info[:routing_key]}")
     end
     connection.close
     connection = nil
