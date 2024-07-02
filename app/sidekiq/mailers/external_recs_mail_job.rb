@@ -1,7 +1,7 @@
 class Mailers::ExternalRecsMailJob
   include Sidekiq::Worker
 
-  sidekiq_options queue: :mailer, retry: false, backtrace: 1
+  sidekiq_options queue: :messengers, retry: false, backtrace: 1
 
   def perform(nid, uid)
     ExternalRecsMailer

@@ -2,7 +2,7 @@ module UploadsInfos
   class UpdateStreamingInfosWorker
     include Sidekiq::Worker
     include Sidekiq::Status::Worker
-    sidekiq_options queue: :default
+    sidekiq_options queue: :updater
 
     def perform(record_id)
       record = UploadsInfo.find(record_id)

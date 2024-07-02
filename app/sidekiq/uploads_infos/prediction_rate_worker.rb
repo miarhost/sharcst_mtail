@@ -4,7 +4,7 @@ module UploadsInfos
     include Sidekiq::Worker
     include Sidekiq::Status::Worker
 
-    sidekiq_options queue: :default
+    sidekiq_options queue: :predictions
 
     def perform(ids)
       records = UploadsInfo.where(id: ids)

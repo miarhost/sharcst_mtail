@@ -3,7 +3,7 @@ module MistralResponses
     include RedisCache::RedisClient
     include Sidekiq::Worker
 
-    sidekiq_options queue: :ollama
+    sidekiq_options queue: :predictions
 
     def perform(user_id)
       begin

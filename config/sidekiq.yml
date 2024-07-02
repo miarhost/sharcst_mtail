@@ -1,17 +1,13 @@
 development:
-  :concurrency: 10
+  :concurrency: 5
 
 production:
-  :concurrency: 10
+  :concurrency: 5
 
 :max_retries: 3
 
 :queues:
-  - default
   - updater
-  - mailer
   - messengers
-  - queries
-  - ollama
+  - predictions
   - upload
-  - tail

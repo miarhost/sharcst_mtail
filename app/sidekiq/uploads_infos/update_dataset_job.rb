@@ -2,7 +2,7 @@ module UploadsInfos
   class UpdateDatasetJob
     include Sidekiq::Worker
     include Sidekiq::Status::Worker
-    sidekiq_options queue: :queries
+    sidekiq_options queue: :predictions
 
     def perform(user_id, upl_id, fv_id, *args)
       data = DataSets::MajorInfos.call(*args, fv_id, upl_id)

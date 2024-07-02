@@ -1,7 +1,7 @@
 class Mailers::TeamRecommenderMailJob
   include Sidekiq::Job
 
-  sidekiq_options queue: :mailer, retry: 4, backtrace: 3
+  sidekiq_options queue: :messengers, retry: 4, backtrace: 3
 
   def perform
     recs = DiscoRecommendationsQueries.group_team_recs

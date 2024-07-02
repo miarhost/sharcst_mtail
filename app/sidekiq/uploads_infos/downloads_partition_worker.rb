@@ -1,7 +1,7 @@
 module UploadsInfos
   class DownloadsPartitionWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :upload, retry_queue: :tail, retry: 1, backtrace: 3
+    sidekiq_options queue: :upload, retry_queue: :updater, retry: 1, backtrace: 3
 
     def perform(attachment_id, chunk_size)
       UploadsInfoAttacment.find(attachment_id).blob.open do |temp|
