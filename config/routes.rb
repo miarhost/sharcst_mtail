@@ -38,6 +38,7 @@ Rails.application.routes.draw do
         end
         collection do
           get 'public_downloads_list', to: 'uploads#public_downloads_list'
+          post 'bulk_upload', to: 'uploads#bulk_upload'
         end
       end
 

@@ -3,7 +3,7 @@ module Api
     class UploadsController < ApplicationController
       include SwagDocs::UploadsDoc
       before_action :authorize_request, except: %i[show index public_downloads_list]
-      before_action :set_upload, except: %i[create index dashboard public_downloads_list]
+      before_action :set_upload, except: %i[create index dashboard public_downloads_list bulk_upload]
       after_action :track_action, only: %i[download_file]
       after_action :update_infos_dataset, only: %i[create update upload_file download_file]
 
@@ -61,6 +61,18 @@ module Api
       def remove_file
         @upload.upload_attachment&.purge
         @upload.upload_attachment&.destroy!
+      end
+
+      def bulk_upload
+        unless params
+          skip_action
+        else
+          files= []
+          params.values.map{|v| files << v}
+          args = files.each{|v| v.tempfile.path}
+          Uploads::BulkUploadWorker.perform_async(@current_user.id, args)
+          render json: { body: files }
+        end
       end
 
       def download_file
