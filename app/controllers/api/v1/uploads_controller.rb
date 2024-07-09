@@ -67,11 +67,17 @@ module Api
         unless params
           skip_action
         else
-          files= []
-          params.values.map{|v| files << v}
-          args = files.each{|v| v.tempfile.path}
-          Uploads::BulkUploadWorker.perform_async(@current_user.id, args)
-          render json: { body: files }
+
+          args = []
+          path = Rails.root + "/tmp/background_cache/#{Time.now.to_i}"
+          params[:files].each do |filename, file|
+            FileUtils.mkdir_p(path)
+             io = File.open("#{path}/#{filename}", "w") { |f| f << file.read.force_encoding("UTF-8")}
+             args << io.path
+          end
+          Uploads::BulkUploadWorker.perform_async(args, @current_user.id)
+          FileUtils.rm_r(path)
+          render json: { body: args}
         end
       end
 
@@ -135,7 +141,7 @@ module Api
       end
 
       def upload_params
-        params.require(:upload).permit(:user_id, :name, :file, :rating, :category, :topic, :date)
+        params.require(:upload).permit(:user_id, :name, :file, :rating, :category, :topic, :date, files: [])
       end
 
       def set_upload

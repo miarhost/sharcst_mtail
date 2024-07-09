@@ -2,8 +2,9 @@ module Uploads
   class BulkUploadWorker
     include Sidekiq::Job
     sidekiq_options queue: :upload
-    def perform(bulk_filenames)
-      Uploads::UploadJob.perform_bulk('args': [bulk_filenames], batch: 300)
+
+    def perform(bulk_filenames, uid)
+      Uploads::UploadJob.perform_bulk([[bulk_filenames, uid]], batch_size: 10)
     end
   end
 end
