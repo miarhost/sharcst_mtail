@@ -11,6 +11,7 @@ describe 'Uploads', type: :request do
       include_examples 'v1:unauthorized_request', :delete, '/api/v1/uploads/1/remove_file', params: { id: 1 }
       include_examples 'v1:unauthorized_request', :get, '/api/v1/uploads/1/load_prediction_for_infos', params: { id: 1 }
       include_examples 'v1:unauthorized_request', :get, '/api/v1/uploads/1/download_file', params: { id: 1 }
+      include_examples 'v1:unauthorized_request', :post, '/api/v1/uploads/1/update_recs_by_infos', params: {}
     end
   end
 
@@ -248,6 +249,25 @@ describe 'Uploads', type: :request do
             downloads_count: 0
           ]
         )
+      end
+    end
+  end
+
+  describe 'POST /api/v1/uploads/:id/update_recs_by_infos' do
+    let!(:upload_1) { create(:upload) }
+    let!(:folder_version) { create(:folder_version, upload_id: upload.id)}
+    let!(:uploads_infos) { create_list(:uploads_info, 3, upload_id: upload_1.id) }
+
+    before { DataSets::MajorInfos.call(uploads_infos.pluck(:id), upload.id, folder_version.id) }
+
+    include_context 'v1:authorized_request'
+    context 'successful response' do
+      it 'returns list of recommended uploads infos' do
+        expect do
+        post "/api/v1/uploads/#{upload.id}/update_recs_by_infos",
+          headers: { Authorization: "Bearer: #{authenticate}"}
+        end.to change(Disco::Recommendation, :count).by(2)
+        expect(response).to have_http_status(:success)
       end
     end
   end

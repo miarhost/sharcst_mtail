@@ -113,7 +113,8 @@ module Api
       end
 
       def update_recs_by_infos
-        DiscoServices::UpdateInfosRecsToVersion.(@upload.id)
+        recommendations = DiscoServices::UpdateInfosRecsToVersion.(@upload.id)
+        render json: recommendations
       rescue StandardError
         render json: no_training_data, status: no_training_data[:status]
       end

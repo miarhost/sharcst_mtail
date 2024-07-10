@@ -6,7 +6,7 @@ module DataSets
       items_group.each do |item|
         data << { user_id: item.user_id, item_id: item.id, rating: item.rating }
       end
-      stored_fragment = UploadsStats.create!(
+      stored_fragment = UploadsStat.create!(
         infos_ratings: data.to_json,
         upload_id: upl_id,
         folder_version_id: fv_id
