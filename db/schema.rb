@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_28_120606) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,6 +187,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_28_120606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
+  create_table "recommendations_groups", force: :cascade do |t|
+    t.json "uploads_recs"
+    t.json "infos_ratings"
+    t.integer "subscription_ids", default: [], array: true
+    t.integer "user_ids", default: [], array: true
+    t.datetime "date"
+    t.string "statable_type"
+    t.bigint "statable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["statable_type", "statable_id"], name: "index_recommendations_groups_on_statable"
   end
 
   create_table "subscriptions", force: :cascade do |t|
