@@ -42,6 +42,7 @@ class ApiDocsController < ActionController::Base
     SwagDocs::TeamFormModel,
     SwagDocs::TeamSerializerModel,
     SwagDocs::SingleTopicParsingModel,
+    SwagDocs::UploadsInfoModel,
     self
   ].freeze
 
