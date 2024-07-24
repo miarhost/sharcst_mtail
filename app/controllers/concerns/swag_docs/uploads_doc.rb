@@ -38,22 +38,22 @@ module SwagDocs
           key :description, 'creates infos recommendations and updates stat record'
           key :tags, ['disco_recs', 'stats', 'upload']
           key :produces, ['application/json']
-        end
 
-        response 200 do
-          key :description, 'list of recommended infos'
-          schema do
-            key :type, :array
-            items do
-              key :'$ref', :UploadsInfoModel
+          response 200 do
+            key :description, 'list of recommended infos'
+            schema do
+              key :type, :array
+              items do
+                key :'$ref', :UploadsInfoModel
+              end
             end
           end
-        end
 
-        response 303 do
-          key :description, 'no training data response'
-          schema do
-            key :'$ref', :ErrorResponseModel
+          response 303 do
+            key :description, 'no training data response'
+            schema do
+              key :'$ref', :ErrorResponseModel
+            end
           end
         end
       end

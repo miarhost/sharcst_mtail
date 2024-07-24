@@ -30,7 +30,7 @@ end
 
 
 every 7.days, at: '22.23 pm' do
-  runner 'UploadsInfos::UpdateDatasetJob.bulk_update'
+  runner 'UploadsInfos::UpdateDatasetsBatchWorker.perform_async'
 end
 
 every 2.days, at: '14.30 pm' do
