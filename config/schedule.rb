@@ -1,7 +1,7 @@
 set :output, "#{path}/log/cron.log"
 
 every :day , at: '13:15 pm' do
-  runner 'PopulateUidsWorker.perform_async'
+  runner 'Update::PopulateUidsWorker.perform_async'
 end
 
 every :day, at: '18.17 pm' do

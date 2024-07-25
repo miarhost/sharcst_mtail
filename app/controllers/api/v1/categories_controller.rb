@@ -5,6 +5,7 @@
 
       def store_topic_recommendations
         DiscoServices::TopicSubscriptionsUpdater.call(@category.id)
+        Update::FillRecGroupWorker.perform_later(@category.id)
       end
 
       def update_recommmendations_stats; end
