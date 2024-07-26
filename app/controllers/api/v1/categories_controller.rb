@@ -5,15 +5,18 @@
 
       def store_topic_recommendations
         DiscoServices::TopicSubscriptionsUpdater.call(@category.id)
-        Update::FillRecGroupWorker.perform_later(@category.id)
       end
 
-      def update_recommmendations_stats; end
+      def update_recommendations_stats
+        stat_creator = Update::FillRecGroupWorker.perform_async(@category.id)
+        sleep 1
+        render json: { result: Sidekiq::Status.get_all(stat_creator) }
+      end
 
       private
 
       def set_category
-        Category.find(params[:id])
+        @category = Category.find(params[:id])
       end
     end
   end

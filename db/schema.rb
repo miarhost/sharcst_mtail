@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_26_182716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -89,6 +89,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
   create_table "categories", force: :cascade do |t|
     t.string "tag"
     t.string "title", null: false
+  end
+
+  create_table "category_stats", force: :cascade do |t|
+    t.string "related_topics", array: true
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_category_stats_on_category_id"
   end
 
   create_table "disco_recommendations", force: :cascade do |t|
@@ -189,7 +197,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-  create_table "recommendations_groups", force: :cascade do |t|
+  create_table "recommendations_stats", force: :cascade do |t|
     t.json "uploads_recs"
     t.json "infos_ratings"
     t.integer "subscription_ids", default: [], array: true
@@ -199,7 +207,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
     t.bigint "statable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["statable_type", "statable_id"], name: "index_recommendations_groups_on_statable"
+    t.index ["statable_type", "statable_id"], name: "index_recommendations_stats_on_statable"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -229,6 +237,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["topic_id"], name: "index_topic_digests_on_topic_id"
+  end
+
+  create_table "topic_stats", force: :cascade do |t|
+    t.json "external_recs"
+    t.string "last_digests", array: true
+    t.bigint "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_topic_stats_on_topic_id"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -342,6 +359,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "category_stats", "categories"
   add_foreign_key "newsletters", "subscriptions"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
@@ -349,6 +367,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_11_100906) do
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "subscriptions", "topics"
   add_foreign_key "topic_digests", "topics"
+  add_foreign_key "topic_stats", "topics"
   add_foreign_key "topics", "categories"
   add_foreign_key "upload_attachments", "uploads"
   add_foreign_key "uploads", "users"

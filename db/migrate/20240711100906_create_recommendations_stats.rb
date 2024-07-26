@@ -1,6 +1,6 @@
-class CreateRecommendationsGroups < ActiveRecord::Migration[7.0]
+class CreateRecommendationsStats < ActiveRecord::Migration[7.0]
   def change
-    create_table :recommendations_groups do |t|
+    create_table :recommendations_stats do |t|
       t.json :uploads_recs
       t.json :infos_ratings
       t.integer :subscription_ids, default: [], array: true

@@ -98,6 +98,12 @@ Rails.application.routes.draw do
           get 'show_parsed_by_topic', to: 'teams#show_parsed_by_topic'
         end
       end
+
+      resources :categories do
+        member do
+          post 'update_recommendations_stats', to: 'categories#update_recommendations_stats'
+        end
+      end
     end
   end
 end
