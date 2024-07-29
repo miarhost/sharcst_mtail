@@ -102,6 +102,7 @@ Rails.application.routes.draw do
       resources :categories do
         member do
           post 'update_recommendations_stats', to: 'categories#update_recommendations_stats'
+          get 'show_recommendations_stats', to: 'categories#show_recommendations_stats'
         end
       end
     end
