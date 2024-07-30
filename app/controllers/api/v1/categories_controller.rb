@@ -1,7 +1,9 @@
  module Api
    module V1
     class CategoriesController < ApplicationController
-      before_action :set_category, except: :index
+      include SwagDocs::CategoriesDoc
+      before_action :authorize_request, except: :show_recommendations_stats
+      before_action :set_category, except: :show_recommendations_stats
 
       def store_topic_recommendations
         DiscoServices::TopicSubscriptionsUpdater.call(@category.id)

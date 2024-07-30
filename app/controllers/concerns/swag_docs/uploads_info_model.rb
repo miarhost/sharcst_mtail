@@ -41,21 +41,20 @@ module SwagDocs
       end
       property :static_info_block do
         key :type, :object
-          property :streaming_statistics do
-            key :type, :object
-            property :duration do
-              key :type, :integer
-              key :format, :int64
-            end
-            property :marking do
-              key :type, :string
-            end
-            property :other do
-              key :type, :string
-            end
-            property :send_to do
-              key :type, :string
-            end
+        property :streaming_statistics do
+          key :type, :object
+          property :duration do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :marking do
+            key :type, :string
+          end
+          property :other do
+            key :type, :string
+          end
+          property :send_to do
+            key :type, :string
           end
         end
       end

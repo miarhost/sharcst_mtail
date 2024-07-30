@@ -3,10 +3,9 @@ require 'rails_helper'
 describe Update::FillRecsStatWorker, type: :worker do
   let!(:category) { create(:category)}
   let(:subject) { described_class.new }
+  let(:worker_action) { Sidekiq::Testing.inline! { subject.perform(category.id) } }
 
-  after do
-    Sidekiq::Testing.fake!
-  end
+  after { Sidekiq::Testing.fake! }
 
   describe "#perform" do
     it 'got to an updaters queue' do
@@ -14,10 +13,8 @@ describe Update::FillRecsStatWorker, type: :worker do
     end
 
     it 'performs creating stat unit' do
-      expect do
-        subject.perform(category.id)
-        sleep 1
-      end.to change(RecommendationsStat, :count).by(1)
+
+      expect{ worker_action }.to change(RecommendationsStat, :count).by(1)
     end
   end
 end
