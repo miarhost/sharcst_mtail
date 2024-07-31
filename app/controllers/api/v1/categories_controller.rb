@@ -3,8 +3,7 @@
     class CategoriesController < ApplicationController
       include SwagDocs::CategoriesDoc
       before_action :authorize_request, except: :show_recommendations_stats
-      before_action :set_category, except: :show_recommendations_stats
-
+      before_action :set_category
       def store_topic_recommendations
         DiscoServices::TopicSubscriptionsUpdater.call(@category.id)
       end
@@ -15,16 +14,9 @@
       end
 
       def show_recommendations_stats
-        query = <<-SQL
-           select category_stats.category_id, recommendations_stats.uploads_recs,
-           recommendations_stats.infos_ratings, recommendations_stats.user_ids
-           from recommendations_stats, category_stats
-           where category_stats.category_id = #{@category.id}
-        SQL
-        recs = ActiveRecord::Base.connection.execute(query).to_a.to_json
-        render json: recs
+        recs = CategoryStat.joins(:recommendations_stat).where(category_stats: {category_id: @category.id})
+        render json: recs, each_serializer: CatStatWithRecsSerializer
       end
-
       private
 
       def set_category
