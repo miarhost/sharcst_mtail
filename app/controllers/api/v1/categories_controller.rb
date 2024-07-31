@@ -4,6 +4,7 @@
       include SwagDocs::CategoriesDoc
       before_action :authorize_request, except: :show_recommendations_stats
       before_action :set_category
+
       def store_topic_recommendations
         DiscoServices::TopicSubscriptionsUpdater.call(@category.id)
       end
@@ -14,9 +15,12 @@
       end
 
       def show_recommendations_stats
-        recs = CategoryStat.joins(:recommendations_stat).where(category_stats: {category_id: @category.id})
+        recs = paginate_collection(CategoryStat.joins(:recommendations_stat)
+                                               .where(category_stats: {category_id: @category.id}),
+                                               params[:page], 5)
         render json: recs, each_serializer: CatStatWithRecsSerializer
       end
+
       private
 
       def set_category

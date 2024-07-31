@@ -45,6 +45,7 @@ class ApiDocsController < ActionController::Base
     SwagDocs::SingleTopicParsingModel,
     SwagDocs::UploadsInfoModel,
     SwagDocs::QueueResultModel,
+    SwagDocs::CatStatWithRecsModel,
     self
   ].freeze
 
