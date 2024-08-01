@@ -2,7 +2,7 @@ class Uploads::IndRatesCollectingWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker
 
-  sidekiq_options queue: :updater, retry: 2, backtrace: 3
+  sidekiq_options queue: :updater, retry: 1, backtrace: 3
 
   def perform(payload)
     redis = Redis.new(url: ENV['REDIS_DEV_CACHE_URL'])
@@ -11,9 +11,10 @@ class Uploads::IndRatesCollectingWorker
     date = Date.today.strftime('%d-%m-%Y')
     upload = JSON.parse(payload)['upload_id']
     redis.hmset("exprate#{date}", "date", date, "rate", rate, "user", uid, "upload", upload )
-    store result: {"#{Time.now}": "updated"}.to_json
+    store result: { rate: rate, user: uid }
+    Sidekiq.logger.info "Rate is updated"
   rescue StandardError => e
-    store result: e.message
-    Rails.logger.error(e.message)
+    store result: "Failed to create exprate" + e.message
+    Sidekiq.logger.error( e.message)
   end
 end

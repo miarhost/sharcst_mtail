@@ -13,7 +13,6 @@ describe Update::FillRecsStatWorker, type: :worker do
     end
 
     it 'performs creating stat unit' do
-
       expect{ worker_action }.to change(RecommendationsStat, :count).by(1)
     end
   end
