@@ -16,15 +16,11 @@ Bundler.require(*Rails.groups)
 
 module SharcstMtail
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
     config.autoload_paths += Dir[Rails.root.join('lib', '{**}')]
     config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
     config.active_job.queue_adapter = :sidekiq
-
-    # Only loads a smaller set of middleware suitable for API only apps.
-    # Middleware like session, flash, cookies can be added back manually.
-    # Skip views, helpers and assets when generating a new resource.
+    config.application_host = ENV.fetch('APPLICATION_HOST', '')
     config.api_only = true
   end
 end

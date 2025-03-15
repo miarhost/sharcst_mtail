@@ -27,6 +27,7 @@ module Users
     end
 
     def token
+      return unless @headers['Authorization']
       @headers['HTTP_AUTHORIZATION'].split(' ').last
     end
   end

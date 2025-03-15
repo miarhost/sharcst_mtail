@@ -38,6 +38,13 @@ class SubscriptionsQueries
       result.to_a
     end
 
+    def extract_external_links_to_limit(sub_id, user_id, limit)
+      links_array = self.users_and_extlinks_by_subscription(sub_id)
+      links_array.select { |el| el['links'].start_with?('{http') && el['user'] == user_id }
+                 .last(limit)
+                 .map{ |el| el['links'].delete('{').delete('}') }
+    end
+
     def users_and_extlinks_by_subscription(sub_id)
       query = <<-SQL
       select topic_digests.list_of_5 as links, users.id as user

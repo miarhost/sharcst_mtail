@@ -55,8 +55,8 @@ module Api
       def subscriptions_info
         last_links = []
         ratings = SubscriptionsQueries.show_subs_ratings_per_user(current_resource_owner.id)
-        current_resource_owner.subscription_ids.each do |sid|
-          last_links << SubscriptionsQueries.users_and_extlinks_by_subscription(sid)[:links]
+        current_resource_owner.subscription_ids.each do |sub_id|
+          last_links << SubscriptionsQueries.extract_external_links_to_limit(sub_id, current_resource_owner.id, 6)
         end
         render json: {'subscriptions_ratings': ratings, links: last_links.flatten }
       end

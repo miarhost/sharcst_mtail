@@ -1,6 +1,6 @@
 
 module RedisCache
-  class  < ApplicationService
+  class FetchRt < ApplicationService
     include RedisClient
     def initialize(token)
       @token = token
@@ -13,6 +13,8 @@ module RedisCache
     def ttl_valid?(key)
       ttl = redis.hget(key, "ttl").to_i
       redis.hget(key, "ttl") >= Time.now.to_i
+    rescue Redis::CommandError => e
+      Rails.logger.error "Redis::CommandError: #{e.message} on key #{key}"
     end
 
     def call

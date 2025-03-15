@@ -12,7 +12,7 @@ Doorkeeper.configure do
   enforce_configured_scopes
 
   resource_owner_authenticator do
-    head :forbidden unless Users::Authorization.call(request.headers)
+    Users::Authorization.call(request.headers)
   end
 
   api_only
