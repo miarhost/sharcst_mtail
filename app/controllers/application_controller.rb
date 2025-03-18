@@ -12,8 +12,8 @@ class ApplicationController < ActionController::API
     Kaminari.paginate_array(collection).page(page).per(num)
   end
 
-  def bearer
-    request.headers['HTTP_AUTHORIZATION']
+  def refresh_doorkeeper_token
+    access_token = ::Doorkeeper::AccessToken.find_by(resource_owner_id: authorize_request['id'])
   end
 
   def authorize_request
@@ -33,10 +33,6 @@ class ApplicationController < ActionController::API
     JSON.parse(authorize_request)['message'] == "Signature has expired"
   end
 
-  def pundit_user
-    authorize_request
-  end
-
   def location_setup(record)
     return if Rails.env != 'production'
     location_object = request.location
@@ -50,7 +46,21 @@ class ApplicationController < ActionController::API
     Rails.logger.info({ location: location.id, location_type: location.locatable_type })
   end
 
+  private
+
+  def pundit_user
+    authorize_request
+  end
+
+  def bearer
+    request.headers['HTTP_AUTHORIZATION']
+  end
+
   def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+
+  def doorkeeper_token
+    Doorkeeper::AuthRequests.new(bearer.split(' ').last).token_request
   end
 end
