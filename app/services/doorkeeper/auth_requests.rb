@@ -19,7 +19,7 @@ module Doorkeeper
     end
 
     def code_request
-      response = Faraday.post("#{ENV['APPLICATION_HOST']}/localhost:3000/oauth/authorize",
+      response = Faraday.post("#{ENV['APPLICATION_HOST']}/oauth/authorize",
         { response_type: 'code',
           redirect_uri: application.redirect_uri,
           client_id: application.uid,

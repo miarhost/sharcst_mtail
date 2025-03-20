@@ -59,8 +59,4 @@ class ApplicationController < ActionController::API
   def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
-
-  def doorkeeper_token
-    Doorkeeper::AuthRequests.new(bearer.split(' ').last).token_request
-  end
 end
