@@ -1,12 +1,11 @@
-# README
+## Development Environment
 
-* Ruby version 2.7.1
+### Prerequisites
+- Ruby version 3.2.1
+- Docker and Docker Compose
 
-* on dev environment run dev compose config:
-
-docker-compose -f docker-compose.dev.yml up
-
-also for local env locally run rails s -p 3001 and sidekiq, for all the rest run docker-compose up
+### Setup
+1. For the dev environment, run:
 
 
 ### New production server installing schedule
