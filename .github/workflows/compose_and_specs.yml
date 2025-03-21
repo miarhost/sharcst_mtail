@@ -1,0 +1,30 @@
+name: sharcst_mtail
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and run Docker Compose
+        run: |
+          cd sharcst_mtail
+          docker-compose build
+          docker-compose up -d
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.1"
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+      - name: Run tests
+        run: bundle exec rspec
