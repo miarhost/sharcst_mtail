@@ -1,0 +1,37 @@
+name: Run Ansible
+on:
+  workflow_dispatch:
+jobs:
+  run_playbooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+      - name: Ansible Inventory File For Remote Host
+        run: |
+          mkdir -p ./devops/ansible
+          echo
+          echo "[local]" >> inventory.ini
+          echo "localhost ansible_connection=local" >> inventory.ini
+          echo ""
+          echo "[production]" >> inventory.ini
+          echo "production ansible_host=ENV['REMOTE_HOST']" >> inventory.ini
+      - name: Ansible Default Configuration File
+        run: |
+          cat <<EOF > ./devops/ansible/ansible.cfg
+          [defaults]
+          inventory =./inventory.ini
+          ansible_python_interpreter = 'usr/bin/python3.9'
+          remote_user = ENV['REMOTE_USER']
+          private_key_file = ~/.ssh/id_rsa
+          EOF
+      - name: Ansible Playbook Execution
+        run: |
+          ansible-playbook deploy.yml

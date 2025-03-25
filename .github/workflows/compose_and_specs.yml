@@ -1,4 +1,4 @@
-name: sharcst_mtail
+name: Compose And Specs
 on:
   workflow_dispatch:
   push:
