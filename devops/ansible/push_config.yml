@@ -1,0 +1,8 @@
+- name: Push Config
+  hosts: production
+  become: true
+  tasks:
+    - name: Copy config file to remote server
+    - copy:
+        src: config.yaml
+        dest: var/www/sharcst/config.yaml

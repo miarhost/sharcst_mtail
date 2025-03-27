@@ -11,7 +11,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build and run Docker Compose
         run: |
-          cd sharcst_mtail
           docker-compose build
           docker-compose up -d
   run-tests:

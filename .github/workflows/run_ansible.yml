@@ -34,4 +34,4 @@ jobs:
           EOF
       - name: Ansible Playbook Execution
         run: |
-          ansible-playbook deploy.yml
+          ansible-playbook push_config.yml
