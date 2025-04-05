@@ -1,20 +1,6 @@
 
 version: '3'
 services:
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - 80:80
-    restart: unless-stopped
-    depends_on:
-      - web
-    volumes:
-      - ./docker/nginx:/etc/nginx/conf.d
-      - ./docker/html:/usr/share/nginx/html
-    networks:
-      - nginx_network
-
   db:
     image: postgres:latest
     ports:
@@ -34,9 +20,6 @@ services:
     env_file:
     - .env
     container_name: web
-
-    networks:
-      - nginx_network
 
   redis:
     image: redis:7.2.5-alpine
@@ -145,15 +128,11 @@ services:
   swaggerui:
     image: swaggerapi/swagger-ui
     container_name: swaggerui
-    depends_on:
-    - nginx
-    networks:
-    - nginx_network
     environment:
       SWAGGER_JSON_URL: 'http://localhost:3000/api_docs.json'
       EMBEDDING: 'true'
     volumes:
-      - ./swagger:/usr/share/nginx/html/swagger
+      - ./swagger:/usr/share/html/swagger
 
   ollama:
     image: ollama/ollama
@@ -177,7 +156,3 @@ volumes:
 
 networks:
   opensearch-net:
-  nginx_network:
-    driver: bridge
-    ipam:
-      driver: default
