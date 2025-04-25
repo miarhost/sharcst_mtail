@@ -34,4 +34,5 @@ jobs:
           EOF
       - name: Ansible Playbook Execution
         run: |
-          ansible-playbook push_config.yml
+          ansible-playbook push-config.yml
+          ansible-playbook install-nginx.yml
