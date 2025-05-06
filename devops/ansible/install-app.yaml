@@ -1,0 +1,42 @@
+- name: Install App
+  hosts: production
+  become: true
+  tasks:
+    - name: Install Docker
+      amazon.aws.package:
+        name: docker
+        state: present
+
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.24.4/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: "755"
+
+    - name: Create App Directory
+      file:
+        path: "/sharcst/sharcst_mtail/app"
+        state: directory
+        mode: "755"
+
+    - name: Copy docker-compose.yml
+      file:
+        path: "../docker-compose.yml"
+        dest: "sharcst/sharcst_mtail/docker-compose.yml"
+
+    - name: Copy Dockerfile
+      copy:
+        src: "../Dockerfile"
+        dest: "/sharcst/sharcst_mtail/Dockerfile"
+
+    - name: Build and Run Containers
+      shell: |
+        cd /sharcst/sharcst_mtail
+        docker-compose down
+        docker-compose up --build -d

@@ -1,0 +1,14 @@
+name: Deploy To EC2
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Ansible playbook
+        run: |
+          ansible-playbook ansible/install-app.yaml\
+            -i "${{ secrets.EC2_HOST }}," \
+            --user ${{ secrets.EC2_USER }} \
+            --private-key ~/.ssh/id_rsa
