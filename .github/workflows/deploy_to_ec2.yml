@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Run Ansible playbook
         run: |
-          ansible-playbook ansible/install-app.yaml\
+          ansible-playbook ansible/install-app.yaml \
             -i "${{ secrets.EC2_HOST }}," \
             --user ${{ secrets.EC2_USER }} \
             --private-key ~/.ssh/id_rsa
