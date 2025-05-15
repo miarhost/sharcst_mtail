@@ -2,11 +2,6 @@
   hosts: production
   become: true
   tasks:
-    - name: Install Docker
-      amazon.aws.package:
-        name: docker
-        state: present
-
     - name: Start Docker Service
       service:
         name: docker
