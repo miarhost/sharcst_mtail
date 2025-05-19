@@ -1,18 +1,7 @@
-name: Compose And Specs
+name: Run Tests
 on:
-  workflow_dispatch:
   push:
 jobs:
-  container-job:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build and run Docker Compose
-        run: |
-          docker-compose build
-          docker-compose up -d
   run-tests:
     runs-on: ubuntu-latest
     steps:

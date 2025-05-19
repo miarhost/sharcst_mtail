@@ -32,6 +32,3 @@ jobs:
           remote_user = ENV['REMOTE_USER']
           private_key_file = ~/.ssh/id_rsa
           EOF
-      - name: Ansible Playbook Execution
-        run: |
-          ansible-playbook ansible/install-nginx.yaml
