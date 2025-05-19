@@ -1,37 +1,25 @@
 ## Development Environment
 
-### Prerequisites
-- Ruby version 3.2.1
-- Docker and Docker Compose
-
-### Setup
-1. For the dev environment, run:
-
-
-### New production server installing schedule
-
-sudo mkdir -p /var/www
-
-sudo chown ec2-user /var/www
-
-sudo yum install nginx
-
 ### Setup Docker and compose
 
-sudo yum install docker
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-sudo service docker start
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable"  \
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-sudo usermod -a -G docker ec2-user
+sudo apt-get update
 
-reload instance
-
-sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable docker
+sudo systemctl start docker
 sudo chmod +x /usr/local/bin/docker-compose
 
-docker-compose version
+### Run app locally
 
-### deploy last update
-
-from local: cap production deploy
+docker-compose up --build -d
