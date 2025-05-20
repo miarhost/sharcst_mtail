@@ -1,4 +1,4 @@
-# cloud-config
+#cloud-config
 package_update: true
 package_upgrade: true
 
@@ -7,34 +7,58 @@ packages:
   - ca-certificates
   - curl
   - gnupg
-  - lsb-resease
+  - lsb-release
+  - git
   - python3
   - python3-pip
 
 runcmd:
-  # Add docker repo and install
-  - install -m 0755 -d /etc/apt/keyrings
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-  - chmod a+r /etc/apt/keyrings/docker.asc
-  - echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-    https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) stable"  \
-    tee /etc/apt/sources.list.d/docker.list > /dev/null
-  - apt-update
-  - apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+  - hostnamectl set-hostname k8s-master
+  - mkdir -p /etc/apt/keyrings
 
-  # Add kubernetes repo and install
-  - curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  - echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
-  - apt update
-  - apt install -y kubelet kubeadm kubectl
-  - apt-mark hold kubelet kubeadm kubectl
+  # Docker install
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - bash -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo ${VERSION_CODENAME}) stable" > /etc/apt/sources.list.d/docker.list'
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+  - systemctl enable docker
+  - systemctl start docker
+  - usermod -aG docker ubuntu
 
-  # Start docker service and remove swap
-  - sudo systemctl enable docker
-  - sudo systemctl start docker
-  - usermod aG docker $USER
+  # Config containerd
+
+  - mkdir -p /etc/containerd
+  - containerd config default | sudo tee /etc/containerd/config.toml
+  - sudo systemctl restart containerd
+
+  # Kubernetes install
+  - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  - bash -c 'echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /" > /etc/apt/sources.list.d/kubernetes.list'
+  - apt-get update
+  - apt-get install -y kubelet kubeadm kubectl
+  - apt-mark hold kubelet kubeadm kubectl kubernetes-cni
+
+  # Disable swap
   - swapoff -a
   - sed -i '/ swap / s/^/#/' /etc/fstab
-  - echo "✅ docker and kubernetes are installed successfully"
+
+  # Pre-pull Kubernetes images
+  - kubeadm config images pull
+  # Initialize Kubernetes
+  - kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Mem,SystemVerification
+
+  # Configure kubectl for ubuntu user
+  - mkdir -p /home/ubuntu/.kube
+  - cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+  - chown ubuntu:ubuntu /home/ubuntu/.kube/config
+
+  # Install Flannel CNI
+  - su - ubuntu -c "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+
+  # Install Helm
+  - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+  # Install NGINX Ingress Controller
+  - su - ubuntu -c "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/baremetal/deploy.yaml"
+
+  - echo "✅ Kubernetes cluster is up"
