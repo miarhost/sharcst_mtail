@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mtail-web
+  labels:
+    run: mtail-web
+spec:
+  containers:
+    - name: mtail-web
+      image: rghost/sharcst_mtail_web:latest
+  imagePullSecrets:
+    - name: regcred
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
