@@ -8,6 +8,11 @@ spec:
   containers:
     - name: mtail-web
       image: rghost/sharcst_mtail_web:latest
+      envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
   imagePullSecrets:
     - name: regcred
   dnsPolicy: ClusterFirst
