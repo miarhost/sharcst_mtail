@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mtail-web
+  labels:
+    app: mtail-web
+    tier: backend
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mtail-web
+  template:
+    metadata:
+      labels:
+        app: mtail-web
+        tier: backend
+    spec:
+      containers:
+        - name: mtail-web
+          image: rghost/sharcst_mtail_web:latest
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          imagePullSecrets:
+            - name: regcred
+          ports:
+            - containerPort: 8080
