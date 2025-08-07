@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-react
+  labels:
+    app: fe-react
+    tier: frontend
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fe-react
+  template:
+    metadata:
+      labels:
+        app: fe-react
+        tier: frontend
+      spec:
+        containers:
+          - name: fe-react
+            image: rghost/fe-react # TBD
+            ports:
+              - containerPort: 80
