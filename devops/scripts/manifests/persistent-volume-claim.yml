@@ -1,0 +1,13 @@
+apiVersion:
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-pg-vm-claim
+
+spec:
+  accessModes:
+    - ReadWriteWOnce
+  storageClassName: ebs-sc
+
+  resources:
+    requests:
+      storage: 2Gi
