@@ -1,11 +1,11 @@
-apiVersion:
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ebs-pg-vm-claim
+  name: postgres-pvc
 
 spec:
   accessModes:
-    - ReadWriteWOnce
+    - ReadWriteOnce
   storageClassName: ebs-sc
 
   resources:
