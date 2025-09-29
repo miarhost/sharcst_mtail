@@ -16,3 +16,6 @@ spec:
         limits:
           cpu: 500m
           memory: 512Mi
+      envFrom:
+        - secretRef:
+            name: aws-credentials
