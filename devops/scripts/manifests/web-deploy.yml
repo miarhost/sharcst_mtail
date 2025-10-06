@@ -17,6 +17,18 @@ spec:
         app: mtail-web
         tier: backend
     spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z postgres 5432; do echo waiting...; sleep 2; done",
+            ]
+        - name: init-app
+          image: busybox:1.28
+          command: ["bundle", "exec", "puma", "-C", "config/puma.rb"]
       containers:
         - name: mtail-web
           image: rghost/sharcst_mtail_web:latest
