@@ -38,6 +38,21 @@ spec:
                 name: app-secrets
           ports:
             - containerPort: 8080
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost 8095
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: mtail-web/health-status
+              port: 8095
+            initialDelaySeconds: 60
+            periodSeconds: 10
+
       imagePullSecrets:
         - name: regcred
       volumes:
