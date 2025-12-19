@@ -18,3 +18,20 @@ spec:
         cpu: "300m"
         memory: "256Mi"
       type: Container
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ns-resource-quota
+  namespace: staging
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: "1Gi"
+    limits.cpu: "2"
+    limits.memory: "2Gi"
+    pods: "7"
+    configmaps: "2"
+    persistentvolumeclaims: "2"
+    secrets: "7"
+    services: "2"
