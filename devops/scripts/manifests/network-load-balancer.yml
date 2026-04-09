@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clb-mtail-web
+  labels:
+    app: mtail-web
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  type: LoadBalancer
+  selector:
+    app: mtail-web
+  ports:
+    - port: 8080
+      targetPort: 8095
